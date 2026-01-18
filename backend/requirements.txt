@@ -1,0 +1,5 @@
+Django
+django-cors-headers
+Pillow
+python-decouple
+PyJWT
