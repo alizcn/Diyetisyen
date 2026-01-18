@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/hooks/useAuth'
+import { getBackendUrl } from '@/lib/utils'
 import Link from 'next/link'
 
 export default function DietitianDashboard() {
@@ -228,7 +229,7 @@ export default function DietitianDashboard() {
                 Buradan hasta ekleyebilir, diyet planları oluşturabilir ve tüm verileri yönetebilirsiniz.
               </p>
               <a
-                href="http://localhost:8000/admin"
+                href={getBackendUrl('/admin')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary-600 transition-colors"

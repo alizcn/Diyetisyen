@@ -8,15 +8,17 @@ const nextConfig = {
         port: '8000',
         pathname: '/media/**',
       },
-    ],
-  },
-  async rewrites() {
-    return [
       {
-        source: '/api/:path*',
-        destination: 'http://localhost:8000/api/:path*',
+        protocol: 'http',
+        hostname: 'diyetisyen.apexdock.net',
+        pathname: '/media/**',
       },
-    ];
+      {
+        protocol: 'https',
+        hostname: 'diyetisyen.apexdock.net',
+        pathname: '/media/**',
+      },
+    ],
   },
 };
 

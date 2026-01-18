@@ -1,6 +1,7 @@
 'use client'
 
 import { useAuth } from '@/lib/hooks/useAuth'
+import { getBackendUrl } from '@/lib/utils'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
@@ -45,7 +46,7 @@ export default function DietitianPatients() {
             <h1 className="text-3xl font-bold text-secondary-900 mb-2">Hastalarım</h1>
             <p className="text-secondary-600">Tüm hastalarınızı görüntüleyin ve yönetin</p>
           </div>
-          <a href="http://localhost:8000/admin" target="_blank" rel="noopener noreferrer" className="btn-primary">
+          <a href={getBackendUrl('/admin')} target="_blank" rel="noopener noreferrer" className="btn-primary">
             Admin Panel
           </a>
         </div>
@@ -59,7 +60,7 @@ export default function DietitianPatients() {
             </div>
             <p className="text-secondary-600 text-sm mb-2">Henüz hastanız yok</p>
             <p className="text-secondary-500 text-xs mb-4">Admin panelden hasta ekleyebilir veya hastalar size atanabilir</p>
-            <a href="http://localhost:8000/admin/accounts/patientprofile/" target="_blank" rel="noopener noreferrer" className="btn-primary inline-block">
+            <a href={getBackendUrl('/admin/accounts/patientprofile/')} target="_blank" rel="noopener noreferrer" className="btn-primary inline-block">
               Admin Panele Git
             </a>
           </div>

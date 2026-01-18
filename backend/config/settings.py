@@ -11,21 +11,44 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import socket
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Ortam algılama: hostname'e göre local mi production mı belirle
+def is_production():
+    """Production ortamında mıyız kontrol et"""
+    try:
+        hostname = socket.gethostname().lower()
+        # Local development göstergeleri
+        local_indicators = ['localhost', 'desktop', 'laptop', 'pc', 'asus', 'home']
+        return not any(indicator in hostname for indicator in local_indicators)
+    except:
+        return False
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+PRODUCTION = is_production()
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-o2vh8(1-ljd6$iv#ni59u)xn5iq4tt38r*z*exg-qiyud17i!l'
+# Secret Key - Production için farklı, güvenli key
+if PRODUCTION:
+    # Production'da hostname + sabit string ile unique key oluştur
+    import hashlib
+    SECRET_KEY = hashlib.sha256(f'prod-diyetisyen-{socket.gethostname()}-secret-key-2024'.encode()).hexdigest()
+else:
+    SECRET_KEY = 'django-insecure-o2vh8(1-ljd6$iv#ni59u)xn5iq4tt38r*z*exg-qiyud17i!l'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Debug modu - sadece local'de aktif
+DEBUG = not PRODUCTION
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'diyetisyen.apexdock.net']
+# Allowed Hosts
+if PRODUCTION:
+    ALLOWED_HOSTS = [
+        'diyetisyen.apexdock.net',
+        'www.diyetisyen.apexdock.net',
+        '.apexdock.net',
+    ]
+else:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*']
 
 
 # Application definition
@@ -127,6 +150,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -149,7 +173,18 @@ CORS_ALLOWED_ORIGINS = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 
-# JWT Settings
-JWT_SECRET_KEY = SECRET_KEY
-JWT_ALGORITHM = 'HS256'
-JWT_EXP_DELTA_SECONDS = 86400  # 1 day
+# Session Settings
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_AGE = 86400  # 1 day
+
+# Production güvenlik ayarları
+if PRODUCTION:
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 yıl
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True

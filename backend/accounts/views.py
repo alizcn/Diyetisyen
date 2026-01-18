@@ -1,11 +1,10 @@
 import json
 from django.http import JsonResponse
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from .models import User, DietitianProfile, PatientProfile
-from .utils import generate_jwt_token
-from .decorators import jwt_required
+from .decorators import login_required_api
 
 
 @csrf_exempt
@@ -41,10 +40,10 @@ def register(request):
         else:
             PatientProfile.objects.create(user=user)
 
-        token = generate_jwt_token(user)
+        # Session login
+        auth_login(request, user)
 
         return JsonResponse({
-            'token': token,
             'user': {
                 'id': user.id,
                 'email': user.email,
@@ -84,10 +83,10 @@ def login(request):
         if not user.is_active:
             return JsonResponse({'error': 'Hesap aktif değil'}, status=401)
 
-        token = generate_jwt_token(user)
+        # Session login
+        auth_login(request, user)
 
         return JsonResponse({
-            'token': token,
             'user': {
                 'id': user.id,
                 'email': user.email,
@@ -103,7 +102,7 @@ def login(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 
-@jwt_required
+@login_required_api
 @require_http_methods(["GET"])
 def me(request):
     """Mevcut kullanıcı bilgilerini döndürür"""
@@ -153,7 +152,7 @@ def me(request):
 
 
 @csrf_exempt
-@jwt_required
+@login_required_api
 @require_http_methods(["PUT"])
 def update_profile(request):
     """Kullanıcı profili günceller"""
@@ -212,6 +211,14 @@ def update_profile(request):
         return JsonResponse({'error': 'Diyetisyen bulunamadı'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def logout(request):
+    """Kullanıcı çıkışı"""
+    auth_logout(request)
+    return JsonResponse({'message': 'Başarıyla çıkış yapıldı'})
 
 
 @require_http_methods(["GET"])

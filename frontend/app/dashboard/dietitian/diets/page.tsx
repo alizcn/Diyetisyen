@@ -1,6 +1,7 @@
 'use client'
 
 import { useAuth } from '@/lib/hooks/useAuth'
+import { getBackendUrl } from '@/lib/utils'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
@@ -45,7 +46,7 @@ export default function DietitianDiets() {
             <h1 className="text-3xl font-bold text-secondary-900 mb-2">Diyet Planları</h1>
             <p className="text-secondary-600">Hastalarınız için oluşturduğunuz beslenme programları</p>
           </div>
-          <a href="http://localhost:8000/admin/diets/dietplan/add/" target="_blank" rel="noopener noreferrer" className="btn-primary">
+          <a href={getBackendUrl('/admin/diets/dietplan/add/')} target="_blank" rel="noopener noreferrer" className="btn-primary">
             Yeni Plan Oluştur
           </a>
         </div>
@@ -61,7 +62,7 @@ export default function DietitianDiets() {
               </div>
               <p className="text-secondary-600 text-sm mb-2">Henüz diyet planınız yok</p>
               <p className="text-secondary-500 text-xs mb-4">Admin panelden hastalarınız için özelleştirilmiş diyet planları oluşturabilirsiniz</p>
-              <a href="http://localhost:8000/admin/diets/dietplan/add/" target="_blank" rel="noopener noreferrer" className="btn-primary inline-block">
+              <a href={getBackendUrl('/admin/diets/dietplan/add/')} target="_blank" rel="noopener noreferrer" className="btn-primary inline-block">
                 İlk Planı Oluştur
               </a>
             </div>
@@ -70,13 +71,13 @@ export default function DietitianDiets() {
           <div className="card">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-secondary-900">Besin Veritabanı</h3>
-              <a href="http://localhost:8000/admin/diets/food/" target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:text-primary-600">
+              <a href={getBackendUrl('/admin/diets/food/')} target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:text-primary-600">
                 Besinleri Yönet →
               </a>
             </div>
             <p className="text-sm text-secondary-600 mb-4">Diyet planlarında kullanılacak besinleri ekleyin ve düzenleyin</p>
             <div className="grid md:grid-cols-3 gap-4">
-              <a href="http://localhost:8000/admin/diets/food/add/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg border border-secondary-200 hover:border-primary transition-colors">
+              <a href={getBackendUrl('/admin/diets/food/add/')} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg border border-secondary-200 hover:border-primary transition-colors">
                 <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -88,7 +89,7 @@ export default function DietitianDiets() {
                 </div>
               </a>
 
-              <a href="http://localhost:8000/admin/diets/food/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg border border-secondary-200 hover:border-primary transition-colors">
+              <a href={getBackendUrl('/admin/diets/food/')} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg border border-secondary-200 hover:border-primary transition-colors">
                 <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
@@ -100,7 +101,7 @@ export default function DietitianDiets() {
                 </div>
               </a>
 
-              <a href="http://localhost:8000/admin/diets/meal/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg border border-secondary-200 hover:border-primary transition-colors">
+              <a href={getBackendUrl('/admin/diets/meal/')} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg border border-secondary-200 hover:border-primary transition-colors">
                 <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />

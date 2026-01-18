@@ -1,6 +1,7 @@
 'use client'
 
 import { useAuth } from '@/lib/hooks/useAuth'
+import { getBackendUrl } from '@/lib/utils'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
@@ -63,7 +64,7 @@ export default function DietitianAppointments() {
           <div className="card">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-secondary-900">Tüm Randevular</h3>
-              <a href="http://localhost:8000/admin/appointments/appointment/" target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:text-primary-600">
+              <a href={getBackendUrl('/admin/appointments/appointment/')} target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:text-primary-600">
                 Admin Panelde Yönet →
               </a>
             </div>

@@ -2,19 +2,18 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from datetime import datetime, date, time
 import json
 
 from .models import Appointment
 from accounts.models import User
-from accounts.utils import jwt_required
+from accounts.decorators import login_required_api
 
 
 @csrf_exempt
 @require_http_methods(["GET"])
-@jwt_required
+@login_required_api
 def list_appointments(request):
     """Liste randevuları - hasta veya diyetisyen için"""
     user = request.user
@@ -73,7 +72,7 @@ def list_appointments(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-@jwt_required
+@login_required_api
 def create_appointment(request):
     """Yeni randevu oluştur"""
     user = request.user
@@ -148,7 +147,7 @@ def create_appointment(request):
 
 @csrf_exempt
 @require_http_methods(["PUT"])
-@jwt_required
+@login_required_api
 def update_appointment(request, appointment_id):
     """Randevu güncelle (sadece diyetisyen)"""
     user = request.user
@@ -196,7 +195,7 @@ def update_appointment(request, appointment_id):
 
 @csrf_exempt
 @require_http_methods(["DELETE"])
-@jwt_required
+@login_required_api
 def cancel_appointment(request, appointment_id):
     """Randevu iptal et"""
     user = request.user
@@ -221,7 +220,7 @@ def cancel_appointment(request, appointment_id):
 
 @csrf_exempt
 @require_http_methods(["GET"])
-@jwt_required
+@login_required_api
 def get_appointment(request, appointment_id):
     """Tek randevu detayı"""
     user = request.user
