@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-o2vh8(1-ljd6$iv#ni59u)xn5iq4tt38r*z*exg-qiyud17i!l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'diyetisyen.apexdock.net']
 
 
 # Application definition
@@ -144,6 +144,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://diyetisyen.apexdock.net",
+    "https://diyetisyen.apexdock.net",
 ]
 CORS_ALLOW_CREDENTIALS = True
 
