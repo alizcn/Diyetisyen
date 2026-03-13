@@ -1,0 +1,75 @@
+{% extends "base_dietitian.html" %}
+
+{% block title %}Besin Düzenle | Diyetisyen{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-title">
+        <a href="{% url 'dietitian_diets' %}" class="small text-decoration-none muted"><i class="bi bi-arrow-left"></i> Diyet planlarına dön</a>
+        <span class="eyebrow mt-3"><i class="bi bi-basket2"></i> Besin Düzenleme</span>
+        <h1 class="display-font mt-3">{{ food.name }}</h1>
+        <p class="muted mb-0">Besin değerlerini güncelleyin.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="surface-card p-4 p-lg-5">
+                {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+
+                <form method="post" action="{% url 'dietitian_food_edit' food.id %}">
+                    {% csrf_token %}
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label fw-semibold">Besin Adı *</label>
+                            <input type="text" id="name" name="name" class="form-control" value="{{ form_data.name|default:'' }}" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="portion_size" class="form-label fw-semibold">Porsiyon *</label>
+                            <input type="number" step="0.01" id="portion_size" name="portion_size" class="form-control" value="{{ form_data.portion_size|default:'' }}" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="unit" class="form-label fw-semibold">Birim *</label>
+                            <select id="unit" name="unit" class="form-select" required>
+                                {% for value, label in unit_choices %}
+                                <option value="{{ value }}" {% if form_data.unit == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <label for="calories" class="form-label fw-semibold">Kalori *</label>
+                            <input type="number" step="0.01" id="calories" name="calories" class="form-control" value="{{ form_data.calories|default:'' }}" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="protein" class="form-label fw-semibold">Protein</label>
+                            <input type="number" step="0.01" id="protein" name="protein" class="form-control" value="{{ form_data.protein|default:'' }}">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="carbs" class="form-label fw-semibold">Karbonhidrat</label>
+                            <input type="number" step="0.01" id="carbs" name="carbs" class="form-control" value="{{ form_data.carbs|default:'' }}">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="fats" class="form-label fw-semibold">Yağ</label>
+                            <input type="number" step="0.01" id="fats" name="fats" class="form-control" value="{{ form_data.fats|default:'' }}">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="fiber" class="form-label fw-semibold">Lif</label>
+                            <input type="number" step="0.01" id="fiber" name="fiber" class="form-control" value="{{ form_data.fiber|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row gap-2">
+                        <button type="submit" class="btn btn-primary flex-fill">Kaydet</button>
+                        <a href="{% url 'dietitian_diets' %}" class="btn btn-secondary flex-fill">Vazgeç</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

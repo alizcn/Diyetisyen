@@ -7,83 +7,185 @@
     <div class="section-title">
         <span class="eyebrow"><i class="bi bi-journal-richtext"></i> Plan Yönetimi</span>
         <h1 class="display-font mt-3">Diyet Planları</h1>
-        <p class="muted mb-0">Hasta bazında oluşturulan planları tarih, hedef kalori ve durum bilgileriyle takip edin.</p>
+        <p class="muted mb-0">Besin veritabanını ve diyet planlarını tek sayfada listeleyin, düzenleyin, silin.</p>
     </div>
 
     <section class="surface-card p-4 mb-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="display-font h5 mb-0">Plan Listesi</h2>
-            <span class="small muted">Toplam plan: {{ diet_plans|length }}</span>
+            <h2 class="display-font h5 mb-0">Besin Veritabanı</h2>
+            <span class="small muted">Toplam besin: {{ foods|length }}</span>
         </div>
 
-        {% if diet_plans %}
-        <div class="row g-3">
-            {% for plan in diet_plans %}
-            <div class="col-md-6">
-                <article class="surface-muted p-3 h-100">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h3 class="h6 fw-bold mb-0">{{ plan.title }}</h3>
-                        {% if plan.is_active %}
-                        <span class="status-pill status-confirmed">Aktif</span>
-                        {% else %}
-                        <span class="status-pill status-completed">Pasif</span>
-                        {% endif %}
-                    </div>
-                    <p class="small mb-2"><i class="bi bi-person me-1"></i>{{ plan.patient.first_name }} {{ plan.patient.last_name }}</p>
-                    <div class="d-flex flex-wrap gap-2 mb-2">
-                        <span class="status-pill status-scheduled"><i class="bi bi-calendar3 me-1"></i>{{ plan.start_date|date:"d.m.Y" }}</span>
-                        {% if plan.daily_calories_target %}
-                        <span class="status-pill status-confirmed"><i class="bi bi-fire me-1"></i>{{ plan.daily_calories_target }} kcal</span>
-                        {% endif %}
-                    </div>
-                    {% if plan.description %}
-                    <p class="muted small mb-0">{{ plan.description|truncatechars:110 }}</p>
-                    {% endif %}
-                </article>
+        <form method="post" action="{% url 'dietitian_food_create' %}" class="surface-muted p-3 mb-3">
+            {% csrf_token %}
+            <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <label for="food_name" class="form-label small fw-semibold mb-1">Besin Adı</label>
+                    <input type="text" class="form-control" id="food_name" name="name" required>
+                </div>
+                <div class="col-md-2">
+                    <label for="food_portion" class="form-label small fw-semibold mb-1">Porsiyon</label>
+                    <input type="number" step="0.01" class="form-control" id="food_portion" name="portion_size" value="100" required>
+                </div>
+                <div class="col-md-2">
+                    <label for="food_unit" class="form-label small fw-semibold mb-1">Birim</label>
+                    <select class="form-select" id="food_unit" name="unit" required>
+                        {% for value, label in unit_choices %}
+                        <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="food_cal" class="form-label small fw-semibold mb-1">Kalori</label>
+                    <input type="number" step="0.01" class="form-control" id="food_cal" name="calories" required>
+                </div>
+                <div class="col-md-1">
+                    <label for="food_protein" class="form-label small fw-semibold mb-1">Pr.</label>
+                    <input type="number" step="0.01" class="form-control" id="food_protein" name="protein" value="0">
+                </div>
+                <div class="col-md-1">
+                    <label for="food_carbs" class="form-label small fw-semibold mb-1">Karb.</label>
+                    <input type="number" step="0.01" class="form-control" id="food_carbs" name="carbs" value="0">
+                </div>
+                <div class="col-md-1">
+                    <label for="food_fats" class="form-label small fw-semibold mb-1">Yağ</label>
+                    <input type="number" step="0.01" class="form-control" id="food_fats" name="fats" value="0">
+                </div>
+                <div class="col-md-1">
+                    <label for="food_fiber" class="form-label small fw-semibold mb-1">Lif</label>
+                    <input type="number" step="0.01" class="form-control" id="food_fiber" name="fiber" value="0">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Besin Ekle</button>
+                </div>
             </div>
-            {% endfor %}
+        </form>
+
+        {% if foods %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Besin</th>
+                        <th>Porsiyon</th>
+                        <th>Kalori</th>
+                        <th>Protein</th>
+                        <th>Karb.</th>
+                        <th>Yağ</th>
+                        <th>Lif</th>
+                        <th>İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for food in foods %}
+                    <tr>
+                        <td class="fw-semibold">{{ food.name }}</td>
+                        <td>{{ food.portion_size }} {{ food.get_unit_display }}</td>
+                        <td>{{ food.calories }}</td>
+                        <td>{{ food.protein }}</td>
+                        <td>{{ food.carbs }}</td>
+                        <td>{{ food.fats }}</td>
+                        <td>{{ food.fiber }}</td>
+                        <td>
+                            <div class="d-flex flex-wrap gap-1">
+                                <a href="{% url 'dietitian_food_edit' food.id %}" class="btn btn-outline-primary btn-sm">Düzenle</a>
+                                <form method="post" action="{% url 'dietitian_food_delete' food.id %}" onsubmit="return confirm('Bu besini silmek istediğinizden emin misiniz?');" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Sil</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
         {% else %}
         <div class="empty-state">
-            <span class="icon-pill mb-3"><i class="bi bi-journal-x"></i></span>
-            <h3 class="display-font h6">Henüz kayıtlı diyet planı yok</h3>
-            <p class="muted small mb-0">Planlar oluşturuldukça bu listede görünür hale gelir.</p>
+            <span class="icon-pill mb-3"><i class="bi bi-box"></i></span>
+            <h3 class="display-font h6">Besin kaydı bulunmuyor</h3>
+            <p class="muted small mb-0">Yukarıdaki formu kullanarak ilk besin kaydını ekleyebilirsiniz.</p>
         </div>
         {% endif %}
     </section>
 
     <section class="surface-card p-4">
-        <h2 class="display-font h5 mb-3">Besin Veritabanı Durumu</h2>
-        <p class="muted mb-3">Bu bölüm şu an bilgilendirme amaçlıdır. Besin ekleme/düzenleme akışı backend tarafında hazırlandığında aynı panelden yönetilebilir.</p>
-        <div class="row g-3">
-            <div class="col-md-4">
-                <div class="surface-muted p-3 h-100">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <span class="icon-pill"><i class="bi bi-plus-lg"></i></span>
-                        <h3 class="h6 mb-0">Besin Ekleme</h3>
-                    </div>
-                    <p class="small muted mb-0">Yeni besin kaydı için hazırlık kartı.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="surface-muted p-3 h-100">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <span class="icon-pill"><i class="bi bi-list-ul"></i></span>
-                        <h3 class="h6 mb-0">Besin Listesi</h3>
-                    </div>
-                    <p class="small muted mb-0">Tüm besin verilerinin görüleceği alan.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="surface-muted p-3 h-100">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <span class="icon-pill"><i class="bi bi-alarm"></i></span>
-                        <h3 class="h6 mb-0">Öğün Eşleme</h3>
-                    </div>
-                    <p class="small muted mb-0">Besinleri öğünlere bağlama akışı için ayrılmış alan.</p>
-                </div>
-            </div>
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+            <h2 class="display-font h5 mb-0">Diyet Planı Listesi</h2>
+            <span class="small muted">Toplam plan: {{ diet_plans|length }}</span>
         </div>
+
+        <form method="get" action="{% url 'dietitian_diets' %}" class="surface-muted p-3 mb-3">
+            <div class="row g-2 align-items-end">
+                <div class="col-md-4">
+                    <label for="patient_filter" class="form-label small fw-semibold mb-1">Hastaya Göre Filtrele</label>
+                    <select id="patient_filter" name="patient" class="form-select">
+                        <option value="">Tüm hastalar</option>
+                        {% for p in patient_profiles %}
+                        <option value="{{ p.user.id }}" {% if selected_patient_id == p.user.id %}selected{% endif %}>{{ p.user.first_name }} {{ p.user.last_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                    <button type="submit" class="btn btn-outline-primary">Filtrele</button>
+                    <a href="{% url 'dietitian_diets' %}" class="btn btn-secondary">Temizle</a>
+                </div>
+            </div>
+        </form>
+
+        {% if diet_plans %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Başlık</th>
+                        <th>Hasta</th>
+                        <th>Başlangıç</th>
+                        <th>Bitiş</th>
+                        <th>Kalori</th>
+                        <th>Durum</th>
+                        <th>İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for plan in diet_plans %}
+                    <tr>
+                        <td>
+                            <div class="fw-semibold">{{ plan.title }}</div>
+                            <div class="small muted">{{ plan.description|truncatechars:60 }}</div>
+                        </td>
+                        <td>{{ plan.patient.first_name }} {{ plan.patient.last_name }}</td>
+                        <td>{{ plan.start_date|date:"d.m.Y" }}</td>
+                        <td>{% if plan.end_date %}{{ plan.end_date|date:"d.m.Y" }}{% else %}-{% endif %}</td>
+                        <td>{% if plan.daily_calories_target %}{{ plan.daily_calories_target }} kcal{% else %}-{% endif %}</td>
+                        <td>
+                            {% if plan.is_active %}
+                            <span class="status-pill status-confirmed">Aktif</span>
+                            {% else %}
+                            <span class="status-pill status-completed">Pasif</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex flex-wrap gap-1">
+                                <a href="{% url 'dietitian_diet_edit' plan.id %}" class="btn btn-outline-primary btn-sm">Düzenle</a>
+                                <form method="post" action="{% url 'dietitian_diet_delete' plan.id %}" onsubmit="return confirm('Bu diyet planını silmek istediğinizden emin misiniz?');" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Sil</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <span class="icon-pill mb-3"><i class="bi bi-journal-x"></i></span>
+            <h3 class="display-font h6">Kayıtlı diyet planı bulunmuyor</h3>
+            <p class="muted small mb-0">Seçilen filtreye uygun plan yok veya henüz plan oluşturulmamış.</p>
+        </div>
+        {% endif %}
     </section>
 </div>
 {% endblock %}

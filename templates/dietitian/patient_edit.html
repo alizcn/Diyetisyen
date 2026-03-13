@@ -1,0 +1,91 @@
+{% extends "base_dietitian.html" %}
+
+{% block title %}Hasta Düzenle | Diyetisyen{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-title">
+        <a href="{% url 'dietitian_patients' %}" class="small text-decoration-none muted"><i class="bi bi-arrow-left"></i> Hasta listesine dön</a>
+        <span class="eyebrow mt-3"><i class="bi bi-pencil-square"></i> Hasta Düzenleme</span>
+        <h1 class="display-font mt-3">{{ patient_profile.user.first_name }} {{ patient_profile.user.last_name }}</h1>
+        <p class="muted mb-0">Hasta profil bilgilerini güncelleyin.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="surface-card p-4 p-lg-5">
+                {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+
+                <form method="post" action="{% url 'dietitian_patient_edit' patient_profile.id %}">
+                    {% csrf_token %}
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="first_name" class="form-label fw-semibold">Ad *</label>
+                            <input type="text" id="first_name" name="first_name" class="form-control" value="{{ form_data.first_name|default:'' }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="last_name" class="form-label fw-semibold">Soyad *</label>
+                            <input type="text" id="last_name" name="last_name" class="form-control" value="{{ form_data.last_name|default:'' }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="email" class="form-label fw-semibold">E-posta *</label>
+                            <input type="email" id="email" name="email" class="form-control" value="{{ form_data.email|default:'' }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label fw-semibold">Telefon</label>
+                            <input type="text" id="phone" name="phone" class="form-control" value="{{ form_data.phone|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label for="date_of_birth" class="form-label fw-semibold">Doğum Tarihi</label>
+                            <input type="date" id="date_of_birth" name="date_of_birth" class="form-control" value="{{ form_data.date_of_birth|default:'' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="gender" class="form-label fw-semibold">Cinsiyet</label>
+                            <select id="gender" name="gender" class="form-select">
+                                <option value="" {% if not form_data.gender %}selected{% endif %}>Seçiniz</option>
+                                <option value="M" {% if form_data.gender == 'M' %}selected{% endif %}>Erkek</option>
+                                <option value="F" {% if form_data.gender == 'F' %}selected{% endif %}>Kadın</option>
+                                <option value="O" {% if form_data.gender == 'O' %}selected{% endif %}>Diğer</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="height" class="form-label fw-semibold">Boy (cm)</label>
+                            <input type="number" step="0.01" id="height" name="height" class="form-control" value="{{ form_data.height|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="current_weight" class="form-label fw-semibold">Mevcut Kilo (kg)</label>
+                            <input type="number" step="0.01" id="current_weight" name="current_weight" class="form-control" value="{{ form_data.current_weight|default:'' }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="target_weight" class="form-label fw-semibold">Hedef Kilo (kg)</label>
+                            <input type="number" step="0.01" id="target_weight" name="target_weight" class="form-control" value="{{ form_data.target_weight|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="medical_conditions" class="form-label fw-semibold">Tıbbi Notlar</label>
+                        <textarea id="medical_conditions" name="medical_conditions" rows="4" class="form-control">{{ form_data.medical_conditions|default:'' }}</textarea>
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row gap-2">
+                        <button type="submit" class="btn btn-primary flex-fill">Kaydet</button>
+                        <a href="{% url 'dietitian_patients' %}" class="btn btn-secondary flex-fill">Vazgeç</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

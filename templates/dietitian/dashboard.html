@@ -11,28 +11,35 @@
     </div>
 
     <div class="row g-3 mb-4">
-        <div class="col-sm-6 col-xl-3">
+        <div class="col-sm-6 col-xl-4">
             <div class="metric-card fade-up">
                 <p class="metric-label">Toplam Hasta</p>
                 <p class="metric-value">{{ patient_count }}</p>
                 <p class="metric-help">Atanmış aktif hastalar</p>
             </div>
         </div>
-        <div class="col-sm-6 col-xl-3">
+        <div class="col-sm-6 col-xl-4">
             <div class="metric-card fade-up delay-1">
                 <p class="metric-label">Bugünkü Randevu</p>
                 <p class="metric-value">{{ today_appointments_count }}</p>
-                <p class="metric-help">{% if today_appointments_count %}Görüşme yoğunluğu var{% else %}Bugün sakin{% endif %}</p>
+                <p class="metric-help">{% if today_appointments_count %}Bugün görüşme var{% else %}Bugün sakin{% endif %}</p>
             </div>
         </div>
-        <div class="col-sm-6 col-xl-3">
+        <div class="col-sm-6 col-xl-4">
+            <div class="metric-card fade-up delay-2">
+                <p class="metric-label">Haftalık Randevu</p>
+                <p class="metric-value">{{ weekly_appointments_count }}</p>
+                <p class="metric-help">{{ week_start|date:"d.m" }} - {{ week_end|date:"d.m" }} arası</p>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-6">
             <div class="metric-card fade-up delay-2">
                 <p class="metric-label">Aktif Diyet Planı</p>
                 <p class="metric-value">{{ active_diet_count }}</p>
                 <p class="metric-help">Yürürlükteki planlar</p>
             </div>
         </div>
-        <div class="col-sm-6 col-xl-3">
+        <div class="col-sm-6 col-xl-6">
             <div class="metric-card fade-up delay-3">
                 <p class="metric-label">Toplam Randevu</p>
                 <p class="metric-value">{{ total_appointments }}</p>
@@ -72,8 +79,8 @@
         <div class="col-lg-7">
             <div class="surface-card p-4 h-100">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h2 class="display-font h5 mb-0">Yaklaşan Randevular</h2>
-                    <a href="{% url 'dietitian_appointments' %}" class="small">Tümünü gör</a>
+                    <h2 class="display-font h5 mb-0">Bu Haftanın Yaklaşan Randevuları</h2>
+                    <span class="small muted">{{ week_start|date:"d F" }} - {{ week_end|date:"d F" }}</span>
                 </div>
                 {% if upcoming_appointments %}
                     {% for apt in upcoming_appointments %}
@@ -81,7 +88,7 @@
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
                             <div>
                                 <h3 class="h6 fw-bold mb-1">{{ apt.patient.first_name }} {{ apt.patient.last_name }}</h3>
-                                <p class="muted small mb-0">{{ apt.date|date:"d F" }} - {{ apt.time|time:"H:i" }}</p>
+                                <p class="muted small mb-0">{{ apt.date|date:"l, d F" }} - {{ apt.time|time:"H:i" }}</p>
                             </div>
                             <span class="status-pill status-{{ apt.status }}">{{ apt.get_status_display }}</span>
                         </div>
@@ -90,8 +97,8 @@
                 {% else %}
                 <div class="empty-state">
                     <span class="icon-pill mb-3"><i class="bi bi-calendar2-x"></i></span>
-                    <h3 class="display-font h6">Yaklaşan randevu bulunmuyor</h3>
-                    <p class="muted small mb-0">Hastalar yeni randevu aldığında bu alanda listelenecek.</p>
+                    <h3 class="display-font h6">Bu hafta yaklaşan randevu bulunmuyor</h3>
+                    <p class="muted small mb-0">Haftanın randevuları pazartesiden pazara burada listelenir.</p>
                 </div>
                 {% endif %}
             </div>
