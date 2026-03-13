@@ -1,0 +1,89 @@
+{% extends "base_dietitian.html" %}
+
+{% block title %}Diyet Planları | Diyetisyen{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-title">
+        <span class="eyebrow"><i class="bi bi-journal-richtext"></i> Plan Yönetimi</span>
+        <h1 class="display-font mt-3">Diyet Planları</h1>
+        <p class="muted mb-0">Hasta bazında oluşturulan planları tarih, hedef kalori ve durum bilgileriyle takip edin.</p>
+    </div>
+
+    <section class="surface-card p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="display-font h5 mb-0">Plan Listesi</h2>
+            <span class="small muted">Toplam plan: {{ diet_plans|length }}</span>
+        </div>
+
+        {% if diet_plans %}
+        <div class="row g-3">
+            {% for plan in diet_plans %}
+            <div class="col-md-6">
+                <article class="surface-muted p-3 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h3 class="h6 fw-bold mb-0">{{ plan.title }}</h3>
+                        {% if plan.is_active %}
+                        <span class="status-pill status-confirmed">Aktif</span>
+                        {% else %}
+                        <span class="status-pill status-completed">Pasif</span>
+                        {% endif %}
+                    </div>
+                    <p class="small mb-2"><i class="bi bi-person me-1"></i>{{ plan.patient.first_name }} {{ plan.patient.last_name }}</p>
+                    <div class="d-flex flex-wrap gap-2 mb-2">
+                        <span class="status-pill status-scheduled"><i class="bi bi-calendar3 me-1"></i>{{ plan.start_date|date:"d.m.Y" }}</span>
+                        {% if plan.daily_calories_target %}
+                        <span class="status-pill status-confirmed"><i class="bi bi-fire me-1"></i>{{ plan.daily_calories_target }} kcal</span>
+                        {% endif %}
+                    </div>
+                    {% if plan.description %}
+                    <p class="muted small mb-0">{{ plan.description|truncatechars:110 }}</p>
+                    {% endif %}
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <span class="icon-pill mb-3"><i class="bi bi-journal-x"></i></span>
+            <h3 class="display-font h6">Henüz kayıtlı diyet planı yok</h3>
+            <p class="muted small mb-0">Planlar oluşturuldukça bu listede görünür hale gelir.</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <section class="surface-card p-4">
+        <h2 class="display-font h5 mb-3">Besin Veritabanı Durumu</h2>
+        <p class="muted mb-3">Bu bölüm şu an bilgilendirme amaçlıdır. Besin ekleme/düzenleme akışı backend tarafında hazırlandığında aynı panelden yönetilebilir.</p>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="surface-muted p-3 h-100">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span class="icon-pill"><i class="bi bi-plus-lg"></i></span>
+                        <h3 class="h6 mb-0">Besin Ekleme</h3>
+                    </div>
+                    <p class="small muted mb-0">Yeni besin kaydı için hazırlık kartı.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="surface-muted p-3 h-100">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span class="icon-pill"><i class="bi bi-list-ul"></i></span>
+                        <h3 class="h6 mb-0">Besin Listesi</h3>
+                    </div>
+                    <p class="small muted mb-0">Tüm besin verilerinin görüleceği alan.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="surface-muted p-3 h-100">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span class="icon-pill"><i class="bi bi-alarm"></i></span>
+                        <h3 class="h6 mb-0">Öğün Eşleme</h3>
+                    </div>
+                    <p class="small muted mb-0">Besinleri öğünlere bağlama akışı için ayrılmış alan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

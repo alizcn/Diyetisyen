@@ -1,120 +1,72 @@
-# Profesyonel Diyetisyen Yönetim Sistemi
+# Diyetisyen Yönetim Sistemi
 
-Modern ve kullanıcı dostu bir diyetisyen-hasta yönetim platformu.
+Django tabanli, diyetisyen ve hasta rollerine sahip bir yonetim uygulamasi.
 
-## Özellikler
+## Ozellikler
 
-- ✅ **Multi-User Sistem**: Diyetisyen ve hasta rolleri
-- ✅ **Randevu Yönetimi**: Online randevu alma ve yönetme
-- ✅ **Hasta Takibi**: Kilo, vücut ölçümleri, ilerleme grafikleri
-- ✅ **Diyet Planları**: Özelleştirilmiş beslenme programları
-- ✅ **Blog Sistemi**: Beslenme ve sağlık içerikleri
-- ✅ **Modern Tasarım**: Tailwind CSS ile minimal ve profesyonel arayüz
+- Coklu rol: `diyetisyen` ve `hasta`
+- Session tabanli giris/kayit/cikis
+- Hasta randevu olusturma ve iptal
+- Diyetisyen randevu yonetimi (tamamlama, iptal)
+- Hasta olcum kayitlari ve ilerleme takibi
+- Aktif diyet plani goruntuleme
+- Docker Compose ile hizli kurulum
 
-## Teknoloji Stack
+## Teknoloji
 
-### Backend
+- Python 3.11+
 - Django 4.2+
-- SQLite3 Database
-- JWT Authentication
-- Python 3.13
+- PostgreSQL
+- Gunicorn
+- WhiteNoise (static dosya servisi)
+- Bootstrap tabanli Django template UI
 
-### Frontend
-- Next.js 14 (App Router)
-- TypeScript
-- Tailwind CSS
-- Axios
-- React Hooks
+## Proje Yapisi
 
-## Kurulum
+- `config/`: Django ayarlari ve root URL
+- `accounts/`: kullanici modeli, auth view'lari, profil modelleri
+- `appointments/`: randevu modeli ve akislari
+- `patients/`: olcum ve ilerleme akislari
+- `diets/`: diyet plani/besin modelleri
+- `blog/`: blog modelleri
+- `templates/`: tum frontend ekranlari (Django template)
 
-### Backend Kurulumu
+## Hemen Baslat (Docker)
 
 ```bash
-cd backend
+docker compose up -d --build
+```
 
-# Virtual environment oluştur (önerilir)
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+Uygulama: `http://localhost:8000`
 
-# Paketleri kur
+## Lokal Calistirma (opsiyonel)
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
-
-# Veritabanını oluştur
 python manage.py migrate
-
-# Superuser oluştur
-python manage.py createsuperuser
-
-# Development server'ı başlat
-python manage.py runserver
+python manage.py runserver 0.0.0.0:8000
 ```
 
-Backend http://localhost:8000 adresinde çalışacak.
-Admin panel: http://localhost:8000/admin
+## Ornek Hesaplar (Mock Data)
 
-### Frontend Kurulumu
+Migration ile mock data olusur (`accounts.0003_add_mock_data`).
 
-```bash
-cd frontend
+- Diyetisyen: `ayse@ayse.com` / `ayse`
+- Hasta: `elif@patient.com` / `123456`
+- Ek test hesaplari migration ile otomatik gelebilir.
 
-# Paketleri kur
-npm install
+## Onemli URL'ler
 
-# Development server'ı başlat
-npm run dev
-```
+- Ana sayfa: `/`
+- Giris: `/login/`
+- Kayit: `/register/`
+- Hasta paneli: `/panel/hasta/`
+- Diyetisyen paneli: `/panel/diyetisyen/`
 
-Frontend http://localhost:3000 adresinde çalışacak.
+## Notlar
 
-## Kullanım
-
-1. Backend'i çalıştırın: `cd backend && python manage.py runserver`
-2. Frontend'i çalıştırın: `cd frontend && npm run dev`
-3. Tarayıcıda http://localhost:3000 adresine gidin
-4. Yeni bir hesap oluşturun (Diyetisyen veya Hasta)
-5. Dashboard'a erişin ve özellikleri keşfedin
-
-## Proje Yapısı
-
-```
-diyetisyen/
-├── backend/
-│   ├── config/              # Django ayarları
-│   ├── accounts/            # Kullanıcı yönetimi
-│   ├── appointments/        # Randevu sistemi
-│   ├── patients/            # Hasta takibi
-│   ├── diets/               # Diyet planları
-│   ├── blog/                # Blog sistemi
-│   └── db.sqlite3           # Veritabanı
-├── frontend/
-│   ├── app/                 # Next.js pages
-│   ├── components/          # React components
-│   ├── lib/                 # Utilities, hooks, API
-│   └── public/              # Static files
-└── README.md
-```
-
-## API Endpoints
-
-### Authentication
-- `POST /api/auth/register/` - Kullanıcı kaydı
-- `POST /api/auth/login/` - Giriş
-- `GET /api/auth/me/` - Kullanıcı bilgileri
-- `PUT /api/auth/profile/` - Profil güncelleme
-- `GET /api/auth/dietitians/` - Diyetisyen listesi
-
-### Diğer Endpoints
-*(Geliştirme aşamasında)*
-- Appointments API
-- Patients/Measurements API
-- Diet Plans API
-- Blog API
-
-## Lisans
-
-Bu proje eğitim amaçlıdır.
-
-## Destek
-
-Sorularınız için GitHub Issues kullanabilirsiniz.
+- Static dosyalar WhiteNoise ile servis edilir.
+- Production ortaminda `DEBUG=False` ve guvenli `SECRET_KEY` kullanin.
+- `ALLOWED_HOSTS` ortami degisken ile ayarlanabilir (virgulle ayrilmis).

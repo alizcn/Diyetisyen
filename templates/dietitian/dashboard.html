@@ -1,0 +1,101 @@
+{% extends "base_dietitian.html" %}
+
+{% block title %}Diyetisyen Dashboard | Diyetisyen{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-title">
+        <span class="eyebrow"><i class="bi bi-briefcase-fill"></i> Yönetim Paneli</span>
+        <h1 class="display-font mt-3">Diyetisyen Dashboard</h1>
+        <p class="muted mb-0">Hasta, randevu ve diyet planı metriklerini tek bakışta izleyin.</p>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="metric-card fade-up">
+                <p class="metric-label">Toplam Hasta</p>
+                <p class="metric-value">{{ patient_count }}</p>
+                <p class="metric-help">Atanmış aktif hastalar</p>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="metric-card fade-up delay-1">
+                <p class="metric-label">Bugünkü Randevu</p>
+                <p class="metric-value">{{ today_appointments_count }}</p>
+                <p class="metric-help">{% if today_appointments_count %}Görüşme yoğunluğu var{% else %}Bugün sakin{% endif %}</p>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="metric-card fade-up delay-2">
+                <p class="metric-label">Aktif Diyet Planı</p>
+                <p class="metric-value">{{ active_diet_count }}</p>
+                <p class="metric-help">Yürürlükteki planlar</p>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="metric-card fade-up delay-3">
+                <p class="metric-label">Toplam Randevu</p>
+                <p class="metric-value">{{ total_appointments }}</p>
+                <p class="metric-help">Geçmiş dahil tüm kayıtlar</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-5">
+            <div class="surface-card p-4 h-100">
+                <h2 class="display-font h5 mb-3">Hızlı Erişim</h2>
+                <a href="{% url 'dietitian_patients' %}" class="action-link mb-2">
+                    <span class="icon-pill"><i class="bi bi-people"></i></span>
+                    <div>
+                        <p class="mb-0 fw-semibold">Hastalarım</p>
+                        <small class="muted">Atanmış hasta profillerini görüntüle</small>
+                    </div>
+                </a>
+                <a href="{% url 'dietitian_appointments' %}" class="action-link mb-2">
+                    <span class="icon-pill"><i class="bi bi-calendar-week"></i></span>
+                    <div>
+                        <p class="mb-0 fw-semibold">Randevular</p>
+                        <small class="muted">Durum güncelle ve iptal işlemlerini yönet</small>
+                    </div>
+                </a>
+                <a href="{% url 'dietitian_diets' %}" class="action-link">
+                    <span class="icon-pill"><i class="bi bi-journal-medical"></i></span>
+                    <div>
+                        <p class="mb-0 fw-semibold">Diyet Planları</p>
+                        <small class="muted">Hasta planlarının güncel listesini aç</small>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="surface-card p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="display-font h5 mb-0">Yaklaşan Randevular</h2>
+                    <a href="{% url 'dietitian_appointments' %}" class="small">Tümünü gör</a>
+                </div>
+                {% if upcoming_appointments %}
+                    {% for apt in upcoming_appointments %}
+                    <article class="appointment-card">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                            <div>
+                                <h3 class="h6 fw-bold mb-1">{{ apt.patient.first_name }} {{ apt.patient.last_name }}</h3>
+                                <p class="muted small mb-0">{{ apt.date|date:"d F" }} - {{ apt.time|time:"H:i" }}</p>
+                            </div>
+                            <span class="status-pill status-{{ apt.status }}">{{ apt.get_status_display }}</span>
+                        </div>
+                    </article>
+                    {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <span class="icon-pill mb-3"><i class="bi bi-calendar2-x"></i></span>
+                    <h3 class="display-font h6">Yaklaşan randevu bulunmuyor</h3>
+                    <p class="muted small mb-0">Hastalar yeni randevu aldığında bu alanda listelenecek.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

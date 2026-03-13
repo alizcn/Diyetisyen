@@ -1,0 +1,45 @@
+{% extends "base_dietitian.html" %}
+
+{% block title %}Hastalarım | Diyetisyen{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-title">
+        <span class="eyebrow"><i class="bi bi-people-fill"></i> Hasta Yönetimi</span>
+        <h1 class="display-font mt-3">Hastalarım</h1>
+        <p class="muted mb-0">Atanmış hasta profillerini ölçüm ve iletişim detaylarıyla görüntüleyin.</p>
+    </div>
+
+    {% if patients %}
+    <div class="row g-3">
+        {% for patient in patients %}
+        <div class="col-md-6 col-xl-4">
+            <article class="surface-card p-4 h-100 fade-up">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <span class="icon-pill"><i class="bi bi-person"></i></span>
+                    <div>
+                        <h2 class="h6 fw-bold mb-0">{{ patient.user.first_name }} {{ patient.user.last_name }}</h2>
+                        <p class="small muted mb-0">{{ patient.user.email }}</p>
+                    </div>
+                </div>
+                <ul class="data-list">
+                    <li><span>Boy</span><strong>{% if patient.height %}{{ patient.height }} cm{% else %}-{% endif %}</strong></li>
+                    <li><span>Mevcut Kilo</span><strong>{% if patient.current_weight %}{{ patient.current_weight }} kg{% else %}-{% endif %}</strong></li>
+                    <li><span>Hedef Kilo</span><strong>{% if patient.target_weight %}{{ patient.target_weight }} kg{% else %}-{% endif %}</strong></li>
+                    <li><span>Telefon</span><strong>{% if patient.phone %}{{ patient.phone }}{% else %}-{% endif %}</strong></li>
+                </ul>
+            </article>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="surface-card p-4 p-lg-5">
+        <div class="empty-state">
+            <span class="icon-pill mb-3"><i class="bi bi-person-x"></i></span>
+            <h3 class="display-font h5">Henüz hastanız bulunmuyor</h3>
+            <p class="muted mb-0">Hastalar profilinize bağlandıkça bu listede otomatik görünecekler.</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

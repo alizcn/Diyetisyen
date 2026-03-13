@@ -1,0 +1,138 @@
+{% extends "base_public.html" %}
+
+{% block title %}Diyetisyen | Akıllı Beslenme ve Takip Platformu{% endblock %}
+
+{% block content %}
+<section class="container py-3 py-lg-5">
+    <div class="row g-4 align-items-center">
+        <div class="col-lg-7">
+            <div class="fade-up">
+                <span class="eyebrow"><i class="bi bi-heart-pulse"></i> Dijital Beslenme Asistanı</span>
+                <h1 class="display-font mt-3 mb-3" style="font-size: clamp(2rem, 4vw, 3.2rem);">
+                    Sağlıklı yaşama geçişinizi
+                    <span style="color: var(--primary);">ölçülebilir adımlarla</span>
+                    yönetin.
+                </h1>
+                <p class="muted fs-5 mb-4">
+                    Diyetisyen-hasta iletişimini randevu planlama, kişisel diyet programı ve ilerleme kaydı ile tek bir akışta birleştirin.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-lg px-4">Hemen Başla</a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg px-4">Giriş Yap</a>
+                </div>
+            </div>
+            <div class="row g-3 mt-3">
+                <div class="col-sm-4 fade-up delay-1">
+                    <div class="metric-card">
+                        <p class="metric-label">Randevu Akışı</p>
+                        <p class="metric-value">7/24</p>
+                        <p class="metric-help">Online randevu yönetimi</p>
+                    </div>
+                </div>
+                <div class="col-sm-4 fade-up delay-2">
+                    <div class="metric-card">
+                        <p class="metric-label">Takip Modülü</p>
+                        <p class="metric-value">Canlı</p>
+                        <p class="metric-help">Ölçüm ve gelişim kaydı</p>
+                    </div>
+                </div>
+                <div class="col-sm-4 fade-up delay-3">
+                    <div class="metric-card">
+                        <p class="metric-label">Rol Desteği</p>
+                        <p class="metric-value">2</p>
+                        <p class="metric-help">Hasta + diyetisyen paneli</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="surface-card p-4 fade-up delay-2">
+                <h5 class="display-font mb-3">Örnek Günlük Akış</h5>
+                <div class="surface-muted p-3 mb-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="icon-pill"><i class="bi bi-calendar-check"></i></span>
+                        <div>
+                            <p class="mb-0 fw-semibold">Randevu Oluştur</p>
+                            <small class="muted">Uygun saat seçimi ve not ekleme</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="surface-muted p-3 mb-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="icon-pill"><i class="bi bi-clipboard2-pulse"></i></span>
+                        <div>
+                            <p class="mb-0 fw-semibold">Diyet Planını Gör</p>
+                            <small class="muted">Öğün bazlı açıklama ve besin listesi</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="surface-muted p-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="icon-pill"><i class="bi bi-graph-up-arrow"></i></span>
+                        <div>
+                            <p class="mb-0 fw-semibold">İlerleme Takip Et</p>
+                            <small class="muted">Kilo, yağ oranı ve çevre ölçümleri</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-2 mt-3 text-success fw-semibold small">
+                    <i class="bi bi-shield-check"></i> Güvenli oturum yönetimi ve rol bazlı erişim
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="hizmetler" class="container pb-5">
+    <div class="section-title">
+        <span class="eyebrow"><i class="bi bi-stars"></i> Öne Çıkan Özellikler</span>
+        <h2 class="display-font mt-3">Süreç odaklı sağlık deneyimi</h2>
+        <p class="muted mb-0">Hem hasta hem diyetisyen tarafında günlük iş akışını hızlandıran modüller.</p>
+    </div>
+    <div class="row g-3 mt-1">
+        <div class="col-md-6 col-xl-3">
+            <article class="surface-card h-100 p-4 fade-up">
+                <span class="icon-pill mb-3"><i class="bi bi-person-vcard"></i></span>
+                <h5 class="display-font h6">Rol Bazlı Panel</h5>
+                <p class="muted mb-0">Kullanıcı tipiyle otomatik panel yönlendirmesi ve yetki kontrolü.</p>
+            </article>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <article class="surface-card h-100 p-4 fade-up delay-1">
+                <span class="icon-pill mb-3"><i class="bi bi-clock-history"></i></span>
+                <h5 class="display-font h6">Randevu Yönetimi</h5>
+                <p class="muted mb-0">Hasta tarafında yeni randevu, diyetisyen tarafında durum güncelleme.</p>
+            </article>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <article class="surface-card h-100 p-4 fade-up delay-2">
+                <span class="icon-pill mb-3"><i class="bi bi-journal-text"></i></span>
+                <h5 class="display-font h6">Diyet Plan Görünümü</h5>
+                <p class="muted mb-0">Öğün saatleri, açıklama ve besin bazlı kalori görünürlüğü.</p>
+            </article>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <article class="surface-card h-100 p-4 fade-up delay-3">
+                <span class="icon-pill mb-3"><i class="bi bi-speedometer2"></i></span>
+                <h5 class="display-font h6">Ölçüm ve BMI</h5>
+                <p class="muted mb-0">Kilo geçmişi, vücut ölçüleri ve otomatik BMI hesaplaması.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="container pb-4">
+    <div class="surface-card p-4 p-lg-5">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="eyebrow"><i class="bi bi-rocket-takeoff"></i> Başlangıç</span>
+                <h3 class="display-font mt-3">Sağlıklı yaşam takibini bugün başlatın</h3>
+                <p class="muted mb-0">Kayıt olduktan sonra role uygun paneliniz otomatik açılır. Hasta tarafı randevu ve ölçüm takibini, diyetisyen tarafı hasta-diyet-randevu yönetimini tek yerden sürdürür.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{% url 'register' %}" class="btn btn-primary btn-lg px-4">Ücretsiz Kayıt</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

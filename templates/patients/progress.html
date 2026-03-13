@@ -1,0 +1,87 @@
+{% extends "base_patient.html" %}
+
+{% block title %}İlerleme Takibi | Diyetisyen{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 section-title">
+        <div>
+            <span class="eyebrow"><i class="bi bi-graph-up-arrow"></i> Gelişim Paneli</span>
+            <h1 class="display-font mt-3">İlerleme Takibi</h1>
+            <p class="muted mb-0">Kilo ve vücut ölçümlerindeki değişimi zaman içinde inceleyin.</p>
+        </div>
+        <a href="{% url 'patient_add_measurement' %}" class="btn btn-primary">Ölçüm Ekle</a>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="metric-card">
+                <p class="metric-label">Başlangıç Kilosu</p>
+                <p class="metric-value">{% if first_weight %}{{ first_weight }} kg{% else %}-{% endif %}</p>
+                <p class="metric-help">İlk kayıtlı ölçüm</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="metric-card">
+                <p class="metric-label">Mevcut Kilo</p>
+                <p class="metric-value">{% if profile.current_weight %}{{ profile.current_weight }} kg{% else %}-{% endif %}</p>
+                <p class="metric-help">Profildeki güncel değer</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="metric-card">
+                <p class="metric-label">Hedef Kilo</p>
+                <p class="metric-value">{% if profile.target_weight %}{{ profile.target_weight }} kg{% else %}-{% endif %}</p>
+                <p class="metric-help">Belirlenen hedef</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="surface-card p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="display-font h5 mb-0">Ölçüm Geçmişi</h2>
+            <span class="small muted">Toplam kayıt: {{ measurements|length }}</span>
+        </div>
+
+        {% if measurements %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Tarih</th>
+                        <th>Kilo</th>
+                        <th>Yağ %</th>
+                        <th>Kas</th>
+                        <th>Bel</th>
+                        <th>Kalça</th>
+                        <th>BMI</th>
+                        <th>Not</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in measurements %}
+                    <tr>
+                        <td>{{ m.date|date:"d.m.Y" }}</td>
+                        <td class="fw-semibold">{{ m.weight }} kg</td>
+                        <td>{% if m.body_fat_percentage %}{{ m.body_fat_percentage }}%{% else %}-{% endif %}</td>
+                        <td>{% if m.muscle_mass %}{{ m.muscle_mass }} kg{% else %}-{% endif %}</td>
+                        <td>{% if m.waist_circumference %}{{ m.waist_circumference }} cm{% else %}-{% endif %}</td>
+                        <td>{% if m.hip_circumference %}{{ m.hip_circumference }} cm{% else %}-{% endif %}</td>
+                        <td>{% if m.bmi %}{{ m.bmi }}{% else %}-{% endif %}</td>
+                        <td class="muted small">{{ m.notes|truncatechars:36 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <span class="icon-pill mb-3"><i class="bi bi-bar-chart"></i></span>
+            <h3 class="display-font h5">Henüz ölçüm kaydı bulunmuyor</h3>
+            <p class="muted mb-3">İlk ölçümünü ekleyerek ilerleme panelini aktifleştirebilirsin.</p>
+            <a href="{% url 'patient_add_measurement' %}" class="btn btn-primary">İlk Ölçümü Gir</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

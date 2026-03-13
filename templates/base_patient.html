@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+<nav class="topbar navbar navbar-expand-lg">
+    <div class="container py-2">
+        <a class="brand-wrap" href="{% url 'patient_dashboard' %}">
+            <span class="brand-mark">DN</span>
+            <span class="brand-text">Hasta Paneli</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarPatient" aria-controls="navbarPatient" aria-expanded="false" aria-label="Menü">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarPatient">
+            <ul class="navbar-nav me-auto ms-lg-4 mt-3 mt-lg-0">
+                <li class="nav-item"><a class="nav-link {% if active_page == 'dashboard' %}active{% endif %}" href="{% url 'patient_dashboard' %}">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link {% if active_page == 'appointments' %}active{% endif %}" href="{% url 'patient_appointments' %}">Randevular</a></li>
+                <li class="nav-item"><a class="nav-link {% if active_page == 'diet_plan' %}active{% endif %}" href="{% url 'patient_diet_plan' %}">Diyet Planım</a></li>
+                <li class="nav-item"><a class="nav-link {% if active_page == 'progress' %}active{% endif %}" href="{% url 'patient_progress' %}">İlerleme</a></li>
+            </ul>
+            <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-2 mt-3 mt-lg-0">
+                <span class="role-chip"><i class="bi bi-person"></i> {{ user.first_name }} {{ user.last_name }}</span>
+                <form method="post" action="{% url 'logout' %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-primary btn-sm">Çıkış</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</nav>
+{% endblock %}

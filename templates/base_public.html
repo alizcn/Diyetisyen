@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+<nav class="topbar navbar navbar-expand-lg">
+    <div class="container py-2">
+        <a class="brand-wrap" href="/">
+            <span class="brand-mark">DN</span>
+            <span class="brand-text">Diyetisyen</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarPublic" aria-controls="navbarPublic" aria-expanded="false" aria-label="Menü">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarPublic">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2 mt-3 mt-lg-0">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">Ana Sayfa</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/#hizmetler" class="nav-link">Hizmetler</a>
+                </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        {% if user.user_type == 'dietitian' %}
+                        <a href="{% url 'dietitian_dashboard' %}" class="nav-link">Panele Git</a>
+                        {% else %}
+                        <a href="{% url 'patient_dashboard' %}" class="nav-link">Panele Git</a>
+                        {% endif %}
+                    </li>
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-primary btn-sm">Çıkış Yap</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a href="{% url 'login' %}" class="nav-link">Giriş Yap</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'register' %}" class="btn btn-primary btn-sm">Ücretsiz Kayıt</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block footer %}
+<footer class="footer-wrap py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-5">
+                <div class="brand-wrap mb-3">
+                    <span class="brand-mark">DN</span>
+                    <span class="brand-text">Diyetisyen</span>
+                </div>
+                <p class="muted mb-0">Kişiselleştirilmiş diyet planları, randevu yönetimi ve ilerleme takibini tek panelde birleştiren dijital beslenme yönetim sistemi.</p>
+            </div>
+            <div class="col-6 col-md-3">
+                <h6 class="display-font mb-3">Platform</h6>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'register' %}" class="text-decoration-none muted">Kayıt Ol</a>
+                    <a href="{% url 'login' %}" class="text-decoration-none muted">Giriş Yap</a>
+                    <a href="/" class="text-decoration-none muted">Ana Sayfa</a>
+                </div>
+            </div>
+            <div class="col-6 col-md-4">
+                <h6 class="display-font mb-3">İletişim</h6>
+                <p class="mb-1 muted"><i class="bi bi-envelope me-2"></i>destek@diyetisyen.app</p>
+                <p class="mb-1 muted"><i class="bi bi-telephone me-2"></i>+90 212 555 05 55</p>
+                <p class="mb-0 muted"><i class="bi bi-geo-alt me-2"></i>İstanbul / Türkiye</p>
+            </div>
+        </div>
+        <hr class="my-4">
+        <p class="small muted mb-0">&copy; 2026 Diyetisyen. Tüm hakları saklıdır.</p>
+    </div>
+</footer>
+{% endblock %}

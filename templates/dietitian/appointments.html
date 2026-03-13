@@ -1,0 +1,126 @@
+{% extends "base_dietitian.html" %}
+
+{% block title %}Randevular | Diyetisyen{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-title">
+        <span class="eyebrow"><i class="bi bi-calendar2-week"></i> Randevu Operasyonu</span>
+        <h1 class="display-font mt-3">Randevular</h1>
+        <p class="muted mb-0">Günlük görüşmeleri yönet, yaklaşan randevuları kontrol et ve geçmiş kayıtları incele.</p>
+    </div>
+
+    <section class="surface-card p-4 mb-4">
+        <h2 class="display-font h5 mb-3">Bugünkü Randevular</h2>
+        {% if today_appointments %}
+            {% for apt in today_appointments %}
+            <article class="appointment-card">
+                <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
+                    <div>
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <h3 class="h6 fw-bold mb-0">{{ apt.patient.first_name }} {{ apt.patient.last_name }}</h3>
+                            <span class="status-pill status-{{ apt.status }}">{{ apt.get_status_display }}</span>
+                        </div>
+                        <p class="muted small mb-1"><i class="bi bi-clock me-1"></i>{{ apt.time|time:"H:i" }} ({{ apt.duration }} dk)</p>
+                        {% if apt.notes %}<p class="muted small mb-0">Not: {{ apt.notes }}</p>{% endif %}
+                    </div>
+                    {% if apt.status == 'scheduled' %}
+                    <div class="d-flex gap-2">
+                        <form method="post" action="{% url 'dietitian_appointment_update' apt.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="status" value="completed">
+                            <button type="submit" class="btn btn-outline-primary btn-sm">Tamamlandı İşaretle</button>
+                        </form>
+                        <form method="post" action="{% url 'dietitian_appointment_cancel' apt.id %}" onsubmit="return confirm('Randevuyu iptal etmek istediğinizden emin misiniz?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm">İptal Et</button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            </article>
+            {% endfor %}
+        {% else %}
+        <div class="empty-state">
+            <span class="icon-pill mb-3"><i class="bi bi-calendar2-x"></i></span>
+            <h3 class="display-font h6">Bugün için randevu yok</h3>
+            <p class="muted small mb-0">Güncel planınızda aktif bir görüşme görünmüyor.</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <section class="surface-card p-4 mb-4">
+        <h2 class="display-font h5 mb-3">Yaklaşan Randevular</h2>
+        {% if upcoming_appointments %}
+            {% for apt in upcoming_appointments %}
+            <article class="appointment-card">
+                <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
+                    <div>
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <h3 class="h6 fw-bold mb-0">{{ apt.patient.first_name }} {{ apt.patient.last_name }}</h3>
+                            <span class="status-pill status-{{ apt.status }}">{{ apt.get_status_display }}</span>
+                        </div>
+                        <p class="muted small mb-1"><i class="bi bi-calendar3 me-1"></i>{{ apt.date|date:"d F Y" }} - <i class="bi bi-clock ms-1 me-1"></i>{{ apt.time|time:"H:i" }}</p>
+                        {% if apt.notes %}<p class="muted small mb-0">Not: {{ apt.notes }}</p>{% endif %}
+                    </div>
+                    {% if apt.status == 'scheduled' %}
+                    <form method="post" action="{% url 'dietitian_appointment_cancel' apt.id %}" onsubmit="return confirm('Randevuyu iptal etmek istediğinizden emin misiniz?');" class="align-self-start">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger btn-sm">İptal Et</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </article>
+            {% endfor %}
+        {% else %}
+        <div class="empty-state">
+            <span class="icon-pill mb-3"><i class="bi bi-calendar-check"></i></span>
+            <h3 class="display-font h6">Yaklaşan randevu bulunmuyor</h3>
+            <p class="muted small mb-0">İleri tarihli görüşmeler planlandığında burada görünecek.</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <section class="surface-card p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="display-font h5 mb-0">Tüm Randevu Geçmişi</h2>
+            <span class="small muted">Toplam kayıt: {{ all_appointments|length }}</span>
+        </div>
+
+        {% if all_appointments %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Hasta</th>
+                        <th>Tarih</th>
+                        <th>Saat</th>
+                        <th>Süre</th>
+                        <th>Durum</th>
+                        <th>Notlar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for apt in all_appointments %}
+                    <tr>
+                        <td class="fw-semibold">{{ apt.patient.first_name }} {{ apt.patient.last_name }}</td>
+                        <td>{{ apt.date|date:"d.m.Y" }}</td>
+                        <td>{{ apt.time|time:"H:i" }}</td>
+                        <td>{{ apt.duration }} dk</td>
+                        <td><span class="status-pill status-{{ apt.status }}">{{ apt.get_status_display }}</span></td>
+                        <td class="muted small">{{ apt.notes|truncatechars:36 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <span class="icon-pill mb-3"><i class="bi bi-calendar2"></i></span>
+            <h3 class="display-font h6">Kayıtlı randevu bulunamadı</h3>
+            <p class="muted small mb-0">Randevular geldikçe liste otomatik güncellenecek.</p>
+        </div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

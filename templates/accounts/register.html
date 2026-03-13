@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Kayıt Ol | Diyetisyen{% endblock %}
+
+{% block content %}
+<section class="auth-shell py-3 py-lg-4">
+    <div class="container">
+        <div class="auth-grid">
+            <aside class="auth-side fade-up">
+                <div>
+                    <span class="eyebrow" style="background: rgba(255,255,255,0.25); color: #fff;">
+                        <i class="bi bi-person-plus"></i> Yeni Hesap
+                    </span>
+                    <h1 class="display-font mt-3 mb-3">Kendi beslenme yolculuğunu başlat</h1>
+                    <p class="mb-4" style="opacity: 0.95;">Hasta veya diyetisyen olarak kayıt ol, uygun panele anında geç ve tüm akışları tek yerden yönet.</p>
+                </div>
+                <div>
+                    <div class="auth-bullet"><i class="bi bi-check-circle"></i><span>Hızlı rol seçimi</span></div>
+                    <div class="auth-bullet"><i class="bi bi-check-circle"></i><span>Otomatik profil oluşturma</span></div>
+                    <div class="auth-bullet"><i class="bi bi-check-circle"></i><span>Kayıt sonrası doğrudan panel yönlendirmesi</span></div>
+                    <a href="/" class="btn btn-light mt-3">Ana sayfaya dön</a>
+                </div>
+            </aside>
+
+            <div class="surface-card p-4 p-lg-5 fade-up delay-1">
+                <div class="mb-4">
+                    <h2 class="display-font h3 mb-2">Üye Ol</h2>
+                    <p class="muted mb-0">Zaten hesabınız var mı? <a href="{% url 'login' %}">Giriş yap</a></p>
+                </div>
+
+                {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+
+                <form method="post" action="{% url 'register' %}">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="user_type" class="form-label fw-semibold">Hesap Tipi</label>
+                        <select class="form-select" id="user_type" name="user_type" required>
+                            <option value="patient" {% if form_data.user_type == 'patient' %}selected{% endif %}>Hasta</option>
+                            <option value="dietitian" {% if form_data.user_type == 'dietitian' %}selected{% endif %}>Diyetisyen</option>
+                        </select>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-sm-6">
+                            <label for="first_name" class="form-label fw-semibold">Ad</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" required value="{{ form_data.first_name|default:'' }}" placeholder="Adınız">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="last_name" class="form-label fw-semibold">Soyad</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" required value="{{ form_data.last_name|default:'' }}" placeholder="Soyadınız">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-semibold">E-posta</label>
+                        <input type="email" class="form-control" id="email" name="email" required value="{{ form_data.email|default:'' }}" placeholder="ornek@email.com">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label fw-semibold">Şifre</label>
+                        <input type="password" class="form-control" id="password" name="password" minlength="6" required placeholder="En az 6 karakter">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="confirm_password" class="form-label fw-semibold">Şifre Tekrar</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" minlength="6" required placeholder="Şifrenizi tekrar girin">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Hesap Oluştur</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
