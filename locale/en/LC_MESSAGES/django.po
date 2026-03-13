@@ -1,0 +1,2076 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Diyetisyen 1.0\n"
+"POT-Creation-Date: 2026-03-13 00:00+0000\n"
+"PO-Revision-Date: 2026-03-13 00:00+0000\n"
+"Last-Translator: Codex <noreply@example.com>\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: patients/models.py:62
+msgid "Ölçüm"
+msgstr "Measurement"
+
+#: patients/models.py:63
+msgid "Ölçümler"
+msgstr "Measurements"
+
+#: accounts/models.py:27 appointments/models.py:28 diets/models.py:12
+#: patients/models.py:12 templates/accounts/register.html:42
+#: templates/dietitian/appointments.html:96
+#: templates/dietitian/diet_edit.html:26 templates/dietitian/diet_form.html:70
+#: templates/dietitian/diets.html:146 templates/dietitian/patients.html:20
+msgid "Hasta"
+msgstr "Patient"
+
+#: appointments/models.py:30 patients/models.py:14
+#: templates/appointments/patient_new.html:39
+#: templates/dietitian/appointments.html:97
+#: templates/patients/progress.html:52
+msgid "Tarih"
+msgstr "Date"
+
+#: patients/models.py:15 templates/patients/add_measurement.html:26
+msgid "Kilo (kg)"
+msgstr "Weight (kg)"
+
+#: patients/models.py:21 templates/patients/add_measurement.html:32
+msgid "Yağ Oranı (%)"
+msgstr "Body Fat (%)"
+
+#: patients/models.py:28 templates/patients/add_measurement.html:36
+msgid "Kas Kütlesi (kg)"
+msgstr "Muscle Mass (kg)"
+
+#: patients/models.py:35 templates/patients/add_measurement.html:43
+msgid "Bel Çevresi (cm)"
+msgstr "Waist Circumference (cm)"
+
+#: patients/models.py:42 templates/patients/add_measurement.html:47
+msgid "Kalça Çevresi (cm)"
+msgstr "Hip Circumference (cm)"
+
+#: patients/models.py:49 templates/patients/add_measurement.html:54
+msgid "Göğüs Çevresi (cm)"
+msgstr "Chest Circumference (cm)"
+
+#: patients/models.py:56 templates/patients/add_measurement.html:58
+msgid "Kol Çevresi (cm)"
+msgstr "Arm Circumference (cm)"
+
+#: appointments/models.py:34 patients/models.py:58
+#: templates/appointments/patient_new.html:53
+#: templates/dietitian/appointments.html:101
+#: templates/patients/add_measurement.html:64
+msgid "Notlar"
+msgstr "Notes"
+
+#: patients/views.py:91
+msgid "Ölçüm başarıyla kaydedildi"
+msgstr "Measurement saved successfully"
+
+#: patients/views.py:54
+msgid "Kilo alanı zorunludur"
+msgstr "Weight is required"
+
+#: patients/views.py:62
+msgid "Bugün için zaten bir ölçüm kaydınız var"
+msgstr "You already have a measurement record for today"
+
+#: appointments/models.py:39
+msgid "Randevu"
+msgstr "Appointment"
+
+#: appointments/models.py:40 templates/base_dietitian.html:18
+#: templates/base_patient.html:17 templates/dietitian/appointments.html:10
+#: templates/dietitian/dashboard.html:66
+msgid "Randevular"
+msgstr "Appointments"
+
+#: appointments/models.py:10
+msgid "Planlandı"
+msgstr "Scheduled"
+
+#: appointments/models.py:11
+msgid "Onaylandı"
+msgstr "Confirmed"
+
+#: appointments/models.py:12
+msgid "Tamamlandı"
+msgstr "Completed"
+
+#: appointments/models.py:13
+msgid "İptal Edildi"
+msgstr "Cancelled"
+
+#: accounts/models.py:26 accounts/models.py:94 appointments/models.py:21
+#: diets/models.py:19 templates/accounts/patient_dashboard.html:100
+#: templates/accounts/register.html:43
+#: templates/appointments/patient_new.html:26 templates/base_public.html:60
+#: templates/base_public.html:9
+msgid "Diyetisyen"
+msgstr "Dietitian"
+
+#: appointments/models.py:31 templates/appointments/patient_new.html:43
+#: templates/dietitian/appointments.html:98
+#: templates/dietitian/diet_form.html:145
+msgid "Saat"
+msgstr "Time"
+
+#: appointments/models.py:32
+msgid "Süre (dakika)"
+msgstr "Duration (minutes)"
+
+#: appointments/models.py:33 templates/dietitian/appointments.html:100
+#: templates/dietitian/diets.html:151
+msgid "Durum"
+msgstr "Status"
+
+#: appointments/models.py:49
+msgid "Geçmiş tarihlere randevu oluşturamazsınız."
+msgstr "You cannot create appointments for past dates."
+
+#: appointments/models.py:61
+msgid "Bu tarih ve saatte diyetisyenin başka bir randevusu var."
+msgstr "The dietitian already has another appointment at this date and time."
+
+#: appointments/views.py:145 appointments/views.py:210
+msgid "Randevu iptal edildi"
+msgstr "Appointment cancelled"
+
+#: appointments/views.py:124
+msgid "Randevu başarıyla oluşturuldu"
+msgstr "Appointment created successfully"
+
+#: appointments/views.py:191
+msgid "Randevu güncellendi"
+msgstr "Appointment updated"
+
+#: appointments/views.py:58
+msgid "Diyetisyen ve tarih seçimi zorunludur"
+msgstr "Dietitian and date selection are required"
+
+#: appointments/views.py:93
+msgid "Geçmiş bir tarihe randevu oluşturulamaz"
+msgstr "An appointment cannot be created for a past date"
+
+#: appointments/views.py:107
+msgid "Bu saat dilimi zaten dolu"
+msgstr "This time slot is already booked"
+
+#: appointments/views.py:70
+msgid "Diyetisyen bulunamadı"
+msgstr "Dietitian not found"
+
+#: appointments/views.py:83
+msgid "Tarih veya saat formatı geçersiz"
+msgstr "Invalid date or time format"
+
+#: appointments/views.py:193
+msgid "Randevu güncellenemedi: %(error)s"
+msgstr "Appointment could not be updated: %(error)s"
+
+#: diets/models.py:31 diets/models.py:49 templates/dietitian/patients.html:46
+msgid "Diyet Planı"
+msgstr "Diet Plan"
+
+#: diets/models.py:32 templates/base_dietitian.html:19
+#: templates/dietitian/dashboard.html:73 templates/dietitian/diets.html:10
+msgid "Diyet Planları"
+msgstr "Diet Plans"
+
+#: diets/models.py:105 diets/models.py:56 templates/dietitian/diets.html:150
+msgid "Öğün"
+msgstr "Meal"
+
+#: diets/models.py:57
+msgid "Öğünler"
+msgstr "Meals"
+
+#: diets/models.py:106 diets/models.py:96
+#: templates/accounts/patient_diet_plan.html:55
+#: templates/dietitian/diet_form.html:139 templates/dietitian/diets.html:70
+msgid "Besin"
+msgstr "Food"
+
+#: diets/models.py:97
+msgid "Besinler"
+msgstr "Foods"
+
+#: diets/models.py:110
+msgid "Öğün Besini"
+msgstr "Meal Food"
+
+#: diets/models.py:111
+msgid "Öğün Besinleri"
+msgstr "Meal Foods"
+
+#: blog/models.py:28 diets/models.py:21 templates/dietitian/diet_edit.html:36
+#: templates/dietitian/diets.html:145
+msgid "Başlık"
+msgstr "Title"
+
+#: blog/models.py:11 diets/models.py:22 diets/models.py:52
+#: templates/dietitian/diet_edit.html:41
+#: templates/dietitian/diet_form.html:146
+msgid "Açıklama"
+msgstr "Description"
+
+#: diets/models.py:23 templates/dietitian/diet_form.html:90
+msgid "Başlangıç Tarihi"
+msgstr "Start Date"
+
+#: diets/models.py:24 templates/dietitian/diet_form.html:94
+msgid "Bitiş Tarihi"
+msgstr "End Date"
+
+#: diets/models.py:25
+msgid "Günlük Kalori Hedefi"
+msgstr "Daily Calorie Target"
+
+#: diets/models.py:26 templates/dietitian/diets.html:169
+msgid "Aktif"
+msgstr "Active"
+
+#: diets/models.py:41
+msgid "Kahvaltı"
+msgstr "Breakfast"
+
+#: diets/models.py:42
+msgid "Kuşluk"
+msgstr "Morning Snack"
+
+#: diets/models.py:43
+msgid "Öğle Yemeği"
+msgstr "Lunch"
+
+#: diets/models.py:44
+msgid "İkindi"
+msgstr "Afternoon Snack"
+
+#: diets/models.py:45
+msgid "Akşam Yemeği"
+msgstr "Dinner"
+
+#: diets/models.py:46
+msgid "Gece Atıştırması"
+msgstr "Evening Snack"
+
+#: diets/models.py:50
+msgid "Öğün Tipi"
+msgstr "Meal Type"
+
+#: diets/models.py:51
+msgid "Önerilen Saat"
+msgstr "Suggested Time"
+
+#: diets/models.py:53
+msgid "Sıra"
+msgstr "Order"
+
+#: diets/models.py:66
+msgid "gram"
+msgstr "gram"
+
+#: diets/models.py:67
+msgid "mililitre"
+msgstr "milliliter"
+
+#: diets/models.py:68
+msgid "adet"
+msgstr "piece"
+
+#: diets/models.py:69
+msgid "su bardağı"
+msgstr "water glass"
+
+#: diets/models.py:70
+msgid "çay bardağı"
+msgstr "tea glass"
+
+#: diets/models.py:71
+msgid "yemek kaşığı"
+msgstr "tablespoon"
+
+#: diets/models.py:72
+msgid "çay kaşığı"
+msgstr "teaspoon"
+
+#: diets/models.py:73
+msgid "dilim"
+msgstr "slice"
+
+#: diets/models.py:74
+msgid "porsiyon"
+msgstr "portion"
+
+#: diets/models.py:77 templates/dietitian/diets.html:24
+#: templates/dietitian/food_edit.html:27
+msgid "Besin Adı"
+msgstr "Food Name"
+
+#: diets/models.py:78
+msgid "Porsiyon Miktarı"
+msgstr "Portion Size"
+
+#: diets/models.py:79 templates/dietitian/diets.html:32
+#: templates/dietitian/food_edit.html:35
+msgid "Birim"
+msgstr "Unit"
+
+#: diets/models.py:80 templates/accounts/patient_diet_plan.html:57
+#: templates/dietitian/diets.html:149 templates/dietitian/diets.html:40
+#: templates/dietitian/diets.html:72 templates/dietitian/food_edit.html:46
+msgid "Kalori"
+msgstr "Calories"
+
+#: diets/models.py:81
+msgid "Protein (g)"
+msgstr "Protein (g)"
+
+#: diets/models.py:82
+msgid "Karbonhidrat (g)"
+msgstr "Carbohydrate (g)"
+
+#: diets/models.py:83
+msgid "Yağ (g)"
+msgstr "Fat (g)"
+
+#: diets/models.py:84
+msgid "Lif (g)"
+msgstr "Fiber (g)"
+
+#: diets/models.py:91
+msgid "Oluşturan"
+msgstr "Created By"
+
+#: diets/models.py:107 templates/accounts/patient_diet_plan.html:56
+#: templates/dietitian/diet_form.html:140
+msgid "Miktar"
+msgstr "Quantity"
+
+#: blog/models.py:14 blog/models.py:45
+msgid "Kategori"
+msgstr "Category"
+
+#: blog/models.py:15
+msgid "Kategoriler"
+msgstr "Categories"
+
+#: blog/models.py:60
+msgid "Blog Yazısı"
+msgstr "Blog Post"
+
+#: blog/models.py:61
+msgid "Blog Yazıları"
+msgstr "Blog Posts"
+
+#: blog/models.py:9
+msgid "Kategori Adı"
+msgstr "Category Name"
+
+#: blog/models.py:10 blog/models.py:29
+msgid "Slug"
+msgstr "Slug"
+
+#: blog/models.py:30
+msgid "İçerik"
+msgstr "Content"
+
+#: blog/models.py:31
+msgid "Özet"
+msgstr "Summary"
+
+#: blog/models.py:37
+msgid "Yazar"
+msgstr "Author"
+
+#: blog/models.py:51
+msgid "Kapak Görseli"
+msgstr "Cover Image"
+
+#: blog/models.py:53
+msgid "Yayınlandı"
+msgstr "Published"
+
+#: blog/models.py:54
+msgid "Yayın Tarihi"
+msgstr "Publish Date"
+
+#: blog/models.py:57
+msgid "Görüntüleme Sayısı"
+msgstr "View Count"
+
+#: accounts/models.py:49
+msgid "Kullanıcı"
+msgstr "User"
+
+#: accounts/models.py:50
+msgid "Kullanıcılar"
+msgstr "Users"
+
+#: accounts/models.py:72 templates/dietitian/profile_edit.html:10
+msgid "Diyetisyen Profili"
+msgstr "Dietitian Profile"
+
+#: accounts/models.py:73
+msgid "Diyetisyen Profilleri"
+msgstr "Dietitian Profiles"
+
+#: accounts/models.py:105
+msgid "Hasta Profili"
+msgstr "Patient Profile"
+
+#: accounts/models.py:106
+msgid "Hasta Profilleri"
+msgstr "Patient Profiles"
+
+#: accounts/models.py:30
+msgid "Türkçe"
+msgstr "Turkish"
+
+#: accounts/models.py:31
+msgid "English"
+msgstr "English"
+
+#: accounts/models.py:34 templates/accounts/login.html:43
+#: templates/accounts/patient_dashboard.html:98
+#: templates/accounts/register.html:59
+#: templates/dietitian/patient_edit.html:38
+#: templates/dietitian/profile_edit.html:37
+msgid "E-posta"
+msgstr "Email"
+
+#: accounts/models.py:35 templates/accounts/register.html:49
+#: templates/dietitian/patient_edit.html:27
+#: templates/dietitian/profile_edit.html:26
+msgid "Ad"
+msgstr "First Name"
+
+#: accounts/models.py:36 templates/accounts/register.html:53
+#: templates/dietitian/patient_edit.html:31
+#: templates/dietitian/profile_edit.html:30
+msgid "Soyad"
+msgstr "Last Name"
+
+#: accounts/models.py:37
+msgid "Kullanıcı Tipi"
+msgstr "User Type"
+
+#: accounts/models.py:38
+msgid "Tercih Edilen Dil"
+msgstr "Preferred Language"
+
+#: accounts/models.py:62 templates/dietitian/profile_edit.html:73
+msgid "Hakkında"
+msgstr "About"
+
+#: accounts/models.py:63 templates/dietitian/profile_edit.html:48
+msgid "Uzmanlık Alanı"
+msgstr "Specialization"
+
+#: accounts/models.py:64 templates/dietitian/profile_edit.html:52
+msgid "Deneyim (Yıl)"
+msgstr "Experience (Years)"
+
+#: accounts/models.py:65
+msgid "Fotoğraf"
+msgstr "Photo"
+
+#: accounts/models.py:102 accounts/models.py:66
+#: templates/dietitian/patient_edit.html:42
+#: templates/dietitian/profile_edit.html:41
+msgid "Telefon"
+msgstr "Phone"
+
+#: accounts/models.py:67 templates/dietitian/profile_edit.html:67
+msgid "Adres"
+msgstr "Address"
+
+#: accounts/models.py:68 templates/dietitian/profile_edit.html:63
+msgid "Şehir"
+msgstr "City"
+
+#: accounts/models.py:69 templates/dietitian/profile_edit.html:56
+msgid "Diploma No"
+msgstr "License Number"
+
+#: accounts/models.py:81 templates/dietitian/patient_edit.html:56
+msgid "Erkek"
+msgstr "Male"
+
+#: accounts/models.py:82 templates/dietitian/patient_edit.html:57
+msgid "Kadın"
+msgstr "Female"
+
+#: accounts/models.py:83 templates/dietitian/patient_edit.html:58
+msgid "Diğer"
+msgstr "Other"
+
+#: accounts/models.py:96 templates/dietitian/patient_edit.html:49
+msgid "Doğum Tarihi"
+msgstr "Date of Birth"
+
+#: accounts/models.py:97 templates/dietitian/patient_edit.html:53
+msgid "Cinsiyet"
+msgstr "Gender"
+
+#: accounts/models.py:98 templates/dietitian/patient_edit.html:62
+msgid "Boy (cm)"
+msgstr "Height (cm)"
+
+#: accounts/models.py:99 templates/dietitian/patient_edit.html:69
+msgid "Mevcut Kilo (kg)"
+msgstr "Current Weight (kg)"
+
+#: accounts/models.py:100 templates/dietitian/patient_edit.html:73
+msgid "Hedef Kilo (kg)"
+msgstr "Target Weight (kg)"
+
+#: accounts/models.py:101
+msgid "Tıbbi Durumlar/Notlar"
+msgstr "Medical Conditions/Notes"
+
+#: accounts/models.py:10
+msgid "Email adresi zorunludur"
+msgstr "Email address is required"
+
+#: accounts/views.py:372
+msgid "Başarıyla çıkış yapıldı"
+msgstr "Logged out successfully"
+
+#: accounts/views.py:1002
+msgid "Yeni besin kaydı eklendi."
+msgstr "New food item added."
+
+#: accounts/views.py:104 templates/dietitian/diet_form.html:149
+msgid "En az bir öğün eklemelisiniz."
+msgstr "You must add at least one meal."
+
+#: accounts/views.py:229
+msgid "Diyet planı oluşturmadan önce en az bir besin eklemelisiniz."
+msgstr "You must add at least one food item before creating a diet plan."
+
+#: accounts/views.py:232
+msgid "Hasta, başlık ve başlangıç tarihi zorunludur."
+msgstr "Patient, title, and start date are required."
+
+#: accounts/views.py:235
+msgid "Geçerli bir hasta seçiniz."
+msgstr "Please select a valid patient."
+
+#: accounts/views.py:239
+msgid "Seçilen hasta size atanmış görünmüyor."
+msgstr "The selected patient does not appear assigned to you."
+
+#: accounts/views.py:244
+msgid "Tarih formatı geçersiz."
+msgstr "Invalid date format."
+
+#: accounts/views.py:247
+msgid "Bitiş tarihi başlangıç tarihinden önce olamaz."
+msgstr "End date cannot be before start date."
+
+#: accounts/views.py:251
+msgid "Kalori hedefi pozitif bir sayı olmalıdır."
+msgstr "Calorie target must be a positive number."
+
+#: accounts/views.py:416
+msgid "Zayıf"
+msgstr "Underweight"
+
+#: accounts/views.py:582
+msgid "Profil bilgileriniz güncellendi."
+msgstr "Your profile information has been updated."
+
+#: accounts/views.py:705
+msgid "Hasta bilgileri güncellendi."
+msgstr "Patient information has been updated."
+
+#: accounts/views.py:728
+msgid "%(name)s adlı hasta silindi."
+msgstr "Patient %(name)s was deleted."
+
+#: accounts/views.py:831
+msgid "Diyet planı ve öğünleri oluşturuldu."
+msgstr "Diet plan and meals were created."
+
+#: accounts/views.py:801 accounts/views.py:840
+msgid "Planı Oluştur"
+msgstr "Create Plan"
+
+#: accounts/views.py:802 accounts/views.py:841
+msgid "Diyet Planı Oluştur | Diyetisyen"
+msgstr "Create Diet Plan | Dietitian"
+
+#: accounts/views.py:803 accounts/views.py:842
+msgid "Yeni Diyet Planı Oluştur"
+msgstr "Create New Diet Plan"
+
+#: accounts/views.py:916
+msgid "Diyet planı ve öğünleri güncellendi."
+msgstr "Diet plan and meals were updated."
+
+#: accounts/views.py:887 accounts/views.py:925
+msgid "Planı Güncelle"
+msgstr "Update Plan"
+
+#: accounts/views.py:888 accounts/views.py:926
+#: templates/dietitian/diet_edit.html:4
+msgid "Diyet Planı Düzenle | Diyetisyen"
+msgstr "Edit Diet Plan | Dietitian"
+
+#: accounts/views.py:947
+msgid "\"%(title)s\" diyet planı silindi."
+msgstr "Diet plan \"%(title)s\" was deleted."
+
+#: accounts/views.py:1043 accounts/views.py:972
+msgid "Besin adı ve kalori zorunludur."
+msgstr "Food name and calories are required."
+
+#: accounts/views.py:1052 accounts/views.py:976
+msgid "Besin birimi geçersiz."
+msgstr "Invalid food unit."
+
+#: accounts/views.py:1068 accounts/views.py:987
+msgid "Besin değerleri sayısal olmalıdır."
+msgstr "Food values must be numeric."
+
+#: accounts/views.py:1083
+msgid "Besin kaydı güncellendi."
+msgstr "Food item updated."
+
+#: accounts/views.py:1105
+msgid "Bu besin bir veya daha fazla öğünde kullanıldığı için silinemez."
+msgstr "This food cannot be deleted because it is used in one or more meals."
+
+#: accounts/views.py:1111
+msgid "\"%(name)s\" besin kaydı silindi."
+msgstr "Food item \"%(name)s\" was deleted."
+
+#: accounts/views.py:101
+msgid "Öğün verisi geçersiz. Lütfen tekrar deneyin."
+msgstr "Meal data is invalid. Please try again."
+
+#: accounts/views.py:418
+msgid "Normal"
+msgstr "Normal"
+
+#: accounts/views.py:889 accounts/views.py:927
+msgid "Diyet Planı Düzenle: %(title)s"
+msgstr "Edit Diet Plan: %(title)s"
+
+#: accounts/views.py:111
+msgid "%(index)s. öğün verisi geçersiz."
+msgstr "Meal %(index)s data is invalid."
+
+#: accounts/views.py:115
+msgid "%(index)s. öğün tipi geçersiz."
+msgstr "Meal %(index)s type is invalid."
+
+#: accounts/views.py:127
+msgid "%(index)s. öğün açıklaması zorunludur."
+msgstr "Meal %(index)s description is required."
+
+#: accounts/views.py:131
+msgid "%(index)s. öğün için en az bir besin seçmelisiniz."
+msgstr "Select at least one food for meal %(index)s."
+
+#: accounts/views.py:291
+msgid "Email ve şifre gereklidir"
+msgstr "Email and password are required"
+
+#: accounts/views.py:296 accounts/views.py:299
+msgid "Geçersiz email veya şifre"
+msgstr "Invalid email or password"
+
+#: accounts/views.py:302
+msgid "Hesap aktif değil"
+msgstr "Account is not active"
+
+#: accounts/views.py:332
+msgid "Tüm alanlar zorunludur"
+msgstr "All fields are required"
+
+#: accounts/views.py:335
+msgid "Şifreler eşleşmiyor"
+msgstr "Passwords do not match"
+
+#: accounts/views.py:338
+msgid "Şifre en az 6 karakter olmalıdır"
+msgstr "Password must be at least 6 characters"
+
+#: accounts/views.py:341
+msgid "Bu email adresi zaten kullanılıyor"
+msgstr "This email address is already in use"
+
+#: accounts/views.py:420
+msgid "Hafif Kilolu"
+msgstr "Overweight"
+
+#: accounts/views.py:422
+msgid "Obez"
+msgstr "Obese"
+
+#: accounts/views.py:548 accounts/views.py:651
+msgid "Ad, soyad ve e-posta zorunludur."
+msgstr "First name, last name, and email are required."
+
+#: accounts/views.py:556 accounts/views.py:659
+msgid "Bu e-posta başka bir kullanıcı tarafından kullanılıyor."
+msgstr "This email is being used by another user."
+
+#: accounts/views.py:565
+msgid "Deneyim yılı geçerli bir sayı olmalıdır."
+msgstr "Experience years must be a valid number."
+
+#: accounts/views.py:668
+msgid "Doğum tarihi formatı geçersiz."
+msgstr "Invalid date of birth format."
+
+#: accounts/views.py:680
+msgid "Boy ve kilo alanları sayısal olmalıdır."
+msgstr "Height and weight must be numeric."
+
+#: accounts/views.py:688
+msgid "Cinsiyet seçimi geçersiz."
+msgstr "Invalid gender selection."
+
+#: accounts/views.py:136
+msgid "%(meal_index)s. öğün %(food_index)s. besin verisi geçersiz."
+msgstr "Meal %(meal_index)s food %(food_index)s data is invalid."
+
+#: accounts/views.py:143
+msgid "%(meal_index)s. öğün %(food_index)s. besin seçimi geçersiz."
+msgstr "Meal %(meal_index)s food %(food_index)s selection is invalid."
+
+#: accounts/views.py:150
+msgid "%(meal_index)s. öğün %(food_index)s. besin seçimi bulunamadı."
+msgstr "Meal %(meal_index)s food %(food_index)s selection was not found."
+
+#: accounts/views.py:157
+msgid "%(meal_index)s. öğün %(food_index)s. besin miktarı pozitif olmalıdır."
+msgstr "Meal %(meal_index)s food %(food_index)s quantity must be positive."
+
+#: accounts/views.py:123
+msgid "%(index)s. öğün saat formatı geçersiz."
+msgstr "Meal %(index)s time format is invalid."
+
+#: accounts/decorators.py:11
+msgid "Giriş yapmanız gerekli"
+msgstr "You need to sign in"
+
+#: accounts/decorators.py:23
+msgid "Bu işlem için diyetisyen yetkisi gerekli"
+msgstr "Dietitian permission is required for this action"
+
+#: accounts/decorators.py:35
+msgid "Bu işlem için hasta yetkisi gerekli"
+msgstr "Patient permission is required for this action"
+
+#: templates/base_patient.html:9
+msgid "Hasta Paneli"
+msgstr "Patient Panel"
+
+#: templates/base_dietitian.html:11 templates/base_patient.html:11
+#: templates/base_public.html:11
+msgid "Menü"
+msgstr "Menu"
+
+#: templates/base_dietitian.html:16 templates/base_patient.html:16
+msgid "Panel"
+msgstr "Dashboard"
+
+#: templates/accounts/patient_diet_plan.html:11 templates/base_patient.html:18
+msgid "Diyet Planım"
+msgstr "My Diet Plan"
+
+#: templates/base_patient.html:19
+msgid "İlerleme"
+msgstr "Progress"
+
+#: templates/base_dietitian.html:28 templates/base_patient.html:26
+msgid "Çıkış"
+msgstr "Logout"
+
+#: templates/base_dietitian.html:9
+msgid "Diyetisyen Paneli"
+msgstr "Dietitian Panel"
+
+#: templates/base_dietitian.html:17
+msgid "Hastalar"
+msgstr "Patients"
+
+#: templates/accounts/patient_diet_plan.html:26
+#: templates/appointments/patient_list.html:36
+#: templates/appointments/patient_list.html:63
+#: templates/appointments/patient_new.html:31 templates/base_dietitian.html:23
+msgid "Dyt."
+msgstr "Dt."
+
+#: templates/base_public.html:17 templates/base_public.html:69
+msgid "Ana Sayfa"
+msgstr "Home"
+
+#: templates/base_public.html:20
+msgid "Hizmetler"
+msgstr "Services"
+
+#: templates/base_public.html:25 templates/base_public.html:27
+msgid "Panele Git"
+msgstr "Go to Panel"
+
+#: templates/base_public.html:33
+msgid "Çıkış Yap"
+msgstr "Sign Out"
+
+#: templates/accounts/login.html:28 templates/accounts/login.html:60
+#: templates/base_public.html:38 templates/base_public.html:68
+#: templates/home.html:24
+msgid "Giriş Yap"
+msgstr "Sign In"
+
+#: templates/base_public.html:41 templates/home.html:136
+msgid "Ücretsiz Kayıt"
+msgstr "Free Sign Up"
+
+#: templates/base_public.html:62
+msgid ""
+"Kişiselleştirilmiş diyet planları, randevu yönetimi ve ilerleme takibini tek"
+" panelde birleştiren dijital beslenme yönetim sistemi."
+msgstr ""
+"A digital nutrition management system that combines personalized diet plans,"
+" appointment management, and progress tracking in one panel."
+
+#: templates/base_public.html:65
+msgid "Platform"
+msgstr "Platform"
+
+#: templates/base_public.html:67
+msgid "Kayıt Ol"
+msgstr "Sign Up"
+
+#: templates/base_public.html:73 templates/dietitian/patients.html:21
+msgid "İletişim"
+msgstr "Contact"
+
+#: templates/base_public.html:76
+msgid "İstanbul / Türkiye"
+msgstr "Istanbul / Türkiye"
+
+#: templates/base_public.html:80
+msgid "© 2026 Diyetisyen. Tüm hakları saklıdır."
+msgstr "© 2026 Dietitian. All rights reserved."
+
+#: templates/home.html:4
+msgid "Diyetisyen | Akıllı Beslenme ve Takip Platformu"
+msgstr "Dietitian | Smart Nutrition and Tracking Platform"
+
+#: templates/home.html:11
+msgid "Dijital Beslenme Asistanı"
+msgstr "Digital Nutrition Assistant"
+
+#: templates/home.html:20
+msgid ""
+"Diyetisyen-hasta iletişimini randevu planlama, kişisel diyet programı ve "
+"ilerleme kaydı ile tek bir akışta birleştirin."
+msgstr ""
+"Unify dietitian-patient communication with appointment planning, "
+"personalized diet programs, and progress tracking in one flow."
+
+#: templates/home.html:23
+msgid "Hemen Başla"
+msgstr "Get Started"
+
+#: templates/home.html:30
+msgid "Randevu Akışı"
+msgstr "Appointment Flow"
+
+#: templates/home.html:32
+msgid "Online randevu yönetimi"
+msgstr "Online appointment management"
+
+#: templates/home.html:37
+msgid "Takip Modülü"
+msgstr "Tracking Module"
+
+#: templates/home.html:38
+msgid "Canlı"
+msgstr "Live"
+
+#: templates/home.html:39
+msgid "Ölçüm ve gelişim kaydı"
+msgstr "Measurement and progress tracking"
+
+#: templates/home.html:44
+msgid "Rol Desteği"
+msgstr "Role Support"
+
+#: templates/home.html:46
+msgid "Hasta + diyetisyen paneli"
+msgstr "Patient + dietitian panel"
+
+#: templates/home.html:53
+msgid "Örnek Günlük Akış"
+msgstr "Sample Daily Flow"
+
+#: templates/appointments/patient_list.html:23
+#: templates/appointments/patient_new.html:58 templates/home.html:58
+msgid "Randevu Oluştur"
+msgstr "Create Appointment"
+
+#: templates/home.html:59
+msgid "Uygun saat seçimi ve not ekleme"
+msgstr "Choose a suitable time and add notes"
+
+#: templates/home.html:67
+msgid "Diyet Planını Gör"
+msgstr "View Diet Plan"
+
+#: templates/home.html:68
+msgid "Öğün bazlı açıklama ve besin listesi"
+msgstr "Meal-based notes and food list"
+
+#: templates/home.html:76
+msgid "İlerleme Takip Et"
+msgstr "Track Progress"
+
+#: templates/home.html:77
+msgid "Kilo, yağ oranı ve çevre ölçümleri"
+msgstr "Weight, body fat, and circumference measurements"
+
+#: templates/home.html:82
+msgid "Güvenli oturum yönetimi ve rol bazlı erişim"
+msgstr "Secure session management and role-based access"
+
+#: templates/home.html:91
+msgid "Öne Çıkan Özellikler"
+msgstr "Featured Features"
+
+#: templates/home.html:92
+msgid "Süreç odaklı sağlık deneyimi"
+msgstr "Process-focused health experience"
+
+#: templates/home.html:93
+msgid ""
+"Hem hasta hem diyetisyen tarafında günlük iş akışını hızlandıran modüller."
+msgstr ""
+"Modules that speed up daily workflows for both patients and dietitians."
+
+#: templates/home.html:99
+msgid "Rol Bazlı Panel"
+msgstr "Role-Based Panel"
+
+#: templates/home.html:100
+msgid "Kullanıcı tipiyle otomatik panel yönlendirmesi ve yetki kontrolü."
+msgstr "Automatic panel routing and permission control based on user type."
+
+#: templates/appointments/patient_list.html:10 templates/home.html:106
+msgid "Randevu Yönetimi"
+msgstr "Appointment Management"
+
+#: templates/home.html:107
+msgid "Hasta tarafında yeni randevu, diyetisyen tarafında durum güncelleme."
+msgstr "New appointments for patients and status updates for dietitians."
+
+#: templates/home.html:113
+msgid "Diyet Plan Görünümü"
+msgstr "Diet Plan View"
+
+#: templates/home.html:114
+msgid "Öğün saatleri, açıklama ve besin bazlı kalori görünürlüğü."
+msgstr "Meal times, notes, and food-based calorie visibility."
+
+#: templates/home.html:120
+msgid "Ölçüm ve BMI"
+msgstr "Measurement and BMI"
+
+#: templates/home.html:121
+msgid "Kilo geçmişi, vücut ölçüleri ve otomatik BMI hesaplaması."
+msgstr "Weight history, body measurements, and automatic BMI calculation."
+
+#: templates/dietitian/diet_edit.html:47 templates/dietitian/diets.html:147
+#: templates/home.html:131
+msgid "Başlangıç"
+msgstr "Start"
+
+#: templates/home.html:132
+msgid "Sağlıklı yaşam takibini bugün başlatın"
+msgstr "Start healthy lifestyle tracking today"
+
+#: templates/home.html:133
+msgid ""
+"Kayıt olduktan sonra role uygun paneliniz otomatik açılır. Hasta tarafı "
+"randevu ve ölçüm takibini, diyetisyen tarafı hasta-diyet-randevu yönetimini "
+"tek yerden sürdürür."
+msgstr ""
+"After signing up, your role-specific panel opens automatically. The patient "
+"side manages appointments and measurements, while the dietitian side manages"
+" patients, diet plans, and appointments from one place."
+
+#: templates/home.html:13
+msgid ""
+"Sağlıklı yaşama geçişinizi <span style=\"color: "
+"var(--primary);\">ölçülebilir adımlarla</span> yönetin."
+msgstr ""
+"Manage your transition to healthy living with <span style=\"color: "
+"var(--primary);\">measurable steps</span>."
+
+#: templates/base.html:7
+msgid "Diyetisyen Yönetim Sistemi"
+msgstr "Dietitian Management System"
+
+#: templates/base.html:543
+msgid "Kapat"
+msgstr "Close"
+
+#: templates/dietitian/appointments.html:4
+msgid "Randevular | Diyetisyen"
+msgstr "Appointments | Dietitian"
+
+#: templates/dietitian/appointments.html:9
+msgid "Randevu Operasyonu"
+msgstr "Appointment Operations"
+
+#: templates/dietitian/appointments.html:11
+msgid ""
+"Günlük görüşmeleri yönet, yaklaşan randevuları kontrol et ve geçmiş "
+"kayıtları incele."
+msgstr ""
+"Manage daily sessions, monitor upcoming appointments, and review past "
+"records."
+
+#: templates/dietitian/appointments.html:15
+msgid "Bugünkü Randevular"
+msgstr "Today's Appointments"
+
+#: templates/appointments/patient_list.html:39
+#: templates/dietitian/appointments.html:110
+#: templates/dietitian/appointments.html:25
+msgid "dk"
+msgstr "min"
+
+#: templates/appointments/patient_list.html:41
+#: templates/dietitian/appointments.html:26
+#: templates/dietitian/appointments.html:65
+msgid "Not:"
+msgstr "Note:"
+
+#: templates/dietitian/appointments.html:33
+msgid "Tamamlandı İşaretle"
+msgstr "Mark as Completed"
+
+#: templates/dietitian/appointments.html:35
+#: templates/dietitian/appointments.html:68
+msgid "Randevuyu iptal etmek istediğinizden emin misiniz?"
+msgstr "Are you sure you want to cancel this appointment?"
+
+#: templates/dietitian/appointments.html:37
+#: templates/dietitian/appointments.html:70
+msgid "İptal Et"
+msgstr "Cancel"
+
+#: templates/dietitian/appointments.html:47
+msgid "Bugün için randevu yok"
+msgstr "No appointments for today"
+
+#: templates/dietitian/appointments.html:48
+msgid "Güncel planınızda aktif bir görüşme görünmüyor."
+msgstr "There is no active session in your current plan."
+
+#: templates/dietitian/appointments.html:54
+msgid "Yaklaşan Randevular"
+msgstr "Upcoming Appointments"
+
+#: templates/dietitian/appointments.html:79
+msgid "Yaklaşan randevu bulunmuyor"
+msgstr "No upcoming appointments"
+
+#: templates/dietitian/appointments.html:80
+msgid "İleri tarihli görüşmeler planlandığında burada görünecek."
+msgstr "Future sessions will appear here when scheduled."
+
+#: templates/dietitian/appointments.html:87
+msgid "Tüm Randevu Geçmişi"
+msgstr "Full Appointment History"
+
+#: templates/dietitian/appointments.html:88
+#: templates/patients/progress.html:44
+msgid "Toplam kayıt:"
+msgstr "Total records:"
+
+#: templates/dietitian/appointments.html:99
+msgid "Süre"
+msgstr "Duration"
+
+#: templates/dietitian/appointments.html:121
+msgid "Kayıtlı randevu bulunamadı"
+msgstr "No recorded appointments found"
+
+#: templates/dietitian/appointments.html:122
+msgid "Randevular geldikçe liste otomatik güncellenecek."
+msgstr "The list will update automatically as appointments are added."
+
+#: templates/dietitian/profile_edit.html:4
+msgid "Profil Düzenle | Diyetisyen"
+msgstr "Edit Profile | Dietitian"
+
+#: templates/dietitian/profile_edit.html:9
+msgid "Profil Yönetimi"
+msgstr "Profile Management"
+
+#: templates/dietitian/profile_edit.html:11
+msgid ""
+"Sağ üstteki isminize tıklayarak erişebileceğiniz profil düzenleme ekranı."
+msgstr ""
+"Profile editing screen accessible by clicking your name at the top right."
+
+#: templates/dietitian/profile_edit.html:78
+msgid "Profili Kaydet"
+msgstr "Save Profile"
+
+#: templates/dietitian/profile_edit.html:79
+msgid "Panele Dön"
+msgstr "Back to Panel"
+
+#: templates/dietitian/food_edit.html:4
+msgid "Besin Düzenle | Diyetisyen"
+msgstr "Edit Food | Dietitian"
+
+#: templates/dietitian/diet_edit.html:9 templates/dietitian/diet_form.html:39
+#: templates/dietitian/food_edit.html:9
+msgid "Diyet planlarına dön"
+msgstr "Back to diet plans"
+
+#: templates/dietitian/food_edit.html:10
+msgid "Besin Düzenleme"
+msgstr "Food Editing"
+
+#: templates/dietitian/food_edit.html:12
+msgid "Besin değerlerini güncelleyin."
+msgstr "Update nutrition values."
+
+#: templates/dietitian/diets.html:28 templates/dietitian/diets.html:71
+#: templates/dietitian/food_edit.html:31
+msgid "Porsiyon"
+msgstr "Portion"
+
+#: templates/dietitian/diets.html:73 templates/dietitian/food_edit.html:50
+msgid "Protein"
+msgstr "Protein"
+
+#: templates/dietitian/food_edit.html:54
+msgid "Karbonhidrat"
+msgstr "Carbohydrate"
+
+#: templates/dietitian/diets.html:52 templates/dietitian/diets.html:75
+#: templates/dietitian/food_edit.html:58
+msgid "Yağ"
+msgstr "Fat"
+
+#: templates/dietitian/diets.html:56 templates/dietitian/diets.html:76
+#: templates/dietitian/food_edit.html:62
+msgid "Lif"
+msgstr "Fiber"
+
+#: templates/dietitian/diet_edit.html:66 templates/dietitian/food_edit.html:68
+#: templates/dietitian/patient_edit.html:84
+msgid "Kaydet"
+msgstr "Save"
+
+#: templates/appointments/patient_new.html:59
+#: templates/dietitian/diet_edit.html:67
+#: templates/dietitian/diet_form.html:126
+#: templates/dietitian/food_edit.html:69
+#: templates/dietitian/patient_edit.html:85
+#: templates/patients/add_measurement.html:70
+msgid "Vazgeç"
+msgstr "Cancel"
+
+#: templates/dietitian/patient_edit.html:4
+msgid "Hasta Düzenle | Diyetisyen"
+msgstr "Edit Patient | Dietitian"
+
+#: templates/dietitian/patient_edit.html:9
+msgid "Hasta listesine dön"
+msgstr "Back to patient list"
+
+#: templates/dietitian/patient_edit.html:10
+msgid "Hasta Düzenleme"
+msgstr "Patient Editing"
+
+#: templates/dietitian/patient_edit.html:12
+msgid "Hasta profil bilgilerini güncelleyin."
+msgstr "Update patient profile information."
+
+#: templates/dietitian/patient_edit.html:55
+msgid "Seçiniz"
+msgstr "Select"
+
+#: templates/dietitian/patient_edit.html:79
+msgid "Tıbbi Notlar"
+msgstr "Medical Notes"
+
+#: templates/dietitian/diet_edit.html:10
+msgid "Plan Düzenleme"
+msgstr "Plan Editing"
+
+#: templates/dietitian/diet_edit.html:12
+msgid "Diyet planı detaylarını güncelleyin."
+msgstr "Update diet plan details."
+
+#: templates/dietitian/diet_edit.html:28 templates/dietitian/diet_form.html:72
+msgid "Hasta seçin"
+msgstr "Select patient"
+
+#: templates/dietitian/diet_edit.html:51 templates/dietitian/diets.html:148
+msgid "Bitiş"
+msgstr "End"
+
+#: templates/dietitian/diet_edit.html:55 templates/dietitian/diet_form.html:83
+msgid "Günlük Kalori"
+msgstr "Daily Calories"
+
+#: templates/dietitian/diet_edit.html:62
+msgid "Plan aktif durumda olsun"
+msgstr "Keep the plan active"
+
+#: templates/dietitian/dashboard.html:4
+msgid "Diyetisyen Dashboard | Diyetisyen"
+msgstr "Dietitian Dashboard | Dietitian"
+
+#: templates/dietitian/dashboard.html:9
+msgid "Yönetim Paneli"
+msgstr "Management Panel"
+
+#: templates/dietitian/dashboard.html:10
+msgid "Diyetisyen Dashboard"
+msgstr "Dietitian Dashboard"
+
+#: templates/dietitian/dashboard.html:11
+msgid "Hasta, randevu ve diyet planı metriklerini tek bakışta izleyin."
+msgstr "Track patient, appointment, and diet plan metrics at a glance."
+
+#: templates/dietitian/dashboard.html:17
+msgid "Toplam Hasta"
+msgstr "Total Patients"
+
+#: templates/dietitian/dashboard.html:19
+msgid "Atanmış aktif hastalar"
+msgstr "Assigned active patients"
+
+#: templates/dietitian/dashboard.html:24
+msgid "Bugünkü Randevu"
+msgstr "Today's Appointments"
+
+#: templates/dietitian/dashboard.html:26
+msgid "Bugün görüşme var"
+msgstr "There are sessions today"
+
+#: templates/dietitian/dashboard.html:26
+msgid "Bugün sakin"
+msgstr "Quiet today"
+
+#: templates/dietitian/dashboard.html:31
+msgid "Haftalık Randevu"
+msgstr "Weekly Appointments"
+
+#: templates/dietitian/dashboard.html:33
+msgid "arası"
+msgstr "range"
+
+#: templates/dietitian/dashboard.html:38
+msgid "Aktif Diyet Planı"
+msgstr "Active Diet Plans"
+
+#: templates/dietitian/dashboard.html:40
+msgid "Yürürlükteki planlar"
+msgstr "Plans in effect"
+
+#: templates/dietitian/dashboard.html:45
+msgid "Toplam Randevu"
+msgstr "Total Appointments"
+
+#: templates/dietitian/dashboard.html:47
+msgid "Geçmiş dahil tüm kayıtlar"
+msgstr "All records including history"
+
+#: templates/dietitian/dashboard.html:55
+msgid "Hızlı Erişim"
+msgstr "Quick Access"
+
+#: templates/dietitian/dashboard.html:59 templates/dietitian/patients.html:10
+msgid "Hastalarım"
+msgstr "My Patients"
+
+#: templates/dietitian/dashboard.html:60
+msgid "Atanmış hasta profillerini görüntüle"
+msgstr "View assigned patient profiles"
+
+#: templates/dietitian/dashboard.html:67
+msgid "Durum güncelle ve iptal işlemlerini yönet"
+msgstr "Manage status updates and cancellations"
+
+#: templates/dietitian/dashboard.html:74
+msgid "Hasta planlarının güncel listesini aç"
+msgstr "Open current patient plan list"
+
+#: templates/dietitian/dashboard.html:83
+msgid "Bu Haftanın Yaklaşan Randevuları"
+msgstr "This Week's Upcoming Appointments"
+
+#: templates/dietitian/dashboard.html:101
+msgid "Bu hafta yaklaşan randevu bulunmuyor"
+msgstr "No upcoming appointments this week"
+
+#: templates/dietitian/dashboard.html:102
+msgid "Haftanın randevuları pazartesiden pazara burada listelenir."
+msgstr "This week's appointments are listed here from Monday to Sunday."
+
+#: templates/dietitian/patients.html:4
+msgid "Hastalarım | Diyetisyen"
+msgstr "My Patients | Dietitian"
+
+#: templates/dietitian/patients.html:9
+msgid "Hasta Yönetimi"
+msgstr "Patient Management"
+
+#: templates/dietitian/patients.html:11
+msgid ""
+"Hastaları listeleyin, güncelleyin, silin ve doğrudan diyet planlarına geçin."
+msgstr "List, update, delete patients and jump directly to their diet plans."
+
+#: templates/accounts/patient_dashboard.html:99
+#: templates/dietitian/patients.html:22
+msgid "Boy"
+msgstr "Height"
+
+#: templates/dietitian/patients.html:23
+msgid "Mevcut"
+msgstr "Current"
+
+#: templates/dietitian/patients.html:24
+msgid "Hedef"
+msgstr "Target"
+
+#: templates/dietitian/patients.html:25
+msgid "İşlemler"
+msgstr "Actions"
+
+#: templates/dietitian/diets.html:176 templates/dietitian/diets.html:92
+#: templates/dietitian/patients.html:41
+msgid "Düzenle"
+msgstr "Edit"
+
+#: templates/dietitian/patients.html:42
+msgid "Bu hastayı silmek istediğinizden emin misiniz?"
+msgstr "Are you sure you want to delete this patient?"
+
+#: templates/dietitian/diets.html:179 templates/dietitian/diets.html:95
+#: templates/dietitian/patients.html:44
+msgid "Sil"
+msgstr "Delete"
+
+#: templates/dietitian/patients.html:57
+msgid "Henüz hastanız bulunmuyor"
+msgstr "You do not have any patients yet"
+
+#: templates/dietitian/patients.html:58
+msgid "Hastalar profilinize bağlandıkça bu listede otomatik görünecek."
+msgstr ""
+"As patients are linked to your profile, they will appear here automatically."
+
+#: templates/dietitian/diets.html:4
+msgid "Diyet Planları | Diyetisyen"
+msgstr "Diet Plans | Dietitian"
+
+#: templates/dietitian/diets.html:9
+msgid "Plan Yönetimi"
+msgstr "Plan Management"
+
+#: templates/dietitian/diets.html:11
+msgid ""
+"Besin veritabanını ve diyet planlarını tek sayfada listeleyin, düzenleyin, "
+"silin."
+msgstr "List, edit, and delete the food database and diet plans on one page."
+
+#: templates/dietitian/diets.html:16
+msgid "Besin Veritabanı"
+msgstr "Food Database"
+
+#: templates/dietitian/diets.html:17
+msgid "Toplam besin:"
+msgstr "Total foods:"
+
+#: templates/dietitian/diets.html:60
+msgid "Besin Ekle"
+msgstr "Add Food"
+
+#: templates/dietitian/diets.html:152 templates/dietitian/diets.html:77
+msgid "İşlem"
+msgstr "Action"
+
+#: templates/dietitian/diets.html:93
+msgid "Bu besini silmek istediğinizden emin misiniz?"
+msgstr "Are you sure you want to delete this food?"
+
+#: templates/dietitian/diets.html:107
+msgid "Besin kaydı bulunmuyor"
+msgstr "No food records found"
+
+#: templates/dietitian/diets.html:108
+msgid "Yukarıdaki formu kullanarak ilk besin kaydını ekleyebilirsiniz."
+msgstr "You can add the first food record using the form above."
+
+#: templates/dietitian/diets.html:115
+msgid "Diyet Planı Listesi"
+msgstr "Diet Plan List"
+
+#: templates/dietitian/diets.html:117
+msgid "Toplam plan:"
+msgstr "Total plans:"
+
+#: templates/dietitian/diets.html:118
+msgid "Yeni Plan Oluştur"
+msgstr "Create New Plan"
+
+#: templates/dietitian/diets.html:125
+msgid "Hastaya Göre Filtrele"
+msgstr "Filter by Patient"
+
+#: templates/dietitian/diets.html:127
+msgid "Tüm hastalar"
+msgstr "All patients"
+
+#: templates/dietitian/diets.html:134
+msgid "Filtrele"
+msgstr "Filter"
+
+#: templates/dietitian/diets.html:135
+msgid "Temizle"
+msgstr "Clear"
+
+#: templates/dietitian/diets.html:171
+msgid "Pasif"
+msgstr "Inactive"
+
+#: templates/dietitian/diets.html:177
+msgid "Bu diyet planını silmek istediğinizden emin misiniz?"
+msgstr "Are you sure you want to delete this diet plan?"
+
+#: templates/dietitian/diets.html:191
+msgid "Kayıtlı diyet planı bulunmuyor"
+msgstr "No saved diet plans found"
+
+#: templates/dietitian/diets.html:192
+msgid "Seçilen filtreye uygun plan yok veya henüz plan oluşturulmamış."
+msgstr "No plan matches the selected filter, or no plan has been created yet."
+
+#: templates/dietitian/diet_form.html:40
+msgid "Detaylı Plan Oluşturucu"
+msgstr "Detailed Plan Builder"
+
+#: templates/dietitian/diet_form.html:42
+msgid ""
+"Öğünleri kişiye özel oluşturun, her öğüne besin ekleyip çıkarın, miktarları "
+"detaylı girin."
+msgstr ""
+"Create personalized meals, add or remove foods for each meal, and enter "
+"detailed quantities."
+
+#: templates/dietitian/diet_form.html:53
+msgid "Önce besin veritabanı ekleyin"
+msgstr "Add food database first"
+
+#: templates/dietitian/diet_form.html:54
+msgid ""
+"Diyet planı oluşturmak için en az bir besin kaydı gerekli. Önce besin "
+"ekleyip sonra bu ekrana geri dönün."
+msgstr ""
+"At least one food record is required to create a diet plan. Add food first, "
+"then return to this screen."
+
+#: templates/dietitian/diet_form.html:55
+msgid "Besin Veritabanına Git"
+msgstr "Go to Food Database"
+
+#: templates/dietitian/diet_form.html:79
+msgid "Plan Başlığı"
+msgstr "Plan Title"
+
+#: templates/dietitian/diet_form.html:100
+msgid "Plan aktif olsun"
+msgstr "Keep plan active"
+
+#: templates/dietitian/diet_form.html:106
+msgid "Genel Açıklama"
+msgstr "General Description"
+
+#: templates/dietitian/diet_form.html:113
+msgid "Öğün Planı"
+msgstr "Meal Plan"
+
+#: templates/dietitian/diet_form.html:114
+msgid ""
+"Her öğüne birden fazla besin ekleyebilir, miktarları güncelleyebilir ve "
+"öğünleri silebilirsiniz."
+msgstr ""
+"You can add multiple foods to each meal, update quantities, and delete "
+"meals."
+
+#: templates/dietitian/diet_form.html:116
+msgid "Öğün Ekle"
+msgstr "Add Meal"
+
+#: templates/dietitian/diet_form.html:141
+msgid "Besini sil"
+msgstr "Remove food"
+
+#: templates/dietitian/diet_form.html:142
+msgid "Öğün #"
+msgstr "Meal #"
+
+#: templates/dietitian/diet_form.html:143
+msgid "Öğünü Sil"
+msgstr "Delete Meal"
+
+#: templates/dietitian/diet_form.html:144
+msgid "Öğün Türü"
+msgstr "Meal Type"
+
+#: templates/dietitian/diet_form.html:147
+msgid "Öğün açıklaması"
+msgstr "Meal description"
+
+#: templates/dietitian/diet_form.html:148
+msgid "+ Besin Ekle"
+msgstr "+ Add Food"
+
+#: templates/dietitian/diet_form.html:150
+msgid ". öğün açıklaması boş olamaz."
+msgstr ". meal description cannot be empty."
+
+#: templates/dietitian/diet_form.html:151
+msgid ". öğün için en az bir besin ekleyin."
+msgstr ". add at least one food for the meal."
+
+#: templates/dietitian/diet_form.html:152
+msgid ". öğün "
+msgstr ". meal "
+
+#: templates/dietitian/diet_form.html:153
+msgid ". besin seçimi boş."
+msgstr ". food selection is empty."
+
+#: templates/dietitian/diet_form.html:154
+msgid ". besin miktarı pozitif olmalı."
+msgstr ". food quantity must be positive."
+
+#: templates/dietitian/diet_form.html:155
+msgid "En az bir öğün kalmalıdır."
+msgstr "At least one meal must remain."
+
+#: templates/dietitian/diet_form.html:156
+msgid "Her öğünde en az bir besin olmalıdır."
+msgstr "Each meal must contain at least one food item."
+
+#: templates/patients/progress.html:4
+msgid "İlerleme Takibi | Diyetisyen"
+msgstr "Progress Tracking | Dietitian"
+
+#: templates/patients/progress.html:10
+msgid "Gelişim Paneli"
+msgstr "Progress Panel"
+
+#: templates/patients/progress.html:11
+msgid "İlerleme Takibi"
+msgstr "Progress Tracking"
+
+#: templates/patients/progress.html:12
+msgid "Kilo ve vücut ölçümlerindeki değişimi zaman içinde inceleyin."
+msgstr "Review changes in weight and body measurements over time."
+
+#: templates/accounts/patient_dashboard.html:79
+#: templates/patients/add_measurement.html:11
+#: templates/patients/progress.html:14
+msgid "Ölçüm Ekle"
+msgstr "Add Measurement"
+
+#: templates/patients/progress.html:20
+msgid "Başlangıç Kilosu"
+msgstr "Starting Weight"
+
+#: templates/patients/progress.html:22
+msgid "İlk kayıtlı ölçüm"
+msgstr "First recorded measurement"
+
+#: templates/accounts/patient_dashboard.html:19
+#: templates/patients/progress.html:27
+msgid "Mevcut Kilo"
+msgstr "Current Weight"
+
+#: templates/patients/progress.html:29
+msgid "Profildeki güncel değer"
+msgstr "Current value in profile"
+
+#: templates/patients/progress.html:34
+msgid "Hedef Kilo"
+msgstr "Target Weight"
+
+#: templates/patients/progress.html:36
+msgid "Belirlenen hedef"
+msgstr "Set target"
+
+#: templates/patients/progress.html:43
+msgid "Ölçüm Geçmişi"
+msgstr "Measurement History"
+
+#: templates/patients/progress.html:53
+msgid "Kilo"
+msgstr "Weight"
+
+#: templates/patients/progress.html:54
+msgid "Yağ %"
+msgstr "Fat %"
+
+#: templates/patients/progress.html:55
+msgid "Kas"
+msgstr "Muscle"
+
+#: templates/patients/progress.html:56
+msgid "Bel"
+msgstr "Waist"
+
+#: templates/patients/progress.html:57
+msgid "Kalça"
+msgstr "Hip"
+
+#: templates/accounts/patient_dashboard.html:31
+#: templates/patients/progress.html:58
+msgid "BMI"
+msgstr "BMI"
+
+#: templates/patients/progress.html:59
+msgid "Not"
+msgstr "Note"
+
+#: templates/patients/progress.html:81
+msgid "Henüz ölçüm kaydı bulunmuyor"
+msgstr "No measurement records yet"
+
+#: templates/patients/progress.html:82
+msgid "İlk ölçümünü ekleyerek ilerleme panelini aktifleştirebilirsin."
+msgstr "Add your first measurement to activate the progress panel."
+
+#: templates/patients/progress.html:83
+msgid "İlk Ölçümü Gir"
+msgstr "Enter First Measurement"
+
+#: templates/patients/add_measurement.html:4
+msgid "Ölçüm Ekle | Diyetisyen"
+msgstr "Add Measurement | Dietitian"
+
+#: templates/patients/add_measurement.html:9
+msgid "İlerleme Sayfasına Dön"
+msgstr "Back to Progress Page"
+
+#: templates/patients/add_measurement.html:10
+msgid "Yeni Ölçüm"
+msgstr "New Measurement"
+
+#: templates/patients/add_measurement.html:12
+msgid "Bugüne ait ölçümlerinizi kaydederek ilerleme grafiğinizi güncelleyin."
+msgstr "Update your progress chart by recording today's measurements."
+
+#: templates/patients/add_measurement.html:27
+msgid "Örn: 78.4"
+msgstr "e.g.: 78.4"
+
+#: templates/patients/add_measurement.html:33
+msgid "Örn: 24.5"
+msgstr "e.g.: 24.5"
+
+#: templates/patients/add_measurement.html:37
+msgid "Örn: 33.1"
+msgstr "e.g.: 33.1"
+
+#: templates/patients/add_measurement.html:44
+msgid "Örn: 84.0"
+msgstr "e.g.: 84.0"
+
+#: templates/patients/add_measurement.html:48
+msgid "Örn: 97.0"
+msgstr "e.g.: 97.0"
+
+#: templates/patients/add_measurement.html:55
+msgid "Örn: 95.5"
+msgstr "e.g.: 95.5"
+
+#: templates/patients/add_measurement.html:59
+msgid "Örn: 31.2"
+msgstr "e.g.: 31.2"
+
+#: templates/patients/add_measurement.html:65
+msgid "Ölçüm gününe ait ek notlar"
+msgstr "Additional notes for the measurement day"
+
+#: templates/patients/add_measurement.html:69
+msgid "Ölçümü Kaydet"
+msgstr "Save Measurement"
+
+#: templates/includes/language_switcher.html:5
+msgid "Dil"
+msgstr "Language"
+
+#: templates/appointments/patient_new.html:4
+msgid "Yeni Randevu | Diyetisyen"
+msgstr "New Appointment | Dietitian"
+
+#: templates/appointments/patient_new.html:9
+msgid "Randevularıma Dön"
+msgstr "Back to My Appointments"
+
+#: templates/appointments/patient_new.html:10
+msgid "Yeni Planlama"
+msgstr "New Scheduling"
+
+#: templates/appointments/patient_new.html:11
+msgid "Yeni Randevu Oluştur"
+msgstr "Create New Appointment"
+
+#: templates/appointments/patient_new.html:12
+msgid "Diyetisyen, tarih ve saat seçerek randevunuzu tamamlayın."
+msgstr "Complete your appointment by selecting a dietitian, date, and time."
+
+#: templates/appointments/patient_new.html:28
+msgid "Diyetisyen seçin..."
+msgstr "Select a dietitian..."
+
+#: templates/appointments/patient_new.html:54
+msgid "Görüşme öncesi paylaşmak istediğiniz notlar"
+msgstr "Notes you want to share before the session"
+
+#: templates/appointments/patient_list.html:4
+msgid "Randevularım | Diyetisyen"
+msgstr "My Appointments | Dietitian"
+
+#: templates/appointments/patient_list.html:11
+msgid "Randevularım"
+msgstr "My Appointments"
+
+#: templates/appointments/patient_list.html:12
+msgid "Yaklaşan randevularınızı yönetin, geçmiş görüşmeleri inceleyin."
+msgstr "Manage your upcoming appointments and review past sessions."
+
+#: templates/accounts/patient_dashboard.html:72
+#: templates/appointments/patient_list.html:14
+msgid "Yeni Randevu Al"
+msgstr "Book New Appointment"
+
+#: templates/appointments/patient_list.html:21
+msgid "Henüz randevunuz yok"
+msgstr "You have no appointments yet"
+
+#: templates/appointments/patient_list.html:22
+msgid "İlk randevunuzu oluşturarak diyetisyeninizle görüşme planlayın."
+msgstr ""
+"Create your first appointment to schedule a session with your dietitian."
+
+#: templates/appointments/patient_list.html:30
+msgid "Aktif ve Yaklaşan Randevular"
+msgstr "Active and Upcoming Appointments"
+
+#: templates/appointments/patient_list.html:45
+msgid "Bu randevuyu iptal etmek istediğinizden emin misiniz?"
+msgstr "Are you sure you want to cancel this appointment?"
+
+#: templates/appointments/patient_list.html:47
+msgid "Randevuyu İptal Et"
+msgstr "Cancel Appointment"
+
+#: templates/appointments/patient_list.html:58
+msgid "Geçmiş Randevular"
+msgstr "Past Appointments"
+
+#: templates/accounts/login.html:4
+msgid "Giriş Yap | Diyetisyen"
+msgstr "Sign In | Dietitian"
+
+#: templates/accounts/login.html:13
+msgid "Güvenli Oturum"
+msgstr "Secure Session"
+
+#: templates/accounts/login.html:15
+msgid "Panele hızlı ve güvenli giriş"
+msgstr "Fast and secure sign-in to the panel"
+
+#: templates/accounts/login.html:16
+msgid ""
+"Hesabınıza giriş yapın, rolünüze göre hasta veya diyetisyen paneline "
+"otomatik yönlendirilin."
+msgstr ""
+"Sign in to your account and be automatically directed to the patient or "
+"dietitian panel based on your role."
+
+#: templates/accounts/login.html:19
+msgid "Session tabanlı kimlik doğrulama"
+msgstr "Session-based authentication"
+
+#: templates/accounts/login.html:20
+msgid "Rol bazlı yönlendirme akışı"
+msgstr "Role-based routing flow"
+
+#: templates/accounts/login.html:21
+msgid "Randevu ve diyet verilerine hızlı erişim"
+msgstr "Quick access to appointment and diet data"
+
+#: templates/accounts/login.html:22 templates/accounts/register.html:22
+msgid "Ana sayfaya dön"
+msgstr "Back to home"
+
+#: templates/accounts/login.html:29
+msgid "Hesabınız yok mu?"
+msgstr "Don't have an account?"
+
+#: templates/accounts/login.html:29
+msgid "Kayıt ol"
+msgstr "Sign up"
+
+#: templates/accounts/login.html:44 templates/accounts/register.html:60
+msgid "ornek@email.com"
+msgstr "example@email.com"
+
+#: templates/accounts/login.html:48 templates/accounts/register.html:64
+msgid "Şifre"
+msgstr "Password"
+
+#: templates/accounts/login.html:55
+msgid "Beni hatırla"
+msgstr "Remember me"
+
+#: templates/accounts/login.html:57
+msgid "Şifremi unuttum"
+msgstr "Forgot my password"
+
+#: templates/accounts/register.html:4
+msgid "Kayıt Ol | Diyetisyen"
+msgstr "Sign Up | Dietitian"
+
+#: templates/accounts/register.html:13
+msgid "Yeni Hesap"
+msgstr "New Account"
+
+#: templates/accounts/register.html:15
+msgid "Kendi beslenme yolculuğunu başlat"
+msgstr "Start your own nutrition journey"
+
+#: templates/accounts/register.html:16
+msgid ""
+"Hasta veya diyetisyen olarak kayıt ol, uygun panele anında geç ve tüm "
+"akışları tek yerden yönet."
+msgstr ""
+"Sign up as a patient or dietitian, move directly to the appropriate panel, "
+"and manage all flows from one place."
+
+#: templates/accounts/register.html:19
+msgid "Hızlı rol seçimi"
+msgstr "Quick role selection"
+
+#: templates/accounts/register.html:20
+msgid "Otomatik profil oluşturma"
+msgstr "Automatic profile creation"
+
+#: templates/accounts/register.html:21
+msgid "Kayıt sonrası doğrudan panel yönlendirmesi"
+msgstr "Direct panel routing after registration"
+
+#: templates/accounts/register.html:28
+msgid "Üye Ol"
+msgstr "Join"
+
+#: templates/accounts/register.html:29
+msgid "Zaten hesabınız var mı?"
+msgstr "Already have an account?"
+
+#: templates/accounts/register.html:29
+msgid "Giriş yap"
+msgstr "Sign in"
+
+#: templates/accounts/register.html:40
+msgid "Hesap Tipi"
+msgstr "Account Type"
+
+#: templates/accounts/register.html:50
+msgid "Adınız"
+msgstr "Your first name"
+
+#: templates/accounts/register.html:54
+msgid "Soyadınız"
+msgstr "Your last name"
+
+#: templates/accounts/register.html:65
+msgid "En az 6 karakter"
+msgstr "At least 6 characters"
+
+#: templates/accounts/register.html:69
+msgid "Şifre Tekrar"
+msgstr "Confirm Password"
+
+#: templates/accounts/register.html:70
+msgid "Şifrenizi tekrar girin"
+msgstr "Re-enter your password"
+
+#: templates/accounts/register.html:73
+msgid "Hesap Oluştur"
+msgstr "Create Account"
+
+#: templates/accounts/patient_dashboard.html:4
+msgid "Hasta Dashboard | Diyetisyen"
+msgstr "Patient Dashboard | Dietitian"
+
+#: templates/accounts/patient_dashboard.html:9
+msgid "Hasta Dashboard"
+msgstr "Patient Dashboard"
+
+#: templates/accounts/patient_dashboard.html:11
+msgid ""
+"Güncel ölçümlerini, yaklaşan randevunu ve diyet planını tek ekranda takip "
+"et."
+msgstr ""
+"Track your current measurements, upcoming appointment, and diet plan on one "
+"screen."
+
+#: templates/accounts/patient_dashboard.html:21
+msgid "Hedef:"
+msgstr "Target:"
+
+#: templates/accounts/patient_dashboard.html:21
+msgid "Belirlenmedi"
+msgstr "Not set"
+
+#: templates/accounts/patient_dashboard.html:33
+msgid "Hesap için boy ve kilo gerekli"
+msgstr "Height and weight are required for calculation"
+
+#: templates/accounts/patient_dashboard.html:43
+msgid "Sonraki Randevu"
+msgstr "Next Appointment"
+
+#: templates/accounts/patient_dashboard.html:45
+msgid "Randevu planlayın"
+msgstr "Schedule an appointment"
+
+#: templates/accounts/patient_dashboard.html:55
+msgid "Aktif Diyet"
+msgstr "Active Diet"
+
+#: templates/accounts/patient_dashboard.html:57
+msgid "Plan kullanıma açık"
+msgstr "Plan is available"
+
+#: templates/accounts/patient_dashboard.html:57
+msgid "Diyetisyen onayı bekleniyor"
+msgstr "Waiting for dietitian approval"
+
+#: templates/accounts/patient_dashboard.html:68
+msgid "Hızlı İşlemler"
+msgstr "Quick Actions"
+
+#: templates/accounts/patient_dashboard.html:73
+msgid "Uygun tarih ve saatte görüşme planla"
+msgstr "Plan a session at a suitable date and time"
+
+#: templates/accounts/patient_dashboard.html:80
+msgid "Güncel kilo ve çevre ölçülerini kaydet"
+msgstr "Record current weight and circumference measurements"
+
+#: templates/accounts/patient_dashboard.html:86
+msgid "Diyet Planını Aç"
+msgstr "Open Diet Plan"
+
+#: templates/accounts/patient_dashboard.html:87
+msgid "Öğün içeriklerini ve notları görüntüle"
+msgstr "View meal contents and notes"
+
+#: templates/accounts/patient_dashboard.html:95
+msgid "Profil Özeti"
+msgstr "Profile Summary"
+
+#: templates/accounts/patient_dashboard.html:97
+msgid "Ad Soyad"
+msgstr "Full Name"
+
+#: templates/accounts/patient_dashboard.html:100
+msgid "Atanmadı"
+msgstr "Not assigned"
+
+#: templates/accounts/patient_dashboard.html:103
+msgid "Günlük öneri"
+msgstr "Daily tip"
+
+#: templates/accounts/patient_dashboard.html:104
+msgid ""
+"Ölçümlerinizi düzenli girmeniz, diyetisyeninizin planı daha doğru "
+"güncellemesine yardımcı olur."
+msgstr ""
+"Entering your measurements regularly helps your dietitian update your plan "
+"more accurately."
+
+#: templates/accounts/patient_dashboard.html:10
+msgid "Merhaba {{ first_name }}, sağlıklı güne hazır mısın?"
+msgstr "Hi {{ first_name }}, are you ready for a healthy day?"
+
+#: templates/accounts/patient_diet_plan.html:4
+msgid "Diyet Planım | Diyetisyen"
+msgstr "My Diet Plan | Dietitian"
+
+#: templates/accounts/patient_diet_plan.html:7
+msgid "Bu plan için açıklama girilmedi."
+msgstr "No description was entered for this plan."
+
+#: templates/accounts/patient_diet_plan.html:10
+msgid "Beslenme Programı"
+msgstr "Nutrition Program"
+
+#: templates/accounts/patient_diet_plan.html:12
+msgid "Diyetisyeniniz tarafından tanımlanan aktif plan ve öğün detayları."
+msgstr "Active plan and meal details defined by your dietitian."
+
+#: templates/accounts/patient_diet_plan.html:22
+msgid "Başlangıç:"
+msgstr "Start:"
+
+#: templates/accounts/patient_diet_plan.html:24
+msgid "Bitiş:"
+msgstr "End:"
+
+#: templates/accounts/patient_diet_plan.html:31
+msgid "Günlük Hedef"
+msgstr "Daily Target"
+
+#: templates/accounts/patient_diet_plan.html:80
+msgid "Henüz aktif bir diyet planı bulunmuyor"
+msgstr "No active diet plan yet"
+
+#: templates/accounts/patient_diet_plan.html:81
+msgid ""
+"Diyetisyeniniz size yeni plan atadığında bu ekranda tüm öğünleri "
+"görebilirsiniz."
+msgstr ""
+"When your dietitian assigns a new plan, you will see all meals on this "
+"screen."
+
+#: templates/accounts/patient_diet_plan.html:82
+msgid "Randevularıma Git"
+msgstr "Go to My Appointments"
+
+msgid "Pr."
+msgstr "Pr."
+
+msgid "Karb."
+msgstr "Carb."

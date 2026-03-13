@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 
 
 class Measurement(models.Model):
@@ -8,58 +9,58 @@ class Measurement(models.Model):
         on_delete=models.CASCADE,
         related_name='measurements',
         limit_choices_to={'user_type': 'patient'},
-        verbose_name='Hasta'
+        verbose_name=_('Hasta')
     )
-    date = models.DateField(verbose_name='Tarih')
-    weight = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Kilo (kg)')
+    date = models.DateField(verbose_name=_('Tarih'))
+    weight = models.DecimalField(max_digits=5, decimal_places=2, verbose_name=_('Kilo (kg)'))
     body_fat_percentage = models.DecimalField(
         max_digits=4,
         decimal_places=1,
         null=True,
         blank=True,
-        verbose_name='Yağ Oranı (%)'
+        verbose_name=_('Yağ Oranı (%)')
     )
     muscle_mass = models.DecimalField(
         max_digits=5,
         decimal_places=2,
         null=True,
         blank=True,
-        verbose_name='Kas Kütlesi (kg)'
+        verbose_name=_('Kas Kütlesi (kg)')
     )
     waist_circumference = models.DecimalField(
         max_digits=5,
         decimal_places=1,
         null=True,
         blank=True,
-        verbose_name='Bel Çevresi (cm)'
+        verbose_name=_('Bel Çevresi (cm)')
     )
     hip_circumference = models.DecimalField(
         max_digits=5,
         decimal_places=1,
         null=True,
         blank=True,
-        verbose_name='Kalça Çevresi (cm)'
+        verbose_name=_('Kalça Çevresi (cm)')
     )
     chest_circumference = models.DecimalField(
         max_digits=5,
         decimal_places=1,
         null=True,
         blank=True,
-        verbose_name='Göğüs Çevresi (cm)'
+        verbose_name=_('Göğüs Çevresi (cm)')
     )
     arm_circumference = models.DecimalField(
         max_digits=5,
         decimal_places=1,
         null=True,
         blank=True,
-        verbose_name='Kol Çevresi (cm)'
+        verbose_name=_('Kol Çevresi (cm)')
     )
-    notes = models.TextField(blank=True, verbose_name='Notlar')
+    notes = models.TextField(blank=True, verbose_name=_('Notlar'))
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Ölçüm'
-        verbose_name_plural = 'Ölçümler'
+        verbose_name = _('Ölçüm')
+        verbose_name_plural = _('Ölçümler')
         ordering = ['-date']
         unique_together = ['patient', 'date']
 

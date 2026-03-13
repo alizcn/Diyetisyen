@@ -1,13 +1,15 @@
 {% extends "base_patient.html" %}
+{% load i18n %}
 
-{% block title %}Diyet Planım | Diyetisyen{% endblock %}
+{% block title %}{% trans "Diyet Planım | Diyetisyen" %}{% endblock %}
 
 {% block content %}
+{% trans "Bu plan için açıklama girilmedi." as default_plan_description %}
 <div class="container">
     <div class="section-title">
-        <span class="eyebrow"><i class="bi bi-clipboard2-pulse"></i> Beslenme Programı</span>
-        <h1 class="display-font mt-3">Diyet Planım</h1>
-        <p class="muted mb-0">Diyetisyeniniz tarafından tanımlanan aktif plan ve öğün detayları.</p>
+        <span class="eyebrow"><i class="bi bi-clipboard2-pulse"></i> {% trans "Beslenme Programı" %}</span>
+        <h1 class="display-font mt-3">{% trans "Diyet Planım" %}</h1>
+        <p class="muted mb-0">{% trans "Diyetisyeniniz tarafından tanımlanan aktif plan ve öğün detayları." %}</p>
     </div>
 
     {% if diet_plan %}
@@ -15,18 +17,18 @@
         <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
             <div>
                 <h2 class="display-font h4 mb-2">{{ diet_plan.title }}</h2>
-                <p class="muted mb-3">{{ diet_plan.description|default:"Bu plan için açıklama girilmedi." }}</p>
+                <p class="muted mb-3">{{ diet_plan.description|default:default_plan_description }}</p>
                 <div class="d-flex flex-wrap gap-2">
-                    <span class="status-pill status-confirmed"><i class="bi bi-calendar2-check me-1"></i> Başlangıç: {{ diet_plan.start_date|date:"d F Y" }}</span>
+                    <span class="status-pill status-confirmed"><i class="bi bi-calendar2-check me-1"></i> {% trans "Başlangıç:" %} {{ diet_plan.start_date|date:"d F Y" }}</span>
                     {% if diet_plan.end_date %}
-                    <span class="status-pill status-completed"><i class="bi bi-calendar2-minus me-1"></i> Bitiş: {{ diet_plan.end_date|date:"d F Y" }}</span>
+                    <span class="status-pill status-completed"><i class="bi bi-calendar2-minus me-1"></i> {% trans "Bitiş:" %} {{ diet_plan.end_date|date:"d F Y" }}</span>
                     {% endif %}
-                    <span class="status-pill status-scheduled"><i class="bi bi-person-badge me-1"></i> Dyt. {{ diet_plan.dietitian.first_name }} {{ diet_plan.dietitian.last_name }}</span>
+                    <span class="status-pill status-scheduled"><i class="bi bi-person-badge me-1"></i> {% trans "Dyt." %} {{ diet_plan.dietitian.first_name }} {{ diet_plan.dietitian.last_name }}</span>
                 </div>
             </div>
             {% if diet_plan.daily_calories_target %}
             <div class="surface-muted p-3 align-self-start">
-                <p class="metric-label mb-1">Günlük Hedef</p>
+                <p class="metric-label mb-1">{% trans "Günlük Hedef" %}</p>
                 <p class="metric-value mb-0" style="font-size:1.2rem;">{{ diet_plan.daily_calories_target }} kcal</p>
             </div>
             {% endif %}
@@ -50,9 +52,9 @@
                     <table class="table align-middle mb-0">
                         <thead>
                             <tr>
-                                <th>Besin</th>
-                                <th>Miktar</th>
-                                <th>Kalori</th>
+                                <th>{% trans "Besin" %}</th>
+                                <th>{% trans "Miktar" %}</th>
+                                <th>{% trans "Kalori" %}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -75,9 +77,9 @@
     <div class="surface-card p-4 p-lg-5">
         <div class="empty-state">
             <span class="icon-pill mb-3"><i class="bi bi-journal-x"></i></span>
-            <h3 class="display-font h5">Henüz aktif bir diyet planı bulunmuyor</h3>
-            <p class="muted mb-3">Diyetisyeniniz size yeni plan atadığında bu ekranda tüm öğünleri görebilirsiniz.</p>
-            <a href="{% url 'patient_appointments' %}" class="btn btn-primary">Randevularıma Git</a>
+            <h3 class="display-font h5">{% trans "Henüz aktif bir diyet planı bulunmuyor" %}</h3>
+            <p class="muted mb-3">{% trans "Diyetisyeniniz size yeni plan atadığında bu ekranda tüm öğünleri görebilirsiniz." %}</p>
+            <a href="{% url 'patient_appointments' %}" class="btn btn-primary">{% trans "Randevularıma Git" %}</a>
         </div>
     </div>
     {% endif %}

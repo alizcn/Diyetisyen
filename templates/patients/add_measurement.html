@@ -1,14 +1,15 @@
 {% extends "base_patient.html" %}
+{% load i18n %}
 
-{% block title %}Ölçüm Ekle | Diyetisyen{% endblock %}
+{% block title %}{% trans "Ölçüm Ekle | Diyetisyen" %}{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="section-title">
-        <a href="{% url 'patient_progress' %}" class="small text-decoration-none muted"><i class="bi bi-arrow-left"></i> İlerleme Sayfasına Dön</a>
-        <span class="eyebrow mt-3"><i class="bi bi-rulers"></i> Yeni Ölçüm</span>
-        <h1 class="display-font mt-3">Ölçüm Ekle</h1>
-        <p class="muted mb-0">Bugüne ait ölçümlerinizi kaydederek ilerleme grafiğinizi güncelleyin.</p>
+        <a href="{% url 'patient_progress' %}" class="small text-decoration-none muted"><i class="bi bi-arrow-left"></i> {% trans "İlerleme Sayfasına Dön" %}</a>
+        <span class="eyebrow mt-3"><i class="bi bi-rulers"></i> {% trans "Yeni Ölçüm" %}</span>
+        <h1 class="display-font mt-3">{% trans "Ölçüm Ekle" %}</h1>
+        <p class="muted mb-0">{% trans "Bugüne ait ölçümlerinizi kaydederek ilerleme grafiğinizi güncelleyin." %}</p>
     </div>
 
     <div class="row justify-content-center">
@@ -22,51 +23,51 @@
                     {% csrf_token %}
 
                     <div class="mb-3">
-                        <label for="weight" class="form-label fw-semibold">Kilo (kg) *</label>
-                        <input type="number" step="0.1" class="form-control" id="weight" name="weight" value="{{ form_data.weight|default:'' }}" required placeholder="Örn: 78.4">
+                        <label for="weight" class="form-label fw-semibold">{% trans "Kilo (kg)" %} *</label>
+                        <input type="number" step="0.1" class="form-control" id="weight" name="weight" value="{{ form_data.weight|default:'' }}" required placeholder="{% trans 'Örn: 78.4' %}">
                     </div>
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label for="body_fat" class="form-label fw-semibold">Yağ Oranı (%)</label>
-                            <input type="number" step="0.1" class="form-control" id="body_fat" name="body_fat" value="{{ form_data.body_fat|default:'' }}" placeholder="Örn: 24.5">
+                            <label for="body_fat" class="form-label fw-semibold">{% trans "Yağ Oranı (%)" %}</label>
+                            <input type="number" step="0.1" class="form-control" id="body_fat" name="body_fat" value="{{ form_data.body_fat|default:'' }}" placeholder="{% trans 'Örn: 24.5' %}">
                         </div>
                         <div class="col-md-6">
-                            <label for="muscle_mass" class="form-label fw-semibold">Kas Kütlesi (kg)</label>
-                            <input type="number" step="0.1" class="form-control" id="muscle_mass" name="muscle_mass" value="{{ form_data.muscle_mass|default:'' }}" placeholder="Örn: 33.1">
-                        </div>
-                    </div>
-
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-6">
-                            <label for="waist" class="form-label fw-semibold">Bel Çevresi (cm)</label>
-                            <input type="number" step="0.1" class="form-control" id="waist" name="waist" value="{{ form_data.waist|default:'' }}" placeholder="Örn: 84.0">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="hip" class="form-label fw-semibold">Kalça Çevresi (cm)</label>
-                            <input type="number" step="0.1" class="form-control" id="hip" name="hip" value="{{ form_data.hip|default:'' }}" placeholder="Örn: 97.0">
+                            <label for="muscle_mass" class="form-label fw-semibold">{% trans "Kas Kütlesi (kg)" %}</label>
+                            <input type="number" step="0.1" class="form-control" id="muscle_mass" name="muscle_mass" value="{{ form_data.muscle_mass|default:'' }}" placeholder="{% trans 'Örn: 33.1' %}">
                         </div>
                     </div>
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label for="chest" class="form-label fw-semibold">Göğüs Çevresi (cm)</label>
-                            <input type="number" step="0.1" class="form-control" id="chest" name="chest" value="{{ form_data.chest|default:'' }}" placeholder="Örn: 95.5">
+                            <label for="waist" class="form-label fw-semibold">{% trans "Bel Çevresi (cm)" %}</label>
+                            <input type="number" step="0.1" class="form-control" id="waist" name="waist" value="{{ form_data.waist|default:'' }}" placeholder="{% trans 'Örn: 84.0' %}">
                         </div>
                         <div class="col-md-6">
-                            <label for="arm" class="form-label fw-semibold">Kol Çevresi (cm)</label>
-                            <input type="number" step="0.1" class="form-control" id="arm" name="arm" value="{{ form_data.arm|default:'' }}" placeholder="Örn: 31.2">
+                            <label for="hip" class="form-label fw-semibold">{% trans "Kalça Çevresi (cm)" %}</label>
+                            <input type="number" step="0.1" class="form-control" id="hip" name="hip" value="{{ form_data.hip|default:'' }}" placeholder="{% trans 'Örn: 97.0' %}">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="chest" class="form-label fw-semibold">{% trans "Göğüs Çevresi (cm)" %}</label>
+                            <input type="number" step="0.1" class="form-control" id="chest" name="chest" value="{{ form_data.chest|default:'' }}" placeholder="{% trans 'Örn: 95.5' %}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="arm" class="form-label fw-semibold">{% trans "Kol Çevresi (cm)" %}</label>
+                            <input type="number" step="0.1" class="form-control" id="arm" name="arm" value="{{ form_data.arm|default:'' }}" placeholder="{% trans 'Örn: 31.2' %}">
                         </div>
                     </div>
 
                     <div class="mb-4">
-                        <label for="notes" class="form-label fw-semibold">Notlar</label>
-                        <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Ölçüm gününe ait ek notlar">{{ form_data.notes|default:'' }}</textarea>
+                        <label for="notes" class="form-label fw-semibold">{% trans "Notlar" %}</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="{% trans 'Ölçüm gününe ait ek notlar' %}">{{ form_data.notes|default:'' }}</textarea>
                     </div>
 
                     <div class="d-flex flex-column flex-sm-row gap-2">
-                        <button type="submit" class="btn btn-primary flex-fill">Ölçümü Kaydet</button>
-                        <a href="{% url 'patient_progress' %}" class="btn btn-secondary flex-fill">Vazgeç</a>
+                        <button type="submit" class="btn btn-primary flex-fill">{% trans "Ölçümü Kaydet" %}</button>
+                        <a href="{% url 'patient_progress' %}" class="btn btn-secondary flex-fill">{% trans "Vazgeç" %}</a>
                     </div>
                 </form>
             </div>

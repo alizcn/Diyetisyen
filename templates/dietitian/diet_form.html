@@ -1,4 +1,5 @@
 {% extends "base_dietitian.html" %}
+{% load i18n %}
 
 {% block title %}{{ page_title }}{% endblock %}
 
@@ -35,10 +36,10 @@
 {% block content %}
 <div class="container">
     <div class="section-title">
-        <a href="{% url 'dietitian_diets' %}" class="small text-decoration-none muted"><i class="bi bi-arrow-left"></i> Diyet planlarına dön</a>
-        <span class="eyebrow mt-3"><i class="bi bi-journal-plus"></i> Detaylı Plan Oluşturucu</span>
+        <a href="{% url 'dietitian_diets' %}" class="small text-decoration-none muted"><i class="bi bi-arrow-left"></i> {% trans "Diyet planlarına dön" %}</a>
+        <span class="eyebrow mt-3"><i class="bi bi-journal-plus"></i> {% trans "Detaylı Plan Oluşturucu" %}</span>
         <h1 class="display-font mt-3">{{ heading }}</h1>
-        <p class="muted mb-0">Öğünleri kişiye özel oluşturun, her öğüne besin ekleyip çıkarın, miktarları detaylı girin.</p>
+        <p class="muted mb-0">{% trans "Öğünleri kişiye özel oluşturun, her öğüne besin ekleyip çıkarın, miktarları detaylı girin." %}</p>
     </div>
 
     {% if error %}
@@ -49,9 +50,9 @@
     <div class="surface-card p-4">
         <div class="empty-state">
             <span class="icon-pill mb-3"><i class="bi bi-exclamation-triangle"></i></span>
-            <h3 class="display-font h5">Önce besin veritabanı ekleyin</h3>
-            <p class="muted mb-3">Diyet planı oluşturmak için en az bir besin kaydı gerekli. Önce besin ekleyip sonra bu ekrana geri dönün.</p>
-            <a href="{% url 'dietitian_diets' %}" class="btn btn-primary">Besin Veritabanına Git</a>
+            <h3 class="display-font h5">{% trans "Önce besin veritabanı ekleyin" %}</h3>
+            <p class="muted mb-3">{% trans "Diyet planı oluşturmak için en az bir besin kaydı gerekli. Önce besin ekleyip sonra bu ekrana geri dönün." %}</p>
+            <a href="{% url 'dietitian_diets' %}" class="btn btn-primary">{% trans "Besin Veritabanına Git" %}</a>
         </div>
     </div>
     {% else %}
@@ -66,53 +67,53 @@
 
             <div class="row g-3 mb-3">
                 <div class="col-md-4">
-                    <label for="patient_id" class="form-label fw-semibold">Hasta *</label>
+                    <label for="patient_id" class="form-label fw-semibold">{% trans "Hasta" %} *</label>
                     <select id="patient_id" name="patient_id" class="form-select" required>
-                        <option value="">Hasta seçin</option>
+                        <option value="">{% trans "Hasta seçin" %}</option>
                         {% for p in patient_profiles %}
                         <option value="{{ p.user.id }}" {% if form_data.patient_id == p.user.id|stringformat:"d" %}selected{% endif %}>{{ p.user.first_name }} {{ p.user.last_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="col-md-5">
-                    <label for="title" class="form-label fw-semibold">Plan Başlığı *</label>
+                    <label for="title" class="form-label fw-semibold">{% trans "Plan Başlığı" %} *</label>
                     <input type="text" id="title" name="title" class="form-control" value="{{ form_data.title|default:'' }}" required>
                 </div>
                 <div class="col-md-3">
-                    <label for="daily_calories_target" class="form-label fw-semibold">Günlük Kalori</label>
+                    <label for="daily_calories_target" class="form-label fw-semibold">{% trans "Günlük Kalori" %}</label>
                     <input type="number" id="daily_calories_target" name="daily_calories_target" min="0" class="form-control" value="{{ form_data.daily_calories_target|default:'' }}">
                 </div>
             </div>
 
             <div class="row g-3 mb-3">
                 <div class="col-md-4">
-                    <label for="start_date" class="form-label fw-semibold">Başlangıç Tarihi *</label>
+                    <label for="start_date" class="form-label fw-semibold">{% trans "Başlangıç Tarihi" %} *</label>
                     <input type="date" id="start_date" name="start_date" class="form-control" value="{{ form_data.start_date|default:'' }}" required>
                 </div>
                 <div class="col-md-4">
-                    <label for="end_date" class="form-label fw-semibold">Bitiş Tarihi</label>
+                    <label for="end_date" class="form-label fw-semibold">{% trans "Bitiş Tarihi" %}</label>
                     <input type="date" id="end_date" name="end_date" class="form-control" value="{{ form_data.end_date|default:'' }}">
                 </div>
                 <div class="col-md-4 d-flex align-items-end">
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" id="is_active" name="is_active" {% if form_data.is_active %}checked{% endif %}>
-                        <label class="form-check-label" for="is_active">Plan aktif olsun</label>
+                        <label class="form-check-label" for="is_active">{% trans "Plan aktif olsun" %}</label>
                     </div>
                 </div>
             </div>
 
             <div class="mb-4">
-                <label for="description" class="form-label fw-semibold">Genel Açıklama</label>
+                <label for="description" class="form-label fw-semibold">{% trans "Genel Açıklama" %}</label>
                 <textarea id="description" name="description" rows="3" class="form-control">{{ form_data.description|default:'' }}</textarea>
             </div>
 
             <div class="surface-muted p-3 mb-4">
                 <div class="meal-toolbar mb-3">
                     <div>
-                        <h2 class="display-font h5 mb-1">Öğün Planı</h2>
-                        <p class="tiny-hint mb-0">Her öğüne birden fazla besin ekleyebilir, miktarları güncelleyebilir ve öğünleri silebilirsiniz.</p>
+                        <h2 class="display-font h5 mb-1">{% trans "Öğün Planı" %}</h2>
+                        <p class="tiny-hint mb-0">{% trans "Her öğüne birden fazla besin ekleyebilir, miktarları güncelleyebilir ve öğünleri silebilirsiniz." %}</p>
                     </div>
-                    <button type="button" class="btn btn-outline-primary btn-sm" id="add-meal-btn"><i class="bi bi-plus-lg"></i> Öğün Ekle</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm" id="add-meal-btn"><i class="bi bi-plus-lg"></i> {% trans "Öğün Ekle" %}</button>
                 </div>
 
                 <div id="meal-builder" class="d-grid gap-3"></div>
@@ -122,7 +123,7 @@
 
             <div class="d-flex flex-column flex-sm-row gap-2">
                 <button type="submit" class="btn btn-primary flex-fill">{{ submit_label }}</button>
-                <a href="{% url 'dietitian_diets' %}" class="btn btn-secondary flex-fill">Vazgeç</a>
+                <a href="{% url 'dietitian_diets' %}" class="btn btn-secondary flex-fill">{% trans "Vazgeç" %}</a>
             </div>
         </form>
     </div>
@@ -135,6 +136,24 @@
 {% endblock %}
 
 {% block extra_js %}
+{% trans "Besin" as t_food %}
+{% trans "Miktar" as t_quantity %}
+{% trans "Besini sil" as t_remove_food_title %}
+{% trans "Öğün #" as t_meal_prefix %}
+{% trans "Öğünü Sil" as t_remove_meal %}
+{% trans "Öğün Türü" as t_meal_type %}
+{% trans "Saat" as t_time %}
+{% trans "Açıklama" as t_description %}
+{% trans "Öğün açıklaması" as t_meal_desc_placeholder %}
+{% trans "+ Besin Ekle" as t_add_food %}
+{% trans "En az bir öğün eklemelisiniz." as t_err_min_meal %}
+{% trans ". öğün açıklaması boş olamaz." as t_err_meal_desc_empty %}
+{% trans ". öğün için en az bir besin ekleyin." as t_err_min_food %}
+{% trans ". öğün " as t_err_meal_index_part %}
+{% trans ". besin seçimi boş." as t_err_food_select_empty %}
+{% trans ". besin miktarı pozitif olmalı." as t_err_food_qty_positive %}
+{% trans "En az bir öğün kalmalıdır." as t_alert_keep_meal %}
+{% trans "Her öğünde en az bir besin olmalıdır." as t_alert_min_food_per_meal %}
 <script>
 (function () {
     const form = document.getElementById('diet-plan-form');
@@ -149,6 +168,26 @@
     const mealBuilder = document.getElementById('meal-builder');
     const addMealBtn = document.getElementById('add-meal-btn');
     const payloadInput = document.getElementById('payload-input');
+    const t = {
+        food: "{{ t_food|escapejs }}",
+        quantity: "{{ t_quantity|escapejs }}",
+        removeFoodTitle: "{{ t_remove_food_title|escapejs }}",
+        mealPrefix: "{{ t_meal_prefix|escapejs }}",
+        removeMeal: "{{ t_remove_meal|escapejs }}",
+        mealType: "{{ t_meal_type|escapejs }}",
+        time: "{{ t_time|escapejs }}",
+        description: "{{ t_description|escapejs }}",
+        mealDescPlaceholder: "{{ t_meal_desc_placeholder|escapejs }}",
+        addFood: "{{ t_add_food|escapejs }}",
+        errMinMeal: "{{ t_err_min_meal|escapejs }}",
+        errMealDescEmpty: "{{ t_err_meal_desc_empty|escapejs }}",
+        errMinFood: "{{ t_err_min_food|escapejs }}",
+        errMealIndexPart: "{{ t_err_meal_index_part|escapejs }}",
+        errFoodSelectEmpty: "{{ t_err_food_select_empty|escapejs }}",
+        errFoodQtyPositive: "{{ t_err_food_qty_positive|escapejs }}",
+        alertKeepMeal: "{{ t_alert_keep_meal|escapejs }}",
+        alertMinFoodPerMeal: "{{ t_alert_min_food_per_meal|escapejs }}"
+    };
 
     function defaultMeal() {
         return {
@@ -215,17 +254,17 @@
                     '<div class="food-row mb-2" data-food-index="' + foodIndex + '">' +
                         '<div class="row g-2 align-items-end">' +
                             '<div class="col-md-8">' +
-                                '<label class="form-label small fw-semibold mb-1">Besin</label>' +
+                                '<label class="form-label small fw-semibold mb-1">' + t.food + '</label>' +
                                 '<select class="form-select" data-field="food_id">' +
                                     foodOptionsHtml(foodRow.food_id) +
                                 '</select>' +
                             '</div>' +
                             '<div class="col-md-3">' +
-                                '<label class="form-label small fw-semibold mb-1">Miktar</label>' +
+                                '<label class="form-label small fw-semibold mb-1">' + t.quantity + '</label>' +
                                 '<input type="number" step="0.01" min="0.01" class="form-control" data-field="quantity" value="' + escapeHtml(foodRow.quantity || '1') + '">' +
                             '</div>' +
                             '<div class="col-md-1">' +
-                                '<button type="button" class="btn btn-outline-danger btn-sm w-100" data-action="remove-food" title="Besini sil">×</button>' +
+                                '<button type="button" class="btn btn-outline-danger btn-sm w-100" data-action="remove-food" title="' + t.removeFoodTitle + '">×</button>' +
                             '</div>' +
                         '</div>' +
                     '</div>'
@@ -235,27 +274,27 @@
             return (
                 '<article class="meal-card p-3" data-meal-index="' + mealIndex + '">' +
                     '<div class="d-flex justify-content-between align-items-center mb-2">' +
-                        '<h3 class="h6 fw-bold mb-0">Öğün #' + (mealIndex + 1) + '</h3>' +
-                        '<button type="button" class="btn btn-outline-danger btn-sm" data-action="remove-meal">Öğünü Sil</button>' +
+                        '<h3 class="h6 fw-bold mb-0">' + t.mealPrefix + (mealIndex + 1) + '</h3>' +
+                        '<button type="button" class="btn btn-outline-danger btn-sm" data-action="remove-meal">' + t.removeMeal + '</button>' +
                     '</div>' +
                     '<div class="row g-2 mb-2">' +
                         '<div class="col-md-4">' +
-                            '<label class="form-label small fw-semibold mb-1">Öğün Türü</label>' +
+                            '<label class="form-label small fw-semibold mb-1">' + t.mealType + '</label>' +
                             '<select class="form-select" data-field="meal_type">' +
                                 mealTypeOptionsHtml(meal.meal_type) +
                             '</select>' +
                         '</div>' +
                         '<div class="col-md-3">' +
-                            '<label class="form-label small fw-semibold mb-1">Saat</label>' +
+                            '<label class="form-label small fw-semibold mb-1">' + t.time + '</label>' +
                             '<input type="time" class="form-control" data-field="time" value="' + escapeHtml(meal.time || '') + '">' +
                         '</div>' +
                         '<div class="col-md-5">' +
-                            '<label class="form-label small fw-semibold mb-1">Açıklama</label>' +
-                            '<input type="text" class="form-control" data-field="description" value="' + escapeHtml(meal.description || '') + '" placeholder="Öğün açıklaması">' +
+                            '<label class="form-label small fw-semibold mb-1">' + t.description + '</label>' +
+                            '<input type="text" class="form-control" data-field="description" value="' + escapeHtml(meal.description || '') + '" placeholder="' + t.mealDescPlaceholder + '">' +
                         '</div>' +
                     '</div>' +
                     '<div class="food-list">' + foodsHtml + '</div>' +
-                    '<button type="button" class="btn btn-outline-primary btn-sm" data-action="add-food">+ Besin Ekle</button>' +
+                    '<button type="button" class="btn btn-outline-primary btn-sm" data-action="add-food">' + t.addFood + '</button>' +
                 '</article>'
             );
         }).join('');
@@ -287,26 +326,26 @@
 
     function validateMeals() {
         if (!mealsState.length) {
-            return 'En az bir öğün eklemelisiniz.';
+            return t.errMinMeal;
         }
 
         for (let i = 0; i < mealsState.length; i += 1) {
             const meal = mealsState[i];
             const mealNumber = i + 1;
             if (!meal.description) {
-                return mealNumber + '. öğün açıklaması boş olamaz.';
+                return mealNumber + t.errMealDescEmpty;
             }
             if (!Array.isArray(meal.foods) || !meal.foods.length) {
-                return mealNumber + '. öğün için en az bir besin ekleyin.';
+                return mealNumber + t.errMinFood;
             }
             for (let j = 0; j < meal.foods.length; j += 1) {
                 const foodRow = meal.foods[j];
                 const qty = Number(foodRow.quantity);
                 if (!foodRow.food_id) {
-                    return mealNumber + '. öğün ' + (j + 1) + '. besin seçimi boş.';
+                    return mealNumber + t.errMealIndexPart + (j + 1) + t.errFoodSelectEmpty;
                 }
                 if (!qty || qty <= 0) {
-                    return mealNumber + '. öğün ' + (j + 1) + '. besin miktarı pozitif olmalı.';
+                    return mealNumber + t.errMealIndexPart + (j + 1) + t.errFoodQtyPositive;
                 }
             }
         }
@@ -331,7 +370,7 @@
         const action = target.dataset.action;
         if (action === 'remove-meal') {
             if (mealsState.length === 1) {
-                window.alert('En az bir öğün kalmalıdır.');
+                window.alert(t.alertKeepMeal);
                 return;
             }
             mealsState.splice(mealIndex, 1);
@@ -355,7 +394,7 @@
             }
             const foodIndex = Number(foodRow.dataset.foodIndex);
             if (mealsState[mealIndex].foods.length === 1) {
-                window.alert('Her öğünde en az bir besin olmalıdır.');
+                window.alert(t.alertMinFoodPerMeal);
                 return;
             }
             mealsState[mealIndex].foods.splice(foodIndex, 1);

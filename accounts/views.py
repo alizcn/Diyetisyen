@@ -2,6 +2,7 @@ import json
 from decimal import Decimal, InvalidOperation
 from datetime import date, datetime, timedelta
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -9,11 +10,29 @@ from django.db import transaction
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import translation
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods
 
 from .models import DietitianProfile, PatientProfile, User
 from appointments.models import Appointment
 from diets.models import DietPlan, Food, Meal, MealFood
+
+LANGUAGE_SESSION_KEY = getattr(translation, 'LANGUAGE_SESSION_KEY', 'django_language')
+
+
+def _set_language_cookie(response, language_code):
+    response.set_cookie(
+        settings.LANGUAGE_COOKIE_NAME,
+        language_code,
+        max_age=getattr(settings, 'LANGUAGE_COOKIE_AGE', None),
+        path=getattr(settings, 'LANGUAGE_COOKIE_PATH', '/'),
+        domain=getattr(settings, 'LANGUAGE_COOKIE_DOMAIN', None),
+        secure=getattr(settings, 'LANGUAGE_COOKIE_SECURE', False),
+        httponly=getattr(settings, 'LANGUAGE_COOKIE_HTTPONLY', False),
+        samesite=getattr(settings, 'LANGUAGE_COOKIE_SAMESITE', None),
+    )
 
 
 def _parse_decimal(value):
@@ -94,21 +113,21 @@ def _normalize_meal_payload(payload_raw, allowed_food_ids):
     try:
         payload = json.loads(payload_raw)
     except (TypeError, ValueError, json.JSONDecodeError):
-        return None, 'Öğün verisi geçersiz. Lütfen tekrar deneyin.'
+        return None, _('Öğün verisi geçersiz. Lütfen tekrar deneyin.')
 
     if not isinstance(payload, list) or not payload:
-        return None, 'En az bir öğün eklemelisiniz.'
+        return None, _('En az bir öğün eklemelisiniz.')
 
     valid_meal_types = {choice[0] for choice in Meal.MEAL_TYPE_CHOICES}
     normalized_meals = []
 
     for meal_index, meal_data in enumerate(payload, start=1):
         if not isinstance(meal_data, dict):
-            return None, f'{meal_index}. öğün verisi geçersiz.'
+            return None, _('%(index)s. öğün verisi geçersiz.') % {'index': meal_index}
 
         meal_type = (meal_data.get('meal_type') or '').strip()
         if meal_type not in valid_meal_types:
-            return None, f'{meal_index}. öğün tipi geçersiz.'
+            return None, _('%(index)s. öğün tipi geçersiz.') % {'index': meal_index}
 
         time_raw = (meal_data.get('time') or '').strip()
         parsed_time = None
@@ -116,32 +135,44 @@ def _normalize_meal_payload(payload_raw, allowed_food_ids):
             try:
                 parsed_time = datetime.strptime(time_raw, '%H:%M').time()
             except ValueError:
-                return None, f'{meal_index}. öğün saat formatı geçersiz.'
+                return None, _('%(index)s. öğün saat formatı geçersiz.') % {'index': meal_index}
 
         description = (meal_data.get('description') or '').strip()
         if not description:
-            return None, f'{meal_index}. öğün açıklaması zorunludur.'
+            return None, _('%(index)s. öğün açıklaması zorunludur.') % {'index': meal_index}
 
         foods_data = meal_data.get('foods')
         if not isinstance(foods_data, list) or not foods_data:
-            return None, f'{meal_index}. öğün için en az bir besin seçmelisiniz.'
+            return None, _('%(index)s. öğün için en az bir besin seçmelisiniz.') % {'index': meal_index}
 
         normalized_foods = []
         for food_index, food_data in enumerate(foods_data, start=1):
             if not isinstance(food_data, dict):
-                return None, f'{meal_index}. öğün {food_index}. besin verisi geçersiz.'
+                return None, _('%(meal_index)s. öğün %(food_index)s. besin verisi geçersiz.') % {
+                    'meal_index': meal_index,
+                    'food_index': food_index,
+                }
 
             food_id_raw = str(food_data.get('food_id', '')).strip()
             if not food_id_raw.isdigit():
-                return None, f'{meal_index}. öğün {food_index}. besin seçimi geçersiz.'
+                return None, _('%(meal_index)s. öğün %(food_index)s. besin seçimi geçersiz.') % {
+                    'meal_index': meal_index,
+                    'food_index': food_index,
+                }
 
             food_id = int(food_id_raw)
             if food_id not in allowed_food_ids:
-                return None, f'{meal_index}. öğün {food_index}. besin seçimi bulunamadı.'
+                return None, _('%(meal_index)s. öğün %(food_index)s. besin seçimi bulunamadı.') % {
+                    'meal_index': meal_index,
+                    'food_index': food_index,
+                }
 
             quantity = _parse_decimal(str(food_data.get('quantity', '')).strip())
             if quantity in (None, 'invalid') or quantity <= 0:
-                return None, f'{meal_index}. öğün {food_index}. besin miktarı pozitif olmalıdır.'
+                return None, _('%(meal_index)s. öğün %(food_index)s. besin miktarı pozitif olmalıdır.') % {
+                    'meal_index': meal_index,
+                    'food_index': food_index,
+                }
 
             normalized_foods.append({
                 'food_id': food_id,
@@ -210,29 +241,29 @@ def _diet_form_context(user, patient_profiles, foods, form_data, action_url, sub
 
 def _validate_diet_plan_payload(form_data, payload_raw, patient_profiles, foods):
     if not foods:
-        return None, 'Diyet planı oluşturmadan önce en az bir besin eklemelisiniz.'
+        return None, _('Diyet planı oluşturmadan önce en az bir besin eklemelisiniz.')
 
     if not all([form_data['patient_id'], form_data['title'], form_data['start_date']]):
-        return None, 'Hasta, başlık ve başlangıç tarihi zorunludur.'
+        return None, _('Hasta, başlık ve başlangıç tarihi zorunludur.')
 
     if not form_data['patient_id'].isdigit():
-        return None, 'Geçerli bir hasta seçiniz.'
+        return None, _('Geçerli bir hasta seçiniz.')
 
     patient_user_id = int(form_data['patient_id'])
     if not patient_profiles.filter(user_id=patient_user_id).exists():
-        return None, 'Seçilen hasta size atanmış görünmüyor.'
+        return None, _('Seçilen hasta size atanmış görünmüyor.')
 
     start_date_value = _parse_date(form_data['start_date'])
     end_date_value = _parse_date(form_data['end_date'])
     if start_date_value == 'invalid' or end_date_value == 'invalid':
-        return None, 'Tarih formatı geçersiz.'
+        return None, _('Tarih formatı geçersiz.')
 
     if end_date_value and start_date_value and end_date_value < start_date_value:
-        return None, 'Bitiş tarihi başlangıç tarihinden önce olamaz.'
+        return None, _('Bitiş tarihi başlangıç tarihinden önce olamaz.')
 
     calories = _parse_int(form_data['daily_calories_target'])
     if calories == 'invalid' or (calories is not None and calories < 0):
-        return None, 'Kalori hedefi pozitif bir sayı olmalıdır.'
+        return None, _('Kalori hedefi pozitif bir sayı olmalıdır.')
 
     allowed_food_ids = {food.id for food in foods}
     normalized_meals, meal_error = _normalize_meal_payload(payload_raw, allowed_food_ids)
@@ -272,18 +303,18 @@ def login_view(request):
         password = request.POST.get('password', '')
 
         if not email or not password:
-            return render(request, 'accounts/login.html', {'error': 'Email ve şifre gereklidir', 'email': email})
+            return render(request, 'accounts/login.html', {'error': _('Email ve şifre gereklidir'), 'email': email})
 
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            return render(request, 'accounts/login.html', {'error': 'Geçersiz email veya şifre', 'email': email})
+            return render(request, 'accounts/login.html', {'error': _('Geçersiz email veya şifre'), 'email': email})
 
         if not user.check_password(password):
-            return render(request, 'accounts/login.html', {'error': 'Geçersiz email veya şifre', 'email': email})
+            return render(request, 'accounts/login.html', {'error': _('Geçersiz email veya şifre'), 'email': email})
 
         if not user.is_active:
-            return render(request, 'accounts/login.html', {'error': 'Hesap aktif değil', 'email': email})
+            return render(request, 'accounts/login.html', {'error': _('Hesap aktif değil'), 'email': email})
 
         auth_login(request, user)
 
@@ -313,16 +344,19 @@ def register_view(request):
         confirm_password = request.POST.get('confirm_password', '')
 
         if not all([form_data['email'], form_data['first_name'], form_data['last_name'], password]):
-            return render(request, 'accounts/register.html', {'error': 'Tüm alanlar zorunludur', 'form_data': form_data})
+            return render(request, 'accounts/register.html', {'error': _('Tüm alanlar zorunludur'), 'form_data': form_data})
 
         if password != confirm_password:
-            return render(request, 'accounts/register.html', {'error': 'Şifreler eşleşmiyor', 'form_data': form_data})
+            return render(request, 'accounts/register.html', {'error': _('Şifreler eşleşmiyor'), 'form_data': form_data})
 
         if len(password) < 6:
-            return render(request, 'accounts/register.html', {'error': 'Şifre en az 6 karakter olmalıdır', 'form_data': form_data})
+            return render(request, 'accounts/register.html', {'error': _('Şifre en az 6 karakter olmalıdır'), 'form_data': form_data})
 
         if User.objects.filter(email=form_data['email']).exists():
-            return render(request, 'accounts/register.html', {'error': 'Bu email adresi zaten kullanılıyor', 'form_data': form_data})
+            return render(request, 'accounts/register.html', {'error': _('Bu email adresi zaten kullanılıyor'), 'form_data': form_data})
+
+        active_lang_codes = {code for code, _label in settings.LANGUAGES}
+        preferred_language = request.LANGUAGE_CODE if request.LANGUAGE_CODE in active_lang_codes else settings.LANGUAGE_CODE
 
         user = User.objects.create_user(
             email=form_data['email'],
@@ -330,6 +364,7 @@ def register_view(request):
             first_name=form_data['first_name'],
             last_name=form_data['last_name'],
             user_type=form_data['user_type'],
+            preferred_language=preferred_language,
         )
 
         if form_data['user_type'] == 'dietitian':
@@ -349,8 +384,34 @@ def register_view(request):
 @require_http_methods(["POST"])
 def logout_view(request):
     auth_logout(request)
-    messages.success(request, 'Başarıyla çıkış yapıldı')
+    messages.success(request, _('Başarıyla çıkış yapıldı'))
     return redirect('login')
+
+
+@require_http_methods(["POST"])
+def set_language_preference(request):
+    available_languages = {code for code, _label in settings.LANGUAGES}
+    selected_language = (request.POST.get('language', '') or '').strip().lower()
+
+    if selected_language not in available_languages:
+        selected_language = settings.LANGUAGE_CODE
+
+    if request.session.get(LANGUAGE_SESSION_KEY) != selected_language:
+        request.session[LANGUAGE_SESSION_KEY] = selected_language
+
+    if request.user.is_authenticated and request.user.preferred_language != selected_language:
+        request.user.preferred_language = selected_language
+        request.user.save(update_fields=['preferred_language'])
+
+    next_url = request.POST.get('next') or request.META.get('HTTP_REFERER') or '/'
+    if not url_has_allowed_host_and_scheme(next_url, {request.get_host()}, require_https=request.is_secure()):
+        next_url = '/'
+
+    translation.activate(selected_language)
+    request.LANGUAGE_CODE = selected_language
+    response = redirect(next_url)
+    _set_language_cookie(response, selected_language)
+    return response
 
 
 # ==================== PATIENT VIEWS ====================
@@ -369,13 +430,13 @@ def patient_dashboard(request):
         height_m = float(profile.height) / 100
         bmi = round(float(profile.current_weight) / (height_m ** 2), 1)
         if bmi < 18.5:
-            bmi_label = 'Zayıf'
+            bmi_label = _('Zayıf')
         elif bmi < 25:
-            bmi_label = 'Normal'
+            bmi_label = _('Normal')
         elif bmi < 30:
-            bmi_label = 'Hafif Kilolu'
+            bmi_label = _('Hafif Kilolu')
         else:
-            bmi_label = 'Obez'
+            bmi_label = _('Obez')
 
     next_appointment = Appointment.objects.filter(
         patient=user,
@@ -501,7 +562,7 @@ def dietitian_profile_edit(request):
                 'active_page': 'profile',
                 'profile': profile,
                 'form_data': form_data,
-                'error': 'Ad, soyad ve e-posta zorunludur.',
+                'error': _('Ad, soyad ve e-posta zorunludur.'),
             })
 
         if User.objects.filter(email=form_data['email']).exclude(id=user.id).exists():
@@ -509,7 +570,7 @@ def dietitian_profile_edit(request):
                 'active_page': 'profile',
                 'profile': profile,
                 'form_data': form_data,
-                'error': 'Bu e-posta başka bir kullanıcı tarafından kullanılıyor.',
+                'error': _('Bu e-posta başka bir kullanıcı tarafından kullanılıyor.'),
             })
 
         experience_years = _parse_int(form_data['experience_years'])
@@ -518,7 +579,7 @@ def dietitian_profile_edit(request):
                 'active_page': 'profile',
                 'profile': profile,
                 'form_data': form_data,
-                'error': 'Deneyim yılı geçerli bir sayı olmalıdır.',
+                'error': _('Deneyim yılı geçerli bir sayı olmalıdır.'),
             })
 
         user.first_name = form_data['first_name']
@@ -535,7 +596,7 @@ def dietitian_profile_edit(request):
         profile.bio = form_data['bio']
         profile.save()
 
-        messages.success(request, 'Profil bilgileriniz güncellendi.')
+        messages.success(request, _('Profil bilgileriniz güncellendi.'))
         return redirect('dietitian_profile_edit')
 
     return render(request, 'dietitian/profile_edit.html', {
@@ -604,7 +665,7 @@ def dietitian_patient_edit(request, patient_id):
                 'active_page': 'patients',
                 'patient_profile': patient_profile,
                 'form_data': form_data,
-                'error': 'Ad, soyad ve e-posta zorunludur.',
+                'error': _('Ad, soyad ve e-posta zorunludur.'),
             })
 
         if User.objects.filter(email=form_data['email']).exclude(id=patient_user.id).exists():
@@ -612,7 +673,7 @@ def dietitian_patient_edit(request, patient_id):
                 'active_page': 'patients',
                 'patient_profile': patient_profile,
                 'form_data': form_data,
-                'error': 'Bu e-posta başka bir kullanıcı tarafından kullanılıyor.',
+                'error': _('Bu e-posta başka bir kullanıcı tarafından kullanılıyor.'),
             })
 
         date_of_birth = _parse_date(form_data['date_of_birth'])
@@ -621,7 +682,7 @@ def dietitian_patient_edit(request, patient_id):
                 'active_page': 'patients',
                 'patient_profile': patient_profile,
                 'form_data': form_data,
-                'error': 'Doğum tarihi formatı geçersiz.',
+                'error': _('Doğum tarihi formatı geçersiz.'),
             })
 
         height = _parse_decimal(form_data['height'])
@@ -633,7 +694,7 @@ def dietitian_patient_edit(request, patient_id):
                 'active_page': 'patients',
                 'patient_profile': patient_profile,
                 'form_data': form_data,
-                'error': 'Boy ve kilo alanları sayısal olmalıdır.',
+                'error': _('Boy ve kilo alanları sayısal olmalıdır.'),
             })
 
         if form_data['gender'] and form_data['gender'] not in {'M', 'F', 'O'}:
@@ -641,7 +702,7 @@ def dietitian_patient_edit(request, patient_id):
                 'active_page': 'patients',
                 'patient_profile': patient_profile,
                 'form_data': form_data,
-                'error': 'Cinsiyet seçimi geçersiz.',
+                'error': _('Cinsiyet seçimi geçersiz.'),
             })
 
         patient_user.first_name = form_data['first_name']
@@ -658,7 +719,7 @@ def dietitian_patient_edit(request, patient_id):
         patient_profile.medical_conditions = form_data['medical_conditions']
         patient_profile.save()
 
-        messages.success(request, 'Hasta bilgileri güncellendi.')
+        messages.success(request, _('Hasta bilgileri güncellendi.'))
         return redirect('dietitian_patients')
 
     return render(request, 'dietitian/patient_edit.html', {
@@ -681,7 +742,7 @@ def dietitian_patient_delete(request, patient_id):
     patient_name = patient_profile.user.full_name
     patient_profile.user.delete()
 
-    messages.success(request, f'{patient_name} adlı hasta silindi.')
+    messages.success(request, _('%(name)s adlı hasta silindi.') % {'name': patient_name})
     return redirect('dietitian_patients')
 
 
@@ -754,9 +815,9 @@ def dietitian_diet_create(request):
                 foods=foods,
                 form_data=form_data,
                 action_url='dietitian_diet_create',
-                submit_label='Planı Oluştur',
-                title_text='Diyet Planı Oluştur | Diyetisyen',
-                heading_text='Yeni Diyet Planı Oluştur',
+                submit_label=_('Planı Oluştur'),
+                title_text=_('Diyet Planı Oluştur | Diyetisyen'),
+                heading_text=_('Yeni Diyet Planı Oluştur'),
                 initial_meals=_safe_payload_json(payload_raw, foods),
                 error=error,
             )
@@ -784,7 +845,7 @@ def dietitian_diet_create(request):
 
             _save_plan_meals(diet_plan, validated['meals'], food_lookup)
 
-        messages.success(request, 'Diyet planı ve öğünleri oluşturuldu.')
+        messages.success(request, _('Diyet planı ve öğünleri oluşturuldu.'))
         return redirect('dietitian_diet_edit', plan_id=diet_plan.id)
 
     context = _diet_form_context(
@@ -793,9 +854,9 @@ def dietitian_diet_create(request):
         foods=foods,
         form_data=form_data,
         action_url='dietitian_diet_create',
-        submit_label='Planı Oluştur',
-        title_text='Diyet Planı Oluştur | Diyetisyen',
-        heading_text='Yeni Diyet Planı Oluştur',
+        submit_label=_('Planı Oluştur'),
+        title_text=_('Diyet Planı Oluştur | Diyetisyen'),
+        heading_text=_('Yeni Diyet Planı Oluştur'),
     )
     return render(request, 'dietitian/diet_form.html', context)
 
@@ -840,9 +901,9 @@ def dietitian_diet_edit(request, plan_id):
                 foods=foods,
                 form_data=form_data,
                 action_url='dietitian_diet_edit',
-                submit_label='Planı Güncelle',
-                title_text='Diyet Planı Düzenle | Diyetisyen',
-                heading_text=f'Diyet Planı Düzenle: {diet_plan.title}',
+                submit_label=_('Planı Güncelle'),
+                title_text=_('Diyet Planı Düzenle | Diyetisyen'),
+                heading_text=_('Diyet Planı Düzenle: %(title)s') % {'title': diet_plan.title},
                 diet_plan=diet_plan,
                 initial_meals=_safe_payload_json(payload_raw, foods),
                 error=error,
@@ -869,7 +930,7 @@ def dietitian_diet_edit(request, plan_id):
 
             _save_plan_meals(diet_plan, validated['meals'], food_lookup)
 
-        messages.success(request, 'Diyet planı ve öğünleri güncellendi.')
+        messages.success(request, _('Diyet planı ve öğünleri güncellendi.'))
         return redirect('dietitian_diet_edit', plan_id=diet_plan.id)
 
     context = _diet_form_context(
@@ -878,9 +939,9 @@ def dietitian_diet_edit(request, plan_id):
         foods=foods,
         form_data=form_data,
         action_url='dietitian_diet_edit',
-        submit_label='Planı Güncelle',
-        title_text='Diyet Planı Düzenle | Diyetisyen',
-        heading_text=f'Diyet Planı Düzenle: {diet_plan.title}',
+        submit_label=_('Planı Güncelle'),
+        title_text=_('Diyet Planı Düzenle | Diyetisyen'),
+        heading_text=_('Diyet Planı Düzenle: %(title)s') % {'title': diet_plan.title},
         diet_plan=diet_plan,
         initial_meals=_meal_payload_from_plan(diet_plan),
     )
@@ -900,7 +961,7 @@ def dietitian_diet_delete(request, plan_id):
     title = diet_plan.title
     diet_plan.delete()
 
-    messages.success(request, f'"{title}" diyet planı silindi.')
+    messages.success(request, _('"%(title)s" diyet planı silindi.') % {'title': title})
     return redirect('dietitian_diets')
 
 
@@ -925,11 +986,11 @@ def dietitian_food_create(request):
     }
 
     if not form_data['name'] or not form_data['calories']:
-        messages.error(request, 'Besin adı ve kalori zorunludur.')
+        messages.error(request, _('Besin adı ve kalori zorunludur.'))
         return redirect('dietitian_diets')
 
     if form_data['unit'] not in dict(Food.UNIT_CHOICES):
-        messages.error(request, 'Besin birimi geçersiz.')
+        messages.error(request, _('Besin birimi geçersiz.'))
         return redirect('dietitian_diets')
 
     portion_size = _parse_decimal(form_data['portion_size'])
@@ -940,7 +1001,7 @@ def dietitian_food_create(request):
     fiber = _parse_decimal(form_data['fiber'])
 
     if 'invalid' in (portion_size, calories, protein, carbs, fats, fiber):
-        messages.error(request, 'Besin değerleri sayısal olmalıdır.')
+        messages.error(request, _('Besin değerleri sayısal olmalıdır.'))
         return redirect('dietitian_diets')
 
     Food.objects.create(
@@ -955,7 +1016,7 @@ def dietitian_food_create(request):
         created_by=user,
     )
 
-    messages.success(request, 'Yeni besin kaydı eklendi.')
+    messages.success(request, _('Yeni besin kaydı eklendi.'))
     return redirect('dietitian_diets')
 
 
@@ -996,7 +1057,7 @@ def dietitian_food_edit(request, food_id):
                 'food': food,
                 'form_data': form_data,
                 'unit_choices': Food.UNIT_CHOICES,
-                'error': 'Besin adı ve kalori zorunludur.',
+                'error': _('Besin adı ve kalori zorunludur.'),
             })
 
         if form_data['unit'] not in dict(Food.UNIT_CHOICES):
@@ -1005,7 +1066,7 @@ def dietitian_food_edit(request, food_id):
                 'food': food,
                 'form_data': form_data,
                 'unit_choices': Food.UNIT_CHOICES,
-                'error': 'Besin birimi geçersiz.',
+                'error': _('Besin birimi geçersiz.'),
             })
 
         portion_size = _parse_decimal(form_data['portion_size'])
@@ -1021,7 +1082,7 @@ def dietitian_food_edit(request, food_id):
                 'food': food,
                 'form_data': form_data,
                 'unit_choices': Food.UNIT_CHOICES,
-                'error': 'Besin değerleri sayısal olmalıdır.',
+                'error': _('Besin değerleri sayısal olmalıdır.'),
             })
 
         food.name = form_data['name']
@@ -1036,7 +1097,7 @@ def dietitian_food_edit(request, food_id):
             food.created_by = user
         food.save()
 
-        messages.success(request, 'Besin kaydı güncellendi.')
+        messages.success(request, _('Besin kaydı güncellendi.'))
         return redirect('dietitian_diets')
 
     return render(request, 'dietitian/food_edit.html', {
@@ -1058,13 +1119,13 @@ def dietitian_food_delete(request, food_id):
 
     food = get_object_or_404(Food.objects.filter(Q(created_by=user) | Q(created_by__isnull=True)), id=food_id)
     if MealFood.objects.filter(food=food).exists():
-        messages.error(request, 'Bu besin bir veya daha fazla öğünde kullanıldığı için silinemez.')
+        messages.error(request, _('Bu besin bir veya daha fazla öğünde kullanıldığı için silinemez.'))
         return redirect('dietitian_diets')
 
     name = food.name
     food.delete()
 
-    messages.success(request, f'"{name}" besin kaydı silindi.')
+    messages.success(request, _('"%(name)s" besin kaydı silindi.') % {'name': name})
     return redirect('dietitian_diets')
 
 

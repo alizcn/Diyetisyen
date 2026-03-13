@@ -1,46 +1,47 @@
 {% extends "base_patient.html" %}
+{% load i18n %}
 
-{% block title %}İlerleme Takibi | Diyetisyen{% endblock %}
+{% block title %}{% trans "İlerleme Takibi | Diyetisyen" %}{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 section-title">
         <div>
-            <span class="eyebrow"><i class="bi bi-graph-up-arrow"></i> Gelişim Paneli</span>
-            <h1 class="display-font mt-3">İlerleme Takibi</h1>
-            <p class="muted mb-0">Kilo ve vücut ölçümlerindeki değişimi zaman içinde inceleyin.</p>
+            <span class="eyebrow"><i class="bi bi-graph-up-arrow"></i> {% trans "Gelişim Paneli" %}</span>
+            <h1 class="display-font mt-3">{% trans "İlerleme Takibi" %}</h1>
+            <p class="muted mb-0">{% trans "Kilo ve vücut ölçümlerindeki değişimi zaman içinde inceleyin." %}</p>
         </div>
-        <a href="{% url 'patient_add_measurement' %}" class="btn btn-primary">Ölçüm Ekle</a>
+        <a href="{% url 'patient_add_measurement' %}" class="btn btn-primary">{% trans "Ölçüm Ekle" %}</a>
     </div>
 
     <div class="row g-3 mb-4">
         <div class="col-md-4">
             <div class="metric-card">
-                <p class="metric-label">Başlangıç Kilosu</p>
+                <p class="metric-label">{% trans "Başlangıç Kilosu" %}</p>
                 <p class="metric-value">{% if first_weight %}{{ first_weight }} kg{% else %}-{% endif %}</p>
-                <p class="metric-help">İlk kayıtlı ölçüm</p>
+                <p class="metric-help">{% trans "İlk kayıtlı ölçüm" %}</p>
             </div>
         </div>
         <div class="col-md-4">
             <div class="metric-card">
-                <p class="metric-label">Mevcut Kilo</p>
+                <p class="metric-label">{% trans "Mevcut Kilo" %}</p>
                 <p class="metric-value">{% if profile.current_weight %}{{ profile.current_weight }} kg{% else %}-{% endif %}</p>
-                <p class="metric-help">Profildeki güncel değer</p>
+                <p class="metric-help">{% trans "Profildeki güncel değer" %}</p>
             </div>
         </div>
         <div class="col-md-4">
             <div class="metric-card">
-                <p class="metric-label">Hedef Kilo</p>
+                <p class="metric-label">{% trans "Hedef Kilo" %}</p>
                 <p class="metric-value">{% if profile.target_weight %}{{ profile.target_weight }} kg{% else %}-{% endif %}</p>
-                <p class="metric-help">Belirlenen hedef</p>
+                <p class="metric-help">{% trans "Belirlenen hedef" %}</p>
             </div>
         </div>
     </div>
 
     <div class="surface-card p-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="display-font h5 mb-0">Ölçüm Geçmişi</h2>
-            <span class="small muted">Toplam kayıt: {{ measurements|length }}</span>
+            <h2 class="display-font h5 mb-0">{% trans "Ölçüm Geçmişi" %}</h2>
+            <span class="small muted">{% trans "Toplam kayıt:" %} {{ measurements|length }}</span>
         </div>
 
         {% if measurements %}
@@ -48,14 +49,14 @@
             <table class="table table-hover align-middle">
                 <thead>
                     <tr>
-                        <th>Tarih</th>
-                        <th>Kilo</th>
-                        <th>Yağ %</th>
-                        <th>Kas</th>
-                        <th>Bel</th>
-                        <th>Kalça</th>
-                        <th>BMI</th>
-                        <th>Not</th>
+                        <th>{% trans "Tarih" %}</th>
+                        <th>{% trans "Kilo" %}</th>
+                        <th>{% trans "Yağ %" %}</th>
+                        <th>{% trans "Kas" %}</th>
+                        <th>{% trans "Bel" %}</th>
+                        <th>{% trans "Kalça" %}</th>
+                        <th>{% trans "BMI" %}</th>
+                        <th>{% trans "Not" %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -77,9 +78,9 @@
         {% else %}
         <div class="empty-state">
             <span class="icon-pill mb-3"><i class="bi bi-bar-chart"></i></span>
-            <h3 class="display-font h5">Henüz ölçüm kaydı bulunmuyor</h3>
-            <p class="muted mb-3">İlk ölçümünü ekleyerek ilerleme panelini aktifleştirebilirsin.</p>
-            <a href="{% url 'patient_add_measurement' %}" class="btn btn-primary">İlk Ölçümü Gir</a>
+            <h3 class="display-font h5">{% trans "Henüz ölçüm kaydı bulunmuyor" %}</h3>
+            <p class="muted mb-3">{% trans "İlk ölçümünü ekleyerek ilerleme panelini aktifleştirebilirsin." %}</p>
+            <a href="{% url 'patient_add_measurement' %}" class="btn btn-primary">{% trans "İlk Ölçümü Gir" %}</a>
         </div>
         {% endif %}
     </div>

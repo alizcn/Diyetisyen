@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils.translation import gettext as _
 from datetime import date
 
 from .models import Measurement
@@ -50,7 +51,7 @@ def patient_add_measurement(request):
         if not form_data['weight']:
             return render(request, 'patients/add_measurement.html', {
                 'active_page': 'progress',
-                'error': 'Kilo alanı zorunludur',
+                'error': _('Kilo alanı zorunludur'),
                 'form_data': form_data,
             })
 
@@ -58,7 +59,7 @@ def patient_add_measurement(request):
         if Measurement.objects.filter(patient=user, date=today).exists():
             return render(request, 'patients/add_measurement.html', {
                 'active_page': 'progress',
-                'error': 'Bugün için zaten bir ölçüm kaydınız var',
+                'error': _('Bugün için zaten bir ölçüm kaydınız var'),
                 'form_data': form_data,
             })
 
@@ -87,7 +88,7 @@ def patient_add_measurement(request):
         profile.current_weight = form_data['weight']
         profile.save()
 
-        messages.success(request, 'Ölçüm başarıyla kaydedildi')
+        messages.success(request, _('Ölçüm başarıyla kaydedildi'))
         return redirect('patient_progress')
 
     return render(request, 'patients/add_measurement.html', {

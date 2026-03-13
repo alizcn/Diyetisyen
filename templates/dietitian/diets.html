@@ -1,34 +1,35 @@
 {% extends "base_dietitian.html" %}
+{% load i18n %}
 
-{% block title %}Diyet Planları | Diyetisyen{% endblock %}
+{% block title %}{% trans "Diyet Planları | Diyetisyen" %}{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="section-title">
-        <span class="eyebrow"><i class="bi bi-journal-richtext"></i> Plan Yönetimi</span>
-        <h1 class="display-font mt-3">Diyet Planları</h1>
-        <p class="muted mb-0">Besin veritabanını ve diyet planlarını tek sayfada listeleyin, düzenleyin, silin.</p>
+        <span class="eyebrow"><i class="bi bi-journal-richtext"></i> {% trans "Plan Yönetimi" %}</span>
+        <h1 class="display-font mt-3">{% trans "Diyet Planları" %}</h1>
+        <p class="muted mb-0">{% trans "Besin veritabanını ve diyet planlarını tek sayfada listeleyin, düzenleyin, silin." %}</p>
     </div>
 
     <section class="surface-card p-4 mb-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="display-font h5 mb-0">Besin Veritabanı</h2>
-            <span class="small muted">Toplam besin: {{ foods|length }}</span>
+            <h2 class="display-font h5 mb-0">{% trans "Besin Veritabanı" %}</h2>
+            <span class="small muted">{% trans "Toplam besin:" %} {{ foods|length }}</span>
         </div>
 
         <form method="post" action="{% url 'dietitian_food_create' %}" class="surface-muted p-3 mb-3">
             {% csrf_token %}
             <div class="row g-2 align-items-end">
                 <div class="col-md-3">
-                    <label for="food_name" class="form-label small fw-semibold mb-1">Besin Adı</label>
+                    <label for="food_name" class="form-label small fw-semibold mb-1">{% trans "Besin Adı" %}</label>
                     <input type="text" class="form-control" id="food_name" name="name" required>
                 </div>
                 <div class="col-md-2">
-                    <label for="food_portion" class="form-label small fw-semibold mb-1">Porsiyon</label>
+                    <label for="food_portion" class="form-label small fw-semibold mb-1">{% trans "Porsiyon" %}</label>
                     <input type="number" step="0.01" class="form-control" id="food_portion" name="portion_size" value="100" required>
                 </div>
                 <div class="col-md-2">
-                    <label for="food_unit" class="form-label small fw-semibold mb-1">Birim</label>
+                    <label for="food_unit" class="form-label small fw-semibold mb-1">{% trans "Birim" %}</label>
                     <select class="form-select" id="food_unit" name="unit" required>
                         {% for value, label in unit_choices %}
                         <option value="{{ value }}">{{ label }}</option>
@@ -36,27 +37,27 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <label for="food_cal" class="form-label small fw-semibold mb-1">Kalori</label>
+                    <label for="food_cal" class="form-label small fw-semibold mb-1">{% trans "Kalori" %}</label>
                     <input type="number" step="0.01" class="form-control" id="food_cal" name="calories" required>
                 </div>
                 <div class="col-md-1">
-                    <label for="food_protein" class="form-label small fw-semibold mb-1">Pr.</label>
+                    <label for="food_protein" class="form-label small fw-semibold mb-1">{% trans "Pr." %}</label>
                     <input type="number" step="0.01" class="form-control" id="food_protein" name="protein" value="0">
                 </div>
                 <div class="col-md-1">
-                    <label for="food_carbs" class="form-label small fw-semibold mb-1">Karb.</label>
+                    <label for="food_carbs" class="form-label small fw-semibold mb-1">{% trans "Karb." %}</label>
                     <input type="number" step="0.01" class="form-control" id="food_carbs" name="carbs" value="0">
                 </div>
                 <div class="col-md-1">
-                    <label for="food_fats" class="form-label small fw-semibold mb-1">Yağ</label>
+                    <label for="food_fats" class="form-label small fw-semibold mb-1">{% trans "Yağ" %}</label>
                     <input type="number" step="0.01" class="form-control" id="food_fats" name="fats" value="0">
                 </div>
                 <div class="col-md-1">
-                    <label for="food_fiber" class="form-label small fw-semibold mb-1">Lif</label>
+                    <label for="food_fiber" class="form-label small fw-semibold mb-1">{% trans "Lif" %}</label>
                     <input type="number" step="0.01" class="form-control" id="food_fiber" name="fiber" value="0">
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">Besin Ekle</button>
+                    <button type="submit" class="btn btn-primary w-100">{% trans "Besin Ekle" %}</button>
                 </div>
             </div>
         </form>
@@ -66,14 +67,14 @@
             <table class="table table-hover align-middle">
                 <thead>
                     <tr>
-                        <th>Besin</th>
-                        <th>Porsiyon</th>
-                        <th>Kalori</th>
-                        <th>Protein</th>
-                        <th>Karb.</th>
-                        <th>Yağ</th>
-                        <th>Lif</th>
-                        <th>İşlem</th>
+                        <th>{% trans "Besin" %}</th>
+                        <th>{% trans "Porsiyon" %}</th>
+                        <th>{% trans "Kalori" %}</th>
+                        <th>{% trans "Protein" %}</th>
+                        <th>{% trans "Karb." %}</th>
+                        <th>{% trans "Yağ" %}</th>
+                        <th>{% trans "Lif" %}</th>
+                        <th>{% trans "İşlem" %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -88,10 +89,10 @@
                         <td>{{ food.fiber }}</td>
                         <td>
                             <div class="d-flex flex-wrap gap-1">
-                                <a href="{% url 'dietitian_food_edit' food.id %}" class="btn btn-outline-primary btn-sm">Düzenle</a>
-                                <form method="post" action="{% url 'dietitian_food_delete' food.id %}" onsubmit="return confirm('Bu besini silmek istediğinizden emin misiniz?');" class="d-inline">
+                                <a href="{% url 'dietitian_food_edit' food.id %}" class="btn btn-outline-primary btn-sm">{% trans "Düzenle" %}</a>
+                                <form method="post" action="{% url 'dietitian_food_delete' food.id %}" onsubmit="return confirm('{% trans 'Bu besini silmek istediğinizden emin misiniz?' %}');" class="d-inline">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-outline-danger btn-sm">Sil</button>
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">{% trans "Sil" %}</button>
                                 </form>
                             </div>
                         </td>
@@ -103,35 +104,35 @@
         {% else %}
         <div class="empty-state">
             <span class="icon-pill mb-3"><i class="bi bi-box"></i></span>
-            <h3 class="display-font h6">Besin kaydı bulunmuyor</h3>
-            <p class="muted small mb-0">Yukarıdaki formu kullanarak ilk besin kaydını ekleyebilirsiniz.</p>
+            <h3 class="display-font h6">{% trans "Besin kaydı bulunmuyor" %}</h3>
+            <p class="muted small mb-0">{% trans "Yukarıdaki formu kullanarak ilk besin kaydını ekleyebilirsiniz." %}</p>
         </div>
         {% endif %}
     </section>
 
     <section class="surface-card p-4">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
-            <h2 class="display-font h5 mb-0">Diyet Planı Listesi</h2>
+            <h2 class="display-font h5 mb-0">{% trans "Diyet Planı Listesi" %}</h2>
             <div class="d-flex align-items-center gap-2">
-                <span class="small muted">Toplam plan: {{ diet_plans|length }}</span>
-                <a href="{% url 'dietitian_diet_create' %}" class="btn btn-primary btn-sm">Yeni Plan Oluştur</a>
+                <span class="small muted">{% trans "Toplam plan:" %} {{ diet_plans|length }}</span>
+                <a href="{% url 'dietitian_diet_create' %}" class="btn btn-primary btn-sm">{% trans "Yeni Plan Oluştur" %}</a>
             </div>
         </div>
 
         <form method="get" action="{% url 'dietitian_diets' %}" class="surface-muted p-3 mb-3">
             <div class="row g-2 align-items-end">
                 <div class="col-md-4">
-                    <label for="patient_filter" class="form-label small fw-semibold mb-1">Hastaya Göre Filtrele</label>
+                    <label for="patient_filter" class="form-label small fw-semibold mb-1">{% trans "Hastaya Göre Filtrele" %}</label>
                     <select id="patient_filter" name="patient" class="form-select">
-                        <option value="">Tüm hastalar</option>
+                        <option value="">{% trans "Tüm hastalar" %}</option>
                         {% for p in patient_profiles %}
                         <option value="{{ p.user.id }}" {% if selected_patient_id == p.user.id %}selected{% endif %}>{{ p.user.first_name }} {{ p.user.last_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="col-md-2 d-flex gap-2">
-                    <button type="submit" class="btn btn-outline-primary">Filtrele</button>
-                    <a href="{% url 'dietitian_diets' %}" class="btn btn-secondary">Temizle</a>
+                    <button type="submit" class="btn btn-outline-primary">{% trans "Filtrele" %}</button>
+                    <a href="{% url 'dietitian_diets' %}" class="btn btn-secondary">{% trans "Temizle" %}</a>
                 </div>
             </div>
         </form>
@@ -141,14 +142,14 @@
             <table class="table table-hover align-middle">
                 <thead>
                     <tr>
-                        <th>Başlık</th>
-                        <th>Hasta</th>
-                        <th>Başlangıç</th>
-                        <th>Bitiş</th>
-                        <th>Kalori</th>
-                        <th>Öğün</th>
-                        <th>Durum</th>
-                        <th>İşlem</th>
+                        <th>{% trans "Başlık" %}</th>
+                        <th>{% trans "Hasta" %}</th>
+                        <th>{% trans "Başlangıç" %}</th>
+                        <th>{% trans "Bitiş" %}</th>
+                        <th>{% trans "Kalori" %}</th>
+                        <th>{% trans "Öğün" %}</th>
+                        <th>{% trans "Durum" %}</th>
+                        <th>{% trans "İşlem" %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -165,17 +166,17 @@
                         <td>{{ plan.meals.all|length }}</td>
                         <td>
                             {% if plan.is_active %}
-                            <span class="status-pill status-confirmed">Aktif</span>
+                            <span class="status-pill status-confirmed">{% trans "Aktif" %}</span>
                             {% else %}
-                            <span class="status-pill status-completed">Pasif</span>
+                            <span class="status-pill status-completed">{% trans "Pasif" %}</span>
                             {% endif %}
                         </td>
                         <td>
                             <div class="d-flex flex-wrap gap-1">
-                                <a href="{% url 'dietitian_diet_edit' plan.id %}" class="btn btn-outline-primary btn-sm">Düzenle</a>
-                                <form method="post" action="{% url 'dietitian_diet_delete' plan.id %}" onsubmit="return confirm('Bu diyet planını silmek istediğinizden emin misiniz?');" class="d-inline">
+                                <a href="{% url 'dietitian_diet_edit' plan.id %}" class="btn btn-outline-primary btn-sm">{% trans "Düzenle" %}</a>
+                                <form method="post" action="{% url 'dietitian_diet_delete' plan.id %}" onsubmit="return confirm('{% trans 'Bu diyet planını silmek istediğinizden emin misiniz?' %}');" class="d-inline">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-outline-danger btn-sm">Sil</button>
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">{% trans "Sil" %}</button>
                                 </form>
                             </div>
                         </td>
@@ -187,8 +188,8 @@
         {% else %}
         <div class="empty-state">
             <span class="icon-pill mb-3"><i class="bi bi-journal-x"></i></span>
-            <h3 class="display-font h6">Kayıtlı diyet planı bulunmuyor</h3>
-            <p class="muted small mb-0">Seçilen filtreye uygun plan yok veya henüz plan oluşturulmamış.</p>
+            <h3 class="display-font h6">{% trans "Kayıtlı diyet planı bulunmuyor" %}</h3>
+            <p class="muted small mb-0">{% trans "Seçilen filtreye uygun plan yok veya henüz plan oluşturulmamış." %}</p>
         </div>
         {% endif %}
     </section>

@@ -13,6 +13,7 @@ urlpatterns = [
     path('login/', accounts_views.login_view, name='login'),
     path('register/', accounts_views.register_view, name='register'),
     path('logout/', accounts_views.logout_view, name='logout'),
+    path('language/set/', accounts_views.set_language_preference, name='set_language_preference'),
 
     # Patient pages
     path('panel/hasta/', accounts_views.patient_dashboard, name='patient_dashboard'),

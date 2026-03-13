@@ -1,49 +1,50 @@
 {% extends "base_patient.html" %}
+{% load i18n %}
 
-{% block title %}Randevularım | Diyetisyen{% endblock %}
+{% block title %}{% trans "Randevularım | Diyetisyen" %}{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 section-title">
         <div>
-            <span class="eyebrow"><i class="bi bi-calendar-check"></i> Randevu Yönetimi</span>
-            <h1 class="display-font mt-3">Randevularım</h1>
-            <p class="muted mb-0">Yaklaşan randevularınızı yönetin, geçmiş görüşmeleri inceleyin.</p>
+            <span class="eyebrow"><i class="bi bi-calendar-check"></i> {% trans "Randevu Yönetimi" %}</span>
+            <h1 class="display-font mt-3">{% trans "Randevularım" %}</h1>
+            <p class="muted mb-0">{% trans "Yaklaşan randevularınızı yönetin, geçmiş görüşmeleri inceleyin." %}</p>
         </div>
-        <a href="{% url 'patient_appointment_new' %}" class="btn btn-primary">Yeni Randevu Al</a>
+        <a href="{% url 'patient_appointment_new' %}" class="btn btn-primary">{% trans "Yeni Randevu Al" %}</a>
     </div>
 
     {% if not appointments %}
     <div class="surface-card p-4 p-lg-5">
         <div class="empty-state">
             <span class="icon-pill mb-3"><i class="bi bi-calendar2-x"></i></span>
-            <h3 class="display-font h5">Henüz randevunuz yok</h3>
-            <p class="muted mb-3">İlk randevunuzu oluşturarak diyetisyeninizle görüşme planlayın.</p>
-            <a href="{% url 'patient_appointment_new' %}" class="btn btn-primary">Randevu Oluştur</a>
+            <h3 class="display-font h5">{% trans "Henüz randevunuz yok" %}</h3>
+            <p class="muted mb-3">{% trans "İlk randevunuzu oluşturarak diyetisyeninizle görüşme planlayın." %}</p>
+            <a href="{% url 'patient_appointment_new' %}" class="btn btn-primary">{% trans "Randevu Oluştur" %}</a>
         </div>
     </div>
     {% else %}
 
     {% if active_appointments %}
     <section class="surface-card p-4 mb-4">
-        <h2 class="display-font h5 mb-3">Aktif ve Yaklaşan Randevular</h2>
+        <h2 class="display-font h5 mb-3">{% trans "Aktif ve Yaklaşan Randevular" %}</h2>
         {% for apt in active_appointments %}
         <article class="appointment-card">
             <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
                 <div>
                     <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                        <h3 class="h6 fw-bold mb-0">Dyt. {{ apt.dietitian.first_name }} {{ apt.dietitian.last_name }}</h3>
+                        <h3 class="h6 fw-bold mb-0">{% trans "Dyt." %} {{ apt.dietitian.first_name }} {{ apt.dietitian.last_name }}</h3>
                         <span class="status-pill status-{{ apt.status }}">{{ apt.get_status_display }}</span>
                     </div>
-                    <p class="mb-1 muted"><i class="bi bi-calendar3 me-1"></i>{{ apt.date|date:"d F Y" }} - <i class="bi bi-clock ms-1 me-1"></i>{{ apt.time|time:"H:i" }} ({{ apt.duration }} dk)</p>
+                    <p class="mb-1 muted"><i class="bi bi-calendar3 me-1"></i>{{ apt.date|date:"d F Y" }} - <i class="bi bi-clock ms-1 me-1"></i>{{ apt.time|time:"H:i" }} ({{ apt.duration }} {% trans "dk" %})</p>
                     {% if apt.notes %}
-                    <p class="mb-0 small muted">Not: {{ apt.notes }}</p>
+                    <p class="mb-0 small muted">{% trans "Not:" %} {{ apt.notes }}</p>
                     {% endif %}
                 </div>
                 {% if apt.status == 'scheduled' %}
-                <form method="post" action="{% url 'patient_appointment_cancel' apt.id %}" onsubmit="return confirm('Bu randevuyu iptal etmek istediğinizden emin misiniz?');" class="align-self-start">
+                <form method="post" action="{% url 'patient_appointment_cancel' apt.id %}" onsubmit="return confirm('{% trans 'Bu randevuyu iptal etmek istediğinizden emin misiniz?' %}');" class="align-self-start">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-danger btn-sm">Randevuyu İptal Et</button>
+                    <button type="submit" class="btn btn-outline-danger btn-sm">{% trans "Randevuyu İptal Et" %}</button>
                 </form>
                 {% endif %}
             </div>
@@ -54,12 +55,12 @@
 
     {% if past_appointments %}
     <section class="surface-card p-4">
-        <h2 class="display-font h5 mb-3">Geçmiş Randevular</h2>
+        <h2 class="display-font h5 mb-3">{% trans "Geçmiş Randevular" %}</h2>
         {% for apt in past_appointments %}
         <article class="appointment-card" style="opacity: 0.8;">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
                 <div>
-                    <h3 class="h6 fw-bold mb-1">Dyt. {{ apt.dietitian.first_name }} {{ apt.dietitian.last_name }}</h3>
+                    <h3 class="h6 fw-bold mb-1">{% trans "Dyt." %} {{ apt.dietitian.first_name }} {{ apt.dietitian.last_name }}</h3>
                     <p class="mb-0 muted small">{{ apt.date|date:"d F Y" }} - {{ apt.time|time:"H:i" }}</p>
                 </div>
                 <span class="status-pill status-{{ apt.status }}">{{ apt.get_status_display }}</span>

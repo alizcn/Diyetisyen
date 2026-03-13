@@ -1,0 +1,10 @@
+{% load i18n %}
+<form method="post" action="{% url 'set_language_preference' %}" class="d-inline">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+    <label for="lang-switch" class="visually-hidden">{% trans "Dil" %}</label>
+    <select id="lang-switch" name="language" class="form-select form-select-sm" style="min-width: 86px;" onchange="this.form.submit()">
+        <option value="tr" {% if request.LANGUAGE_CODE == 'tr' %}selected{% endif %}>TR</option>
+        <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option>
+    </select>
+</form>

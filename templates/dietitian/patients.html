@@ -1,13 +1,14 @@
 {% extends "base_dietitian.html" %}
+{% load i18n %}
 
-{% block title %}Hastalarım | Diyetisyen{% endblock %}
+{% block title %}{% trans "Hastalarım | Diyetisyen" %}{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="section-title">
-        <span class="eyebrow"><i class="bi bi-people-fill"></i> Hasta Yönetimi</span>
-        <h1 class="display-font mt-3">Hastalarım</h1>
-        <p class="muted mb-0">Hastaları listeleyin, güncelleyin, silin ve doğrudan diyet planlarına geçin.</p>
+        <span class="eyebrow"><i class="bi bi-people-fill"></i> {% trans "Hasta Yönetimi" %}</span>
+        <h1 class="display-font mt-3">{% trans "Hastalarım" %}</h1>
+        <p class="muted mb-0">{% trans "Hastaları listeleyin, güncelleyin, silin ve doğrudan diyet planlarına geçin." %}</p>
     </div>
 
     <div class="surface-card p-4">
@@ -16,12 +17,12 @@
             <table class="table table-hover align-middle">
                 <thead>
                     <tr>
-                        <th>Hasta</th>
-                        <th>İletişim</th>
-                        <th>Boy</th>
-                        <th>Mevcut</th>
-                        <th>Hedef</th>
-                        <th>İşlemler</th>
+                        <th>{% trans "Hasta" %}</th>
+                        <th>{% trans "İletişim" %}</th>
+                        <th>{% trans "Boy" %}</th>
+                        <th>{% trans "Mevcut" %}</th>
+                        <th>{% trans "Hedef" %}</th>
+                        <th>{% trans "İşlemler" %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,12 +38,12 @@
                         <td>{% if patient.target_weight %}{{ patient.target_weight }} kg{% else %}-{% endif %}</td>
                         <td>
                             <div class="d-flex flex-wrap gap-1">
-                                <a href="{% url 'dietitian_patient_edit' patient.id %}" class="btn btn-outline-primary btn-sm">Düzenle</a>
-                                <form method="post" action="{% url 'dietitian_patient_delete' patient.id %}" onsubmit="return confirm('Bu hastayı silmek istediğinizden emin misiniz?');" class="d-inline">
+                                <a href="{% url 'dietitian_patient_edit' patient.id %}" class="btn btn-outline-primary btn-sm">{% trans "Düzenle" %}</a>
+                                <form method="post" action="{% url 'dietitian_patient_delete' patient.id %}" onsubmit="return confirm('{% trans 'Bu hastayı silmek istediğinizden emin misiniz?' %}');" class="d-inline">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-outline-danger btn-sm">Sil</button>
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">{% trans "Sil" %}</button>
                                 </form>
-                                <a href="{% url 'dietitian_diets' %}?patient={{ patient.user.id }}" class="btn btn-secondary btn-sm">Diyet Planı</a>
+                                <a href="{% url 'dietitian_diets' %}?patient={{ patient.user.id }}" class="btn btn-secondary btn-sm">{% trans "Diyet Planı" %}</a>
                             </div>
                         </td>
                     </tr>
@@ -53,8 +54,8 @@
         {% else %}
         <div class="empty-state">
             <span class="icon-pill mb-3"><i class="bi bi-person-x"></i></span>
-            <h3 class="display-font h5">Henüz hastanız bulunmuyor</h3>
-            <p class="muted mb-0">Hastalar profilinize bağlandıkça bu listede otomatik görünecek.</p>
+            <h3 class="display-font h5">{% trans "Henüz hastanız bulunmuyor" %}</h3>
+            <p class="muted mb-0">{% trans "Hastalar profilinize bağlandıkça bu listede otomatik görünecek." %}</p>
         </div>
         {% endif %}
     </div>

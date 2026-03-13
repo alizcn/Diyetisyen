@@ -2,16 +2,17 @@ from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name='Kategori Adı')
-    slug = models.SlugField(max_length=100, unique=True, verbose_name='Slug')
-    description = models.TextField(blank=True, verbose_name='Açıklama')
+    name = models.CharField(max_length=100, unique=True, verbose_name=_('Kategori Adı'))
+    slug = models.SlugField(max_length=100, unique=True, verbose_name=_('Slug'))
+    description = models.TextField(blank=True, verbose_name=_('Açıklama'))
 
     class Meta:
-        verbose_name = 'Kategori'
-        verbose_name_plural = 'Kategoriler'
+        verbose_name = _('Kategori')
+        verbose_name_plural = _('Kategoriler')
         ordering = ['name']
 
     def __str__(self):
@@ -24,16 +25,16 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=200, verbose_name='Başlık')
-    slug = models.SlugField(max_length=200, unique=True, verbose_name='Slug')
-    content = models.TextField(verbose_name='İçerik')
-    excerpt = models.TextField(max_length=500, blank=True, verbose_name='Özet')
+    title = models.CharField(max_length=200, verbose_name=_('Başlık'))
+    slug = models.SlugField(max_length=200, unique=True, verbose_name=_('Slug'))
+    content = models.TextField(verbose_name=_('İçerik'))
+    excerpt = models.TextField(max_length=500, blank=True, verbose_name=_('Özet'))
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='blog_posts',
         limit_choices_to={'user_type': 'dietitian'},
-        verbose_name='Yazar'
+        verbose_name=_('Yazar')
     )
     category = models.ForeignKey(
         Category,
@@ -41,23 +42,23 @@ class Post(models.Model):
         null=True,
         blank=True,
         related_name='posts',
-        verbose_name='Kategori'
+        verbose_name=_('Kategori')
     )
     featured_image = models.ImageField(
         upload_to='blog/',
         blank=True,
         null=True,
-        verbose_name='Kapak Görseli'
+        verbose_name=_('Kapak Görseli')
     )
-    is_published = models.BooleanField(default=False, verbose_name='Yayınlandı')
-    published_date = models.DateTimeField(null=True, blank=True, verbose_name='Yayın Tarihi')
+    is_published = models.BooleanField(default=False, verbose_name=_('Yayınlandı'))
+    published_date = models.DateTimeField(null=True, blank=True, verbose_name=_('Yayın Tarihi'))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    views_count = models.PositiveIntegerField(default=0, verbose_name='Görüntüleme Sayısı')
+    views_count = models.PositiveIntegerField(default=0, verbose_name=_('Görüntüleme Sayısı'))
 
     class Meta:
-        verbose_name = 'Blog Yazısı'
-        verbose_name_plural = 'Blog Yazıları'
+        verbose_name = _('Blog Yazısı')
+        verbose_name_plural = _('Blog Yazıları')
         ordering = ['-published_date', '-created_at']
 
     def __str__(self):

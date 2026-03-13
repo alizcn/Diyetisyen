@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 from datetime import datetime, date, timedelta
 
 from .models import Appointment
@@ -54,7 +55,7 @@ def patient_appointment_new(request):
         if not form_data['dietitian_id'] or not form_data['date']:
             return render(request, 'appointments/patient_new.html', {
                 'active_page': 'appointments',
-                'error': 'Diyetisyen ve tarih seçimi zorunludur',
+                'error': _('Diyetisyen ve tarih seçimi zorunludur'),
                 'dietitians': dietitians,
                 'form_data': form_data,
                 'min_date': min_date,
@@ -66,20 +67,30 @@ def patient_appointment_new(request):
         except User.DoesNotExist:
             return render(request, 'appointments/patient_new.html', {
                 'active_page': 'appointments',
-                'error': 'Diyetisyen bulunamadı',
+                'error': _('Diyetisyen bulunamadı'),
                 'dietitians': dietitians,
                 'form_data': form_data,
                 'min_date': min_date,
                 'time_slots': TIME_SLOTS,
             })
 
-        appointment_date = datetime.strptime(form_data['date'], '%Y-%m-%d').date()
-        appointment_time = datetime.strptime(form_data['time'], '%H:%M').time()
+        try:
+            appointment_date = datetime.strptime(form_data['date'], '%Y-%m-%d').date()
+            appointment_time = datetime.strptime(form_data['time'], '%H:%M').time()
+        except ValueError:
+            return render(request, 'appointments/patient_new.html', {
+                'active_page': 'appointments',
+                'error': _('Tarih veya saat formatı geçersiz'),
+                'dietitians': dietitians,
+                'form_data': form_data,
+                'min_date': min_date,
+                'time_slots': TIME_SLOTS,
+            })
 
         if appointment_date < date.today():
             return render(request, 'appointments/patient_new.html', {
                 'active_page': 'appointments',
-                'error': 'Geçmiş bir tarihe randevu oluşturulamaz',
+                'error': _('Geçmiş bir tarihe randevu oluşturulamaz'),
                 'dietitians': dietitians,
                 'form_data': form_data,
                 'min_date': min_date,
@@ -93,7 +104,7 @@ def patient_appointment_new(request):
         if conflicts.exists():
             return render(request, 'appointments/patient_new.html', {
                 'active_page': 'appointments',
-                'error': 'Bu saat dilimi zaten dolu',
+                'error': _('Bu saat dilimi zaten dolu'),
                 'dietitians': dietitians,
                 'form_data': form_data,
                 'min_date': min_date,
@@ -110,7 +121,7 @@ def patient_appointment_new(request):
             notes=form_data['notes']
         )
 
-        messages.success(request, 'Randevu başarıyla oluşturuldu')
+        messages.success(request, _('Randevu başarıyla oluşturuldu'))
         return redirect('patient_appointments')
 
     return render(request, 'appointments/patient_new.html', {
@@ -131,7 +142,7 @@ def patient_appointment_cancel(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id, patient=user)
     appointment.status = 'cancelled'
     appointment.save()
-    messages.success(request, 'Randevu iptal edildi')
+    messages.success(request, _('Randevu iptal edildi'))
     return redirect('patient_appointments')
 
 
@@ -177,9 +188,9 @@ def dietitian_appointment_update(request, appointment_id):
         appointment.status = status
         try:
             appointment.save()
-            messages.success(request, 'Randevu güncellendi')
+            messages.success(request, _('Randevu güncellendi'))
         except ValidationError as exc:
-            messages.error(request, f'Randevu güncellenemedi: {exc}')
+            messages.error(request, _('Randevu güncellenemedi: %(error)s') % {'error': exc})
 
     return redirect('dietitian_appointments')
 
@@ -196,5 +207,5 @@ def dietitian_appointment_cancel(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id, dietitian=user)
     appointment.status = 'cancelled'
     appointment.save()
-    messages.success(request, 'Randevu iptal edildi')
+    messages.success(request, _('Randevu iptal edildi'))
     return redirect('dietitian_appointments')

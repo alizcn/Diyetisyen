@@ -1,29 +1,31 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block navbar %}
 <nav class="topbar navbar navbar-expand-lg">
     <div class="container py-2">
         <a class="brand-wrap" href="{% url 'dietitian_dashboard' %}">
             <span class="brand-mark">DN</span>
-            <span class="brand-text">Diyetisyen Paneli</span>
+            <span class="brand-text">{% trans "Diyetisyen Paneli" %}</span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDietitian" aria-controls="navbarDietitian" aria-expanded="false" aria-label="Menü">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDietitian" aria-controls="navbarDietitian" aria-expanded="false" aria-label="{% trans 'Menü' %}">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarDietitian">
             <ul class="navbar-nav me-auto ms-lg-4 mt-3 mt-lg-0">
-                <li class="nav-item"><a class="nav-link {% if active_page == 'dashboard' %}active{% endif %}" href="{% url 'dietitian_dashboard' %}">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link {% if active_page == 'patients' %}active{% endif %}" href="{% url 'dietitian_patients' %}">Hastalar</a></li>
-                <li class="nav-item"><a class="nav-link {% if active_page == 'appointments' %}active{% endif %}" href="{% url 'dietitian_appointments' %}">Randevular</a></li>
-                <li class="nav-item"><a class="nav-link {% if active_page == 'diets' %}active{% endif %}" href="{% url 'dietitian_diets' %}">Diyet Planları</a></li>
+                <li class="nav-item"><a class="nav-link {% if active_page == 'dashboard' %}active{% endif %}" href="{% url 'dietitian_dashboard' %}">{% trans "Panel" %}</a></li>
+                <li class="nav-item"><a class="nav-link {% if active_page == 'patients' %}active{% endif %}" href="{% url 'dietitian_patients' %}">{% trans "Hastalar" %}</a></li>
+                <li class="nav-item"><a class="nav-link {% if active_page == 'appointments' %}active{% endif %}" href="{% url 'dietitian_appointments' %}">{% trans "Randevular" %}</a></li>
+                <li class="nav-item"><a class="nav-link {% if active_page == 'diets' %}active{% endif %}" href="{% url 'dietitian_diets' %}">{% trans "Diyet Planları" %}</a></li>
             </ul>
             <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-2 mt-3 mt-lg-0">
                 <a href="{% url 'dietitian_profile_edit' %}" class="role-chip text-decoration-none">
-                    <i class="bi bi-briefcase"></i> Dyt. {{ user.first_name }} {{ user.last_name }}
+                    <i class="bi bi-briefcase"></i> {% trans "Dyt." %} {{ user.first_name }} {{ user.last_name }}
                 </a>
+                {% include "includes/language_switcher.html" %}
                 <form method="post" action="{% url 'logout' %}" class="d-inline">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-primary btn-sm">Çıkış</button>
+                    <button type="submit" class="btn btn-outline-primary btn-sm">{% trans "Çıkış" %}</button>
                 </form>
             </div>
         </div>

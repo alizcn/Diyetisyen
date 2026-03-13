@@ -1,6 +1,7 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Giriş Yap | Diyetisyen{% endblock %}
+{% block title %}{% trans "Giriş Yap | Diyetisyen" %}{% endblock %}
 
 {% block content %}
 <section class="auth-shell py-3 py-lg-4">
@@ -9,23 +10,23 @@
             <aside class="auth-side fade-up">
                 <div>
                     <span class="eyebrow" style="background: rgba(255,255,255,0.25); color: #fff;">
-                        <i class="bi bi-box-arrow-in-right"></i> Güvenli Oturum
+                        <i class="bi bi-box-arrow-in-right"></i> {% trans "Güvenli Oturum" %}
                     </span>
-                    <h1 class="display-font mt-3 mb-3">Panele hızlı ve güvenli giriş</h1>
-                    <p class="mb-4" style="opacity: 0.95;">Hesabınıza giriş yapın, rolünüze göre hasta veya diyetisyen paneline otomatik yönlendirilin.</p>
+                    <h1 class="display-font mt-3 mb-3">{% trans "Panele hızlı ve güvenli giriş" %}</h1>
+                    <p class="mb-4" style="opacity: 0.95;">{% trans "Hesabınıza giriş yapın, rolünüze göre hasta veya diyetisyen paneline otomatik yönlendirilin." %}</p>
                 </div>
                 <div>
-                    <div class="auth-bullet"><i class="bi bi-check-circle"></i><span>Session tabanlı kimlik doğrulama</span></div>
-                    <div class="auth-bullet"><i class="bi bi-check-circle"></i><span>Rol bazlı yönlendirme akışı</span></div>
-                    <div class="auth-bullet"><i class="bi bi-check-circle"></i><span>Randevu ve diyet verilerine hızlı erişim</span></div>
-                    <a href="/" class="btn btn-light mt-3">Ana sayfaya dön</a>
+                    <div class="auth-bullet"><i class="bi bi-check-circle"></i><span>{% trans "Session tabanlı kimlik doğrulama" %}</span></div>
+                    <div class="auth-bullet"><i class="bi bi-check-circle"></i><span>{% trans "Rol bazlı yönlendirme akışı" %}</span></div>
+                    <div class="auth-bullet"><i class="bi bi-check-circle"></i><span>{% trans "Randevu ve diyet verilerine hızlı erişim" %}</span></div>
+                    <a href="/" class="btn btn-light mt-3">{% trans "Ana sayfaya dön" %}</a>
                 </div>
             </aside>
 
             <div class="surface-card p-4 p-lg-5 fade-up delay-1">
                 <div class="mb-4">
-                    <h2 class="display-font h3 mb-2">Giriş Yap</h2>
-                    <p class="muted mb-0">Hesabınız yok mu? <a href="{% url 'register' %}">Kayıt ol</a></p>
+                    <h2 class="display-font h3 mb-2">{% trans "Giriş Yap" %}</h2>
+                    <p class="muted mb-0">{% trans "Hesabınız yok mu?" %} <a href="{% url 'register' %}">{% trans "Kayıt ol" %}</a></p>
                 </div>
 
                 {% if error %}
@@ -39,24 +40,24 @@
                     {% endif %}
 
                     <div class="mb-3">
-                        <label for="email" class="form-label fw-semibold">E-posta</label>
-                        <input type="email" class="form-control" id="email" name="email" required placeholder="ornek@email.com" value="{{ email|default:'' }}">
+                        <label for="email" class="form-label fw-semibold">{% trans "E-posta" %}</label>
+                        <input type="email" class="form-control" id="email" name="email" required placeholder="{% trans 'ornek@email.com' %}" value="{{ email|default:'' }}">
                     </div>
 
                     <div class="mb-3">
-                        <label for="password" class="form-label fw-semibold">Şifre</label>
+                        <label for="password" class="form-label fw-semibold">{% trans "Şifre" %}</label>
                         <input type="password" class="form-control" id="password" name="password" required placeholder="••••••••">
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <label class="form-check d-flex align-items-center gap-2 mb-0">
                             <input class="form-check-input" type="checkbox" name="remember_me" id="remember_me">
-                            <span class="small muted">Beni hatırla</span>
+                            <span class="small muted">{% trans "Beni hatırla" %}</span>
                         </label>
-                        <a href="#" class="small">Şifremi unuttum</a>
+                        <a href="#" class="small">{% trans "Şifremi unuttum" %}</a>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100">Giriş Yap</button>
+                    <button type="submit" class="btn btn-primary w-100">{% trans "Giriş Yap" %}</button>
                 </form>
             </div>
         </div>

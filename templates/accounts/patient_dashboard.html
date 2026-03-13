@@ -1,13 +1,14 @@
 {% extends "base_patient.html" %}
+{% load i18n %}
 
-{% block title %}Hasta Dashboard | Diyetisyen{% endblock %}
+{% block title %}{% trans "Hasta Dashboard | Diyetisyen" %}{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="section-title">
-        <span class="eyebrow"><i class="bi bi-person-heart"></i> Hasta Dashboard</span>
-        <h1 class="display-font mt-3">Merhaba {{ user.first_name }}, sağlıklı güne hazır mısın?</h1>
-        <p class="muted mb-0">Güncel ölçümlerini, yaklaşan randevunu ve diyet planını tek ekranda takip et.</p>
+        <span class="eyebrow"><i class="bi bi-person-heart"></i> {% trans "Hasta Dashboard" %}</span>
+        <h1 class="display-font mt-3">{% blocktrans with first_name=user.first_name %}Merhaba {{ first_name }}, sağlıklı güne hazır mısın?{% endblocktrans %}</h1>
+        <p class="muted mb-0">{% trans "Güncel ölçümlerini, yaklaşan randevunu ve diyet planını tek ekranda takip et." %}</p>
     </div>
 
     <div class="row g-3 mb-4">
@@ -15,9 +16,9 @@
             <div class="metric-card fade-up">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div>
-                        <p class="metric-label">Mevcut Kilo</p>
+                        <p class="metric-label">{% trans "Mevcut Kilo" %}</p>
                         <p class="metric-value">{% if profile.current_weight %}{{ profile.current_weight }} kg{% else %}-{% endif %}</p>
-                        <p class="metric-help">Hedef: {% if profile.target_weight %}{{ profile.target_weight }} kg{% else %}Belirlenmedi{% endif %}</p>
+                        <p class="metric-help">{% trans "Hedef:" %} {% if profile.target_weight %}{{ profile.target_weight }} kg{% else %}{% trans "Belirlenmedi" %}{% endif %}</p>
                     </div>
                     <span class="icon-pill"><i class="bi bi-speedometer2"></i></span>
                 </div>
@@ -27,9 +28,9 @@
             <div class="metric-card fade-up delay-1">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div>
-                        <p class="metric-label">BMI</p>
+                        <p class="metric-label">{% trans "BMI" %}</p>
                         <p class="metric-value">{% if bmi %}{{ bmi }}{% else %}-{% endif %}</p>
-                        <p class="metric-help">{% if bmi_label %}{{ bmi_label }}{% else %}Hesap için boy ve kilo gerekli{% endif %}</p>
+                        <p class="metric-help">{% if bmi_label %}{{ bmi_label }}{% else %}{% trans "Hesap için boy ve kilo gerekli" %}{% endif %}</p>
                     </div>
                     <span class="icon-pill"><i class="bi bi-activity"></i></span>
                 </div>
@@ -39,9 +40,9 @@
             <div class="metric-card fade-up delay-2">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div>
-                        <p class="metric-label">Sonraki Randevu</p>
+                        <p class="metric-label">{% trans "Sonraki Randevu" %}</p>
                         <p class="metric-value">{% if next_appointment %}{{ next_appointment.date|date:"d M" }}{% else %}-{% endif %}</p>
-                        <p class="metric-help">{% if next_appointment %}{{ next_appointment.time|time:"H:i" }}{% else %}Randevu planlayın{% endif %}</p>
+                        <p class="metric-help">{% if next_appointment %}{{ next_appointment.time|time:"H:i" }}{% else %}{% trans "Randevu planlayın" %}{% endif %}</p>
                     </div>
                     <span class="icon-pill"><i class="bi bi-calendar-check"></i></span>
                 </div>
@@ -51,9 +52,9 @@
             <div class="metric-card fade-up delay-3">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div>
-                        <p class="metric-label">Aktif Diyet</p>
+                        <p class="metric-label">{% trans "Aktif Diyet" %}</p>
                         <p class="metric-value">{% if active_diet %}{{ active_diet.title|truncatechars:16 }}{% else %}-{% endif %}</p>
-                        <p class="metric-help">{% if active_diet %}Plan kullanıma açık{% else %}Diyetisyen onayı bekleniyor{% endif %}</p>
+                        <p class="metric-help">{% if active_diet %}{% trans "Plan kullanıma açık" %}{% else %}{% trans "Diyetisyen onayı bekleniyor" %}{% endif %}</p>
                     </div>
                     <span class="icon-pill"><i class="bi bi-journal-check"></i></span>
                 </div>
@@ -64,26 +65,26 @@
     <div class="row g-3">
         <div class="col-lg-6">
             <div class="surface-card p-4 h-100">
-                <h2 class="display-font h5 mb-3">Hızlı İşlemler</h2>
+                <h2 class="display-font h5 mb-3">{% trans "Hızlı İşlemler" %}</h2>
                 <a href="{% url 'patient_appointment_new' %}" class="action-link mb-2">
                     <span class="icon-pill"><i class="bi bi-plus-circle"></i></span>
                     <div>
-                        <p class="mb-0 fw-semibold">Yeni Randevu Al</p>
-                        <small class="muted">Uygun tarih ve saatte görüşme planla</small>
+                        <p class="mb-0 fw-semibold">{% trans "Yeni Randevu Al" %}</p>
+                        <small class="muted">{% trans "Uygun tarih ve saatte görüşme planla" %}</small>
                     </div>
                 </a>
                 <a href="{% url 'patient_add_measurement' %}" class="action-link mb-2">
                     <span class="icon-pill"><i class="bi bi-rulers"></i></span>
                     <div>
-                        <p class="mb-0 fw-semibold">Ölçüm Ekle</p>
-                        <small class="muted">Güncel kilo ve çevre ölçülerini kaydet</small>
+                        <p class="mb-0 fw-semibold">{% trans "Ölçüm Ekle" %}</p>
+                        <small class="muted">{% trans "Güncel kilo ve çevre ölçülerini kaydet" %}</small>
                     </div>
                 </a>
                 <a href="{% url 'patient_diet_plan' %}" class="action-link">
                     <span class="icon-pill"><i class="bi bi-card-list"></i></span>
                     <div>
-                        <p class="mb-0 fw-semibold">Diyet Planını Aç</p>
-                        <small class="muted">Öğün içeriklerini ve notları görüntüle</small>
+                        <p class="mb-0 fw-semibold">{% trans "Diyet Planını Aç" %}</p>
+                        <small class="muted">{% trans "Öğün içeriklerini ve notları görüntüle" %}</small>
                     </div>
                 </a>
             </div>
@@ -91,16 +92,16 @@
 
         <div class="col-lg-6">
             <div class="surface-card p-4 h-100">
-                <h2 class="display-font h5 mb-3">Profil Özeti</h2>
+                <h2 class="display-font h5 mb-3">{% trans "Profil Özeti" %}</h2>
                 <ul class="data-list">
-                    <li><span>Ad Soyad</span><strong>{{ user.first_name }} {{ user.last_name }}</strong></li>
-                    <li><span>E-posta</span><strong>{{ user.email }}</strong></li>
-                    <li><span>Boy</span><strong>{% if profile.height %}{{ profile.height }} cm{% else %}-{% endif %}</strong></li>
-                    <li><span>Diyetisyen</span><strong>{% if profile.dietitian %}{{ profile.dietitian.full_name }}{% else %}Atanmadı{% endif %}</strong></li>
+                    <li><span>{% trans "Ad Soyad" %}</span><strong>{{ user.first_name }} {{ user.last_name }}</strong></li>
+                    <li><span>{% trans "E-posta" %}</span><strong>{{ user.email }}</strong></li>
+                    <li><span>{% trans "Boy" %}</span><strong>{% if profile.height %}{{ profile.height }} cm{% else %}-{% endif %}</strong></li>
+                    <li><span>{% trans "Diyetisyen" %}</span><strong>{% if profile.dietitian %}{{ profile.dietitian.full_name }}{% else %}{% trans "Atanmadı" %}{% endif %}</strong></li>
                 </ul>
                 <div class="surface-muted p-3 mt-3">
-                    <p class="mb-1 fw-semibold">Günlük öneri</p>
-                    <p class="muted small mb-0">Ölçümlerinizi düzenli girmeniz, diyetisyeninizin planı daha doğru güncellemesine yardımcı olur.</p>
+                    <p class="mb-1 fw-semibold">{% trans "Günlük öneri" %}</p>
+                    <p class="muted small mb-0">{% trans "Ölçümlerinizi düzenli girmeniz, diyetisyeninizin planı daha doğru güncellemesine yardımcı olur." %}</p>
                 </div>
             </div>
         </div>

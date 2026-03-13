@@ -1,14 +1,15 @@
 {% extends "base_dietitian.html" %}
+{% load i18n %}
 
-{% block title %}Besin Düzenle | Diyetisyen{% endblock %}
+{% block title %}{% trans "Besin Düzenle | Diyetisyen" %}{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="section-title">
-        <a href="{% url 'dietitian_diets' %}" class="small text-decoration-none muted"><i class="bi bi-arrow-left"></i> Diyet planlarına dön</a>
-        <span class="eyebrow mt-3"><i class="bi bi-basket2"></i> Besin Düzenleme</span>
+        <a href="{% url 'dietitian_diets' %}" class="small text-decoration-none muted"><i class="bi bi-arrow-left"></i> {% trans "Diyet planlarına dön" %}</a>
+        <span class="eyebrow mt-3"><i class="bi bi-basket2"></i> {% trans "Besin Düzenleme" %}</span>
         <h1 class="display-font mt-3">{{ food.name }}</h1>
-        <p class="muted mb-0">Besin değerlerini güncelleyin.</p>
+        <p class="muted mb-0">{% trans "Besin değerlerini güncelleyin." %}</p>
     </div>
 
     <div class="row justify-content-center">
@@ -23,15 +24,15 @@
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label for="name" class="form-label fw-semibold">Besin Adı *</label>
+                            <label for="name" class="form-label fw-semibold">{% trans "Besin Adı" %} *</label>
                             <input type="text" id="name" name="name" class="form-control" value="{{ form_data.name|default:'' }}" required>
                         </div>
                         <div class="col-md-3">
-                            <label for="portion_size" class="form-label fw-semibold">Porsiyon *</label>
+                            <label for="portion_size" class="form-label fw-semibold">{% trans "Porsiyon" %} *</label>
                             <input type="number" step="0.01" id="portion_size" name="portion_size" class="form-control" value="{{ form_data.portion_size|default:'' }}" required>
                         </div>
                         <div class="col-md-3">
-                            <label for="unit" class="form-label fw-semibold">Birim *</label>
+                            <label for="unit" class="form-label fw-semibold">{% trans "Birim" %} *</label>
                             <select id="unit" name="unit" class="form-select" required>
                                 {% for value, label in unit_choices %}
                                 <option value="{{ value }}" {% if form_data.unit == value %}selected{% endif %}>{{ label }}</option>
@@ -42,30 +43,30 @@
 
                     <div class="row g-3 mb-4">
                         <div class="col-md-3">
-                            <label for="calories" class="form-label fw-semibold">Kalori *</label>
+                            <label for="calories" class="form-label fw-semibold">{% trans "Kalori" %} *</label>
                             <input type="number" step="0.01" id="calories" name="calories" class="form-control" value="{{ form_data.calories|default:'' }}" required>
                         </div>
                         <div class="col-md-3">
-                            <label for="protein" class="form-label fw-semibold">Protein</label>
+                            <label for="protein" class="form-label fw-semibold">{% trans "Protein" %}</label>
                             <input type="number" step="0.01" id="protein" name="protein" class="form-control" value="{{ form_data.protein|default:'' }}">
                         </div>
                         <div class="col-md-3">
-                            <label for="carbs" class="form-label fw-semibold">Karbonhidrat</label>
+                            <label for="carbs" class="form-label fw-semibold">{% trans "Karbonhidrat" %}</label>
                             <input type="number" step="0.01" id="carbs" name="carbs" class="form-control" value="{{ form_data.carbs|default:'' }}">
                         </div>
                         <div class="col-md-3">
-                            <label for="fats" class="form-label fw-semibold">Yağ</label>
+                            <label for="fats" class="form-label fw-semibold">{% trans "Yağ" %}</label>
                             <input type="number" step="0.01" id="fats" name="fats" class="form-control" value="{{ form_data.fats|default:'' }}">
                         </div>
                         <div class="col-md-3">
-                            <label for="fiber" class="form-label fw-semibold">Lif</label>
+                            <label for="fiber" class="form-label fw-semibold">{% trans "Lif" %}</label>
                             <input type="number" step="0.01" id="fiber" name="fiber" class="form-control" value="{{ form_data.fiber|default:'' }}">
                         </div>
                     </div>
 
                     <div class="d-flex flex-column flex-sm-row gap-2">
-                        <button type="submit" class="btn btn-primary flex-fill">Kaydet</button>
-                        <a href="{% url 'dietitian_diets' %}" class="btn btn-secondary flex-fill">Vazgeç</a>
+                        <button type="submit" class="btn btn-primary flex-fill">{% trans "Kaydet" %}</button>
+                        <a href="{% url 'dietitian_diets' %}" class="btn btn-secondary flex-fill">{% trans "Vazgeç" %}</a>
                     </div>
                 </form>
             </div>
