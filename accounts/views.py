@@ -1,9 +1,11 @@
+import json
 from decimal import Decimal, InvalidOperation
 from datetime import date, datetime, timedelta
 
 from django.contrib import messages
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -11,7 +13,7 @@ from django.views.decorators.http import require_http_methods
 
 from .models import DietitianProfile, PatientProfile, User
 from appointments.models import Appointment
-from diets.models import DietPlan, Food
+from diets.models import DietPlan, Food, Meal, MealFood
 
 
 def _parse_decimal(value):
@@ -42,6 +44,211 @@ def _parse_date(value):
         return datetime.strptime(value, '%Y-%m-%d').date()
     except ValueError:
         return 'invalid'
+
+
+def _dietitian_food_queryset(user):
+    return Food.objects.filter(Q(created_by=user) | Q(created_by__isnull=True)).order_by('name')
+
+
+def _meal_payload_from_plan(diet_plan):
+    payload = []
+    meals = diet_plan.meals.all().prefetch_related('meal_foods__food').order_by('order')
+    for meal in meals:
+        payload.append({
+            'meal_type': meal.meal_type,
+            'time': meal.time.strftime('%H:%M') if meal.time else '',
+            'description': meal.description,
+            'foods': [
+                {
+                    'food_id': meal_food.food_id,
+                    'quantity': str(meal_food.quantity),
+                }
+                for meal_food in meal.meal_foods.all()
+            ],
+        })
+    return payload
+
+
+def _fallback_meal_payload(foods):
+    if not foods:
+        return []
+    return [{
+        'meal_type': 'breakfast',
+        'time': '08:00',
+        'description': '',
+        'foods': [{'food_id': foods[0].id, 'quantity': '1'}],
+    }]
+
+
+def _safe_payload_json(payload_raw, foods):
+    try:
+        loaded = json.loads(payload_raw)
+        if isinstance(loaded, list):
+            return loaded
+    except (TypeError, ValueError, json.JSONDecodeError):
+        pass
+    return _fallback_meal_payload(foods)
+
+
+def _normalize_meal_payload(payload_raw, allowed_food_ids):
+    try:
+        payload = json.loads(payload_raw)
+    except (TypeError, ValueError, json.JSONDecodeError):
+        return None, 'Öğün verisi geçersiz. Lütfen tekrar deneyin.'
+
+    if not isinstance(payload, list) or not payload:
+        return None, 'En az bir öğün eklemelisiniz.'
+
+    valid_meal_types = {choice[0] for choice in Meal.MEAL_TYPE_CHOICES}
+    normalized_meals = []
+
+    for meal_index, meal_data in enumerate(payload, start=1):
+        if not isinstance(meal_data, dict):
+            return None, f'{meal_index}. öğün verisi geçersiz.'
+
+        meal_type = (meal_data.get('meal_type') or '').strip()
+        if meal_type not in valid_meal_types:
+            return None, f'{meal_index}. öğün tipi geçersiz.'
+
+        time_raw = (meal_data.get('time') or '').strip()
+        parsed_time = None
+        if time_raw:
+            try:
+                parsed_time = datetime.strptime(time_raw, '%H:%M').time()
+            except ValueError:
+                return None, f'{meal_index}. öğün saat formatı geçersiz.'
+
+        description = (meal_data.get('description') or '').strip()
+        if not description:
+            return None, f'{meal_index}. öğün açıklaması zorunludur.'
+
+        foods_data = meal_data.get('foods')
+        if not isinstance(foods_data, list) or not foods_data:
+            return None, f'{meal_index}. öğün için en az bir besin seçmelisiniz.'
+
+        normalized_foods = []
+        for food_index, food_data in enumerate(foods_data, start=1):
+            if not isinstance(food_data, dict):
+                return None, f'{meal_index}. öğün {food_index}. besin verisi geçersiz.'
+
+            food_id_raw = str(food_data.get('food_id', '')).strip()
+            if not food_id_raw.isdigit():
+                return None, f'{meal_index}. öğün {food_index}. besin seçimi geçersiz.'
+
+            food_id = int(food_id_raw)
+            if food_id not in allowed_food_ids:
+                return None, f'{meal_index}. öğün {food_index}. besin seçimi bulunamadı.'
+
+            quantity = _parse_decimal(str(food_data.get('quantity', '')).strip())
+            if quantity in (None, 'invalid') or quantity <= 0:
+                return None, f'{meal_index}. öğün {food_index}. besin miktarı pozitif olmalıdır.'
+
+            normalized_foods.append({
+                'food_id': food_id,
+                'quantity': quantity,
+            })
+
+        normalized_meals.append({
+            'meal_type': meal_type,
+            'time': parsed_time,
+            'description': description,
+            'foods': normalized_foods,
+        })
+
+    return normalized_meals, None
+
+
+def _save_plan_meals(diet_plan, normalized_meals, food_lookup):
+    diet_plan.meals.all().delete()
+    for order, meal_data in enumerate(normalized_meals, start=1):
+        meal = Meal.objects.create(
+            diet_plan=diet_plan,
+            meal_type=meal_data['meal_type'],
+            time=meal_data['time'],
+            description=meal_data['description'],
+            order=order,
+        )
+        MealFood.objects.bulk_create([
+            MealFood(
+                meal=meal,
+                food=food_lookup[item['food_id']],
+                quantity=item['quantity'],
+            )
+            for item in meal_data['foods']
+        ])
+
+
+def _diet_form_context(user, patient_profiles, foods, form_data, action_url, submit_label, title_text, heading_text, diet_plan=None, error=None, initial_meals=None):
+    if initial_meals is None:
+        initial_meals = _fallback_meal_payload(foods)
+    foods_data = [
+        {
+            'id': food.id,
+            'name': food.name,
+            'portion_size': str(food.portion_size),
+            'unit': food.get_unit_display(),
+            'calories': str(food.calories),
+        }
+        for food in foods
+    ]
+    return {
+        'active_page': 'diets',
+        'diet_plan': diet_plan,
+        'patient_profiles': patient_profiles,
+        'form_data': form_data,
+        'action_url': action_url,
+        'submit_label': submit_label,
+        'page_title': title_text,
+        'heading': heading_text,
+        'meal_type_choices': Meal.MEAL_TYPE_CHOICES,
+        'foods_data': foods_data,
+        'initial_meals': initial_meals,
+        'foods_available': bool(foods),
+        'error': error,
+    }
+
+
+def _validate_diet_plan_payload(form_data, payload_raw, patient_profiles, foods):
+    if not foods:
+        return None, 'Diyet planı oluşturmadan önce en az bir besin eklemelisiniz.'
+
+    if not all([form_data['patient_id'], form_data['title'], form_data['start_date']]):
+        return None, 'Hasta, başlık ve başlangıç tarihi zorunludur.'
+
+    if not form_data['patient_id'].isdigit():
+        return None, 'Geçerli bir hasta seçiniz.'
+
+    patient_user_id = int(form_data['patient_id'])
+    if not patient_profiles.filter(user_id=patient_user_id).exists():
+        return None, 'Seçilen hasta size atanmış görünmüyor.'
+
+    start_date_value = _parse_date(form_data['start_date'])
+    end_date_value = _parse_date(form_data['end_date'])
+    if start_date_value == 'invalid' or end_date_value == 'invalid':
+        return None, 'Tarih formatı geçersiz.'
+
+    if end_date_value and start_date_value and end_date_value < start_date_value:
+        return None, 'Bitiş tarihi başlangıç tarihinden önce olamaz.'
+
+    calories = _parse_int(form_data['daily_calories_target'])
+    if calories == 'invalid' or (calories is not None and calories < 0):
+        return None, 'Kalori hedefi pozitif bir sayı olmalıdır.'
+
+    allowed_food_ids = {food.id for food in foods}
+    normalized_meals, meal_error = _normalize_meal_payload(payload_raw, allowed_food_ids)
+    if meal_error:
+        return None, meal_error
+
+    return {
+        'patient_id': patient_user_id,
+        'title': form_data['title'],
+        'description': form_data['description'],
+        'start_date': start_date_value,
+        'end_date': end_date_value,
+        'daily_calories_target': calories,
+        'is_active': form_data['is_active'],
+        'meals': normalized_meals,
+    }, None
 
 
 # ==================== PUBLIC / AUTH ====================
@@ -487,7 +694,7 @@ def dietitian_diets(request):
     patient_profiles = PatientProfile.objects.filter(dietitian=user).select_related('user').order_by('user__first_name', 'user__last_name')
     selected_patient_id = request.GET.get('patient', '').strip()
 
-    diet_plans = DietPlan.objects.filter(dietitian=user).select_related('patient').order_by('-created_at')
+    diet_plans = DietPlan.objects.filter(dietitian=user).select_related('patient').prefetch_related('meals').order_by('-created_at')
 
     selected_patient = None
     if selected_patient_id.isdigit():
@@ -495,7 +702,7 @@ def dietitian_diets(request):
         if selected_patient:
             diet_plans = diet_plans.filter(patient_id=selected_patient.user_id)
 
-    foods = Food.objects.filter(Q(created_by=user) | Q(created_by__isnull=True)).order_by('name')
+    foods = _dietitian_food_queryset(user)
 
     return render(request, 'dietitian/diets.html', {
         'active_page': 'diets',
@@ -509,13 +716,99 @@ def dietitian_diets(request):
 
 
 @login_required
+def dietitian_diet_create(request):
+    user = request.user
+    if user.user_type != 'dietitian':
+        return redirect('patient_dashboard')
+
+    patient_profiles = PatientProfile.objects.filter(dietitian=user).select_related('user').order_by('user__first_name', 'user__last_name')
+    foods = list(_dietitian_food_queryset(user))
+
+    form_data = {
+        'patient_id': '',
+        'title': '',
+        'description': '',
+        'start_date': date.today().isoformat(),
+        'end_date': '',
+        'daily_calories_target': '',
+        'is_active': True,
+    }
+
+    if request.method == 'POST':
+        form_data = {
+            'patient_id': request.POST.get('patient_id', '').strip(),
+            'title': request.POST.get('title', '').strip(),
+            'description': request.POST.get('description', '').strip(),
+            'start_date': request.POST.get('start_date', '').strip(),
+            'end_date': request.POST.get('end_date', '').strip(),
+            'daily_calories_target': request.POST.get('daily_calories_target', '').strip(),
+            'is_active': request.POST.get('is_active') == 'on',
+        }
+        payload_raw = request.POST.get('payload', '[]')
+
+        validated, error = _validate_diet_plan_payload(form_data, payload_raw, patient_profiles, foods)
+        if error:
+            context = _diet_form_context(
+                user=user,
+                patient_profiles=patient_profiles,
+                foods=foods,
+                form_data=form_data,
+                action_url='dietitian_diet_create',
+                submit_label='Planı Oluştur',
+                title_text='Diyet Planı Oluştur | Diyetisyen',
+                heading_text='Yeni Diyet Planı Oluştur',
+                initial_meals=_safe_payload_json(payload_raw, foods),
+                error=error,
+            )
+            return render(request, 'dietitian/diet_form.html', context)
+
+        food_lookup = {food.id: food for food in foods}
+        with transaction.atomic():
+            diet_plan = DietPlan.objects.create(
+                patient_id=validated['patient_id'],
+                dietitian=user,
+                title=validated['title'],
+                description=validated['description'],
+                start_date=validated['start_date'],
+                end_date=validated['end_date'],
+                daily_calories_target=validated['daily_calories_target'],
+                is_active=validated['is_active'],
+            )
+
+            if diet_plan.is_active:
+                DietPlan.objects.filter(
+                    dietitian=user,
+                    patient_id=diet_plan.patient_id,
+                    is_active=True,
+                ).exclude(id=diet_plan.id).update(is_active=False)
+
+            _save_plan_meals(diet_plan, validated['meals'], food_lookup)
+
+        messages.success(request, 'Diyet planı ve öğünleri oluşturuldu.')
+        return redirect('dietitian_diet_edit', plan_id=diet_plan.id)
+
+    context = _diet_form_context(
+        user=user,
+        patient_profiles=patient_profiles,
+        foods=foods,
+        form_data=form_data,
+        action_url='dietitian_diet_create',
+        submit_label='Planı Oluştur',
+        title_text='Diyet Planı Oluştur | Diyetisyen',
+        heading_text='Yeni Diyet Planı Oluştur',
+    )
+    return render(request, 'dietitian/diet_form.html', context)
+
+
+@login_required
 def dietitian_diet_edit(request, plan_id):
     user = request.user
     if user.user_type != 'dietitian':
         return redirect('patient_dashboard')
 
-    diet_plan = get_object_or_404(DietPlan, id=plan_id, dietitian=user)
+    diet_plan = get_object_or_404(DietPlan.objects.prefetch_related('meals__meal_foods'), id=plan_id, dietitian=user)
     patient_profiles = PatientProfile.objects.filter(dietitian=user).select_related('user').order_by('user__first_name', 'user__last_name')
+    foods = list(_dietitian_food_queryset(user))
 
     form_data = {
         'patient_id': str(diet_plan.patient_id),
@@ -537,74 +830,61 @@ def dietitian_diet_edit(request, plan_id):
             'daily_calories_target': request.POST.get('daily_calories_target', '').strip(),
             'is_active': request.POST.get('is_active') == 'on',
         }
+        payload_raw = request.POST.get('payload', '[]')
 
-        if not all([form_data['patient_id'], form_data['title'], form_data['start_date']]):
-            return render(request, 'dietitian/diet_edit.html', {
-                'active_page': 'diets',
-                'diet_plan': diet_plan,
-                'patient_profiles': patient_profiles,
-                'form_data': form_data,
-                'error': 'Hasta, başlık ve başlangıç tarihi zorunludur.',
-            })
+        validated, error = _validate_diet_plan_payload(form_data, payload_raw, patient_profiles, foods)
+        if error:
+            context = _diet_form_context(
+                user=user,
+                patient_profiles=patient_profiles,
+                foods=foods,
+                form_data=form_data,
+                action_url='dietitian_diet_edit',
+                submit_label='Planı Güncelle',
+                title_text='Diyet Planı Düzenle | Diyetisyen',
+                heading_text=f'Diyet Planı Düzenle: {diet_plan.title}',
+                diet_plan=diet_plan,
+                initial_meals=_safe_payload_json(payload_raw, foods),
+                error=error,
+            )
+            return render(request, 'dietitian/diet_form.html', context)
 
-        if not form_data['patient_id'].isdigit() or not patient_profiles.filter(user_id=int(form_data['patient_id'])).exists():
-            return render(request, 'dietitian/diet_edit.html', {
-                'active_page': 'diets',
-                'diet_plan': diet_plan,
-                'patient_profiles': patient_profiles,
-                'form_data': form_data,
-                'error': 'Geçerli bir hasta seçiniz.',
-            })
+        food_lookup = {food.id: food for food in foods}
+        with transaction.atomic():
+            diet_plan.patient_id = validated['patient_id']
+            diet_plan.title = validated['title']
+            diet_plan.description = validated['description']
+            diet_plan.start_date = validated['start_date']
+            diet_plan.end_date = validated['end_date']
+            diet_plan.daily_calories_target = validated['daily_calories_target']
+            diet_plan.is_active = validated['is_active']
+            diet_plan.save()
 
-        start_date_value = _parse_date(form_data['start_date'])
-        end_date_value = _parse_date(form_data['end_date'])
+            if diet_plan.is_active:
+                DietPlan.objects.filter(
+                    dietitian=user,
+                    patient_id=diet_plan.patient_id,
+                    is_active=True,
+                ).exclude(id=diet_plan.id).update(is_active=False)
 
-        if start_date_value == 'invalid' or end_date_value == 'invalid':
-            return render(request, 'dietitian/diet_edit.html', {
-                'active_page': 'diets',
-                'diet_plan': diet_plan,
-                'patient_profiles': patient_profiles,
-                'form_data': form_data,
-                'error': 'Tarih formatı geçersiz.',
-            })
+            _save_plan_meals(diet_plan, validated['meals'], food_lookup)
 
-        if end_date_value and start_date_value and end_date_value < start_date_value:
-            return render(request, 'dietitian/diet_edit.html', {
-                'active_page': 'diets',
-                'diet_plan': diet_plan,
-                'patient_profiles': patient_profiles,
-                'form_data': form_data,
-                'error': 'Bitiş tarihi başlangıç tarihinden önce olamaz.',
-            })
+        messages.success(request, 'Diyet planı ve öğünleri güncellendi.')
+        return redirect('dietitian_diet_edit', plan_id=diet_plan.id)
 
-        calories = _parse_int(form_data['daily_calories_target'])
-        if calories == 'invalid' or (calories is not None and calories < 0):
-            return render(request, 'dietitian/diet_edit.html', {
-                'active_page': 'diets',
-                'diet_plan': diet_plan,
-                'patient_profiles': patient_profiles,
-                'form_data': form_data,
-                'error': 'Kalori hedefi pozitif bir sayı olmalıdır.',
-            })
-
-        diet_plan.patient_id = int(form_data['patient_id'])
-        diet_plan.title = form_data['title']
-        diet_plan.description = form_data['description']
-        diet_plan.start_date = start_date_value
-        diet_plan.end_date = end_date_value
-        diet_plan.daily_calories_target = calories
-        diet_plan.is_active = form_data['is_active']
-        diet_plan.save()
-
-        messages.success(request, 'Diyet planı güncellendi.')
-        return redirect('dietitian_diets')
-
-    return render(request, 'dietitian/diet_edit.html', {
-        'active_page': 'diets',
-        'diet_plan': diet_plan,
-        'patient_profiles': patient_profiles,
-        'form_data': form_data,
-    })
+    context = _diet_form_context(
+        user=user,
+        patient_profiles=patient_profiles,
+        foods=foods,
+        form_data=form_data,
+        action_url='dietitian_diet_edit',
+        submit_label='Planı Güncelle',
+        title_text='Diyet Planı Düzenle | Diyetisyen',
+        heading_text=f'Diyet Planı Düzenle: {diet_plan.title}',
+        diet_plan=diet_plan,
+        initial_meals=_meal_payload_from_plan(diet_plan),
+    )
+    return render(request, 'dietitian/diet_form.html', context)
 
 
 @login_required
@@ -777,6 +1057,10 @@ def dietitian_food_delete(request, food_id):
         return redirect('patient_dashboard')
 
     food = get_object_or_404(Food.objects.filter(Q(created_by=user) | Q(created_by__isnull=True)), id=food_id)
+    if MealFood.objects.filter(food=food).exists():
+        messages.error(request, 'Bu besin bir veya daha fazla öğünde kullanıldığı için silinemez.')
+        return redirect('dietitian_diets')
+
     name = food.name
     food.delete()
 

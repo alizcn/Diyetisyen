@@ -1,0 +1,389 @@
+{% extends "base_dietitian.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .meal-card {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #fff;
+    }
+
+    .food-row {
+        border: 1px dashed rgba(96, 112, 125, 0.35);
+        border-radius: 10px;
+        padding: 0.75rem;
+        background: #fff;
+    }
+
+    .meal-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .tiny-hint {
+        font-size: 0.78rem;
+        color: var(--ink-muted);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-title">
+        <a href="{% url 'dietitian_diets' %}" class="small text-decoration-none muted"><i class="bi bi-arrow-left"></i> Diyet planlarına dön</a>
+        <span class="eyebrow mt-3"><i class="bi bi-journal-plus"></i> Detaylı Plan Oluşturucu</span>
+        <h1 class="display-font mt-3">{{ heading }}</h1>
+        <p class="muted mb-0">Öğünleri kişiye özel oluşturun, her öğüne besin ekleyip çıkarın, miktarları detaylı girin.</p>
+    </div>
+
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    {% if not foods_available %}
+    <div class="surface-card p-4">
+        <div class="empty-state">
+            <span class="icon-pill mb-3"><i class="bi bi-exclamation-triangle"></i></span>
+            <h3 class="display-font h5">Önce besin veritabanı ekleyin</h3>
+            <p class="muted mb-3">Diyet planı oluşturmak için en az bir besin kaydı gerekli. Önce besin ekleyip sonra bu ekrana geri dönün.</p>
+            <a href="{% url 'dietitian_diets' %}" class="btn btn-primary">Besin Veritabanına Git</a>
+        </div>
+    </div>
+    {% else %}
+
+    <div class="surface-card p-4 p-lg-5">
+        {% if diet_plan %}
+        <form method="post" action="{% url action_url diet_plan.id %}" id="diet-plan-form">
+        {% else %}
+        <form method="post" action="{% url action_url %}" id="diet-plan-form">
+        {% endif %}
+            {% csrf_token %}
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label for="patient_id" class="form-label fw-semibold">Hasta *</label>
+                    <select id="patient_id" name="patient_id" class="form-select" required>
+                        <option value="">Hasta seçin</option>
+                        {% for p in patient_profiles %}
+                        <option value="{{ p.user.id }}" {% if form_data.patient_id == p.user.id|stringformat:"d" %}selected{% endif %}>{{ p.user.first_name }} {{ p.user.last_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <label for="title" class="form-label fw-semibold">Plan Başlığı *</label>
+                    <input type="text" id="title" name="title" class="form-control" value="{{ form_data.title|default:'' }}" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="daily_calories_target" class="form-label fw-semibold">Günlük Kalori</label>
+                    <input type="number" id="daily_calories_target" name="daily_calories_target" min="0" class="form-control" value="{{ form_data.daily_calories_target|default:'' }}">
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label for="start_date" class="form-label fw-semibold">Başlangıç Tarihi *</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" value="{{ form_data.start_date|default:'' }}" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="end_date" class="form-label fw-semibold">Bitiş Tarihi</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" value="{{ form_data.end_date|default:'' }}">
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="is_active" name="is_active" {% if form_data.is_active %}checked{% endif %}>
+                        <label class="form-check-label" for="is_active">Plan aktif olsun</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="description" class="form-label fw-semibold">Genel Açıklama</label>
+                <textarea id="description" name="description" rows="3" class="form-control">{{ form_data.description|default:'' }}</textarea>
+            </div>
+
+            <div class="surface-muted p-3 mb-4">
+                <div class="meal-toolbar mb-3">
+                    <div>
+                        <h2 class="display-font h5 mb-1">Öğün Planı</h2>
+                        <p class="tiny-hint mb-0">Her öğüne birden fazla besin ekleyebilir, miktarları güncelleyebilir ve öğünleri silebilirsiniz.</p>
+                    </div>
+                    <button type="button" class="btn btn-outline-primary btn-sm" id="add-meal-btn"><i class="bi bi-plus-lg"></i> Öğün Ekle</button>
+                </div>
+
+                <div id="meal-builder" class="d-grid gap-3"></div>
+            </div>
+
+            <input type="hidden" name="payload" id="payload-input">
+
+            <div class="d-flex flex-column flex-sm-row gap-2">
+                <button type="submit" class="btn btn-primary flex-fill">{{ submit_label }}</button>
+                <a href="{% url 'dietitian_diets' %}" class="btn btn-secondary flex-fill">Vazgeç</a>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+</div>
+
+{{ meal_type_choices|json_script:"meal-type-choices-data" }}
+{{ foods_data|json_script:"foods-data" }}
+{{ initial_meals|json_script:"initial-meals-data" }}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+    const form = document.getElementById('diet-plan-form');
+    if (!form) {
+        return;
+    }
+
+    const mealTypeChoices = JSON.parse(document.getElementById('meal-type-choices-data').textContent);
+    const foods = JSON.parse(document.getElementById('foods-data').textContent);
+    const initialMeals = JSON.parse(document.getElementById('initial-meals-data').textContent);
+
+    const mealBuilder = document.getElementById('meal-builder');
+    const addMealBtn = document.getElementById('add-meal-btn');
+    const payloadInput = document.getElementById('payload-input');
+
+    function defaultMeal() {
+        return {
+            meal_type: 'breakfast',
+            time: '08:00',
+            description: '',
+            foods: foods.length ? [{ food_id: String(foods[0].id), quantity: '1' }] : [],
+        };
+    }
+
+    function normalizedMeals(rawMeals) {
+        if (!Array.isArray(rawMeals) || !rawMeals.length) {
+            return [defaultMeal()];
+        }
+        return rawMeals.map((meal) => {
+            const safeFoods = Array.isArray(meal.foods) && meal.foods.length
+                ? meal.foods.map((item) => ({
+                    food_id: String(item.food_id || ''),
+                    quantity: String(item.quantity || '1'),
+                }))
+                : (foods.length ? [{ food_id: String(foods[0].id), quantity: '1' }] : []);
+
+            return {
+                meal_type: meal.meal_type || 'breakfast',
+                time: meal.time || '',
+                description: meal.description || '',
+                foods: safeFoods,
+            };
+        });
+    }
+
+    let mealsState = normalizedMeals(initialMeals);
+
+    function escapeHtml(value) {
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/\"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function optionHtml(value, label, selectedValue) {
+        const selected = String(value) === String(selectedValue) ? 'selected' : '';
+        return '<option value="' + escapeHtml(value) + '" ' + selected + '>' + escapeHtml(label) + '</option>';
+    }
+
+    function mealTypeOptionsHtml(selectedValue) {
+        return mealTypeChoices.map((choice) => optionHtml(choice[0], choice[1], selectedValue)).join('');
+    }
+
+    function foodOptionsHtml(selectedValue) {
+        return foods.map((food) => optionHtml(food.id, food.name + ' (' + food.portion_size + ' ' + food.unit + ')', selectedValue)).join('');
+    }
+
+    function renderMeals() {
+        if (!mealsState.length) {
+            mealsState = [defaultMeal()];
+        }
+
+        mealBuilder.innerHTML = mealsState.map((meal, mealIndex) => {
+            const foodsHtml = meal.foods.map((foodRow, foodIndex) => {
+                return (
+                    '<div class="food-row mb-2" data-food-index="' + foodIndex + '">' +
+                        '<div class="row g-2 align-items-end">' +
+                            '<div class="col-md-8">' +
+                                '<label class="form-label small fw-semibold mb-1">Besin</label>' +
+                                '<select class="form-select" data-field="food_id">' +
+                                    foodOptionsHtml(foodRow.food_id) +
+                                '</select>' +
+                            '</div>' +
+                            '<div class="col-md-3">' +
+                                '<label class="form-label small fw-semibold mb-1">Miktar</label>' +
+                                '<input type="number" step="0.01" min="0.01" class="form-control" data-field="quantity" value="' + escapeHtml(foodRow.quantity || '1') + '">' +
+                            '</div>' +
+                            '<div class="col-md-1">' +
+                                '<button type="button" class="btn btn-outline-danger btn-sm w-100" data-action="remove-food" title="Besini sil">×</button>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>'
+                );
+            }).join('');
+
+            return (
+                '<article class="meal-card p-3" data-meal-index="' + mealIndex + '">' +
+                    '<div class="d-flex justify-content-between align-items-center mb-2">' +
+                        '<h3 class="h6 fw-bold mb-0">Öğün #' + (mealIndex + 1) + '</h3>' +
+                        '<button type="button" class="btn btn-outline-danger btn-sm" data-action="remove-meal">Öğünü Sil</button>' +
+                    '</div>' +
+                    '<div class="row g-2 mb-2">' +
+                        '<div class="col-md-4">' +
+                            '<label class="form-label small fw-semibold mb-1">Öğün Türü</label>' +
+                            '<select class="form-select" data-field="meal_type">' +
+                                mealTypeOptionsHtml(meal.meal_type) +
+                            '</select>' +
+                        '</div>' +
+                        '<div class="col-md-3">' +
+                            '<label class="form-label small fw-semibold mb-1">Saat</label>' +
+                            '<input type="time" class="form-control" data-field="time" value="' + escapeHtml(meal.time || '') + '">' +
+                        '</div>' +
+                        '<div class="col-md-5">' +
+                            '<label class="form-label small fw-semibold mb-1">Açıklama</label>' +
+                            '<input type="text" class="form-control" data-field="description" value="' + escapeHtml(meal.description || '') + '" placeholder="Öğün açıklaması">' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="food-list">' + foodsHtml + '</div>' +
+                    '<button type="button" class="btn btn-outline-primary btn-sm" data-action="add-food">+ Besin Ekle</button>' +
+                '</article>'
+            );
+        }).join('');
+    }
+
+    function mealFromElement(mealCard) {
+        const mealType = mealCard.querySelector('[data-field="meal_type"]').value;
+        const mealTime = mealCard.querySelector('[data-field="time"]').value;
+        const description = mealCard.querySelector('[data-field="description"]').value.trim();
+
+        const foodsRows = Array.from(mealCard.querySelectorAll('.food-row')).map((row) => {
+            return {
+                food_id: row.querySelector('[data-field="food_id"]').value,
+                quantity: row.querySelector('[data-field="quantity"]').value,
+            };
+        });
+
+        return {
+            meal_type: mealType,
+            time: mealTime,
+            description: description,
+            foods: foodsRows,
+        };
+    }
+
+    function syncStateFromDOM() {
+        mealsState = Array.from(mealBuilder.querySelectorAll('.meal-card')).map(mealFromElement);
+    }
+
+    function validateMeals() {
+        if (!mealsState.length) {
+            return 'En az bir öğün eklemelisiniz.';
+        }
+
+        for (let i = 0; i < mealsState.length; i += 1) {
+            const meal = mealsState[i];
+            const mealNumber = i + 1;
+            if (!meal.description) {
+                return mealNumber + '. öğün açıklaması boş olamaz.';
+            }
+            if (!Array.isArray(meal.foods) || !meal.foods.length) {
+                return mealNumber + '. öğün için en az bir besin ekleyin.';
+            }
+            for (let j = 0; j < meal.foods.length; j += 1) {
+                const foodRow = meal.foods[j];
+                const qty = Number(foodRow.quantity);
+                if (!foodRow.food_id) {
+                    return mealNumber + '. öğün ' + (j + 1) + '. besin seçimi boş.';
+                }
+                if (!qty || qty <= 0) {
+                    return mealNumber + '. öğün ' + (j + 1) + '. besin miktarı pozitif olmalı.';
+                }
+            }
+        }
+
+        return null;
+    }
+
+    mealBuilder.addEventListener('click', function (event) {
+        const target = event.target;
+        const mealCard = target.closest('.meal-card');
+        if (!mealCard) {
+            return;
+        }
+
+        syncStateFromDOM();
+
+        const mealIndex = Number(mealCard.dataset.mealIndex);
+        if (Number.isNaN(mealIndex)) {
+            return;
+        }
+
+        const action = target.dataset.action;
+        if (action === 'remove-meal') {
+            if (mealsState.length === 1) {
+                window.alert('En az bir öğün kalmalıdır.');
+                return;
+            }
+            mealsState.splice(mealIndex, 1);
+            renderMeals();
+            return;
+        }
+
+        if (action === 'add-food') {
+            mealsState[mealIndex].foods.push({
+                food_id: foods.length ? String(foods[0].id) : '',
+                quantity: '1',
+            });
+            renderMeals();
+            return;
+        }
+
+        if (action === 'remove-food') {
+            const foodRow = target.closest('.food-row');
+            if (!foodRow) {
+                return;
+            }
+            const foodIndex = Number(foodRow.dataset.foodIndex);
+            if (mealsState[mealIndex].foods.length === 1) {
+                window.alert('Her öğünde en az bir besin olmalıdır.');
+                return;
+            }
+            mealsState[mealIndex].foods.splice(foodIndex, 1);
+            renderMeals();
+        }
+    });
+
+    mealBuilder.addEventListener('input', syncStateFromDOM);
+    mealBuilder.addEventListener('change', syncStateFromDOM);
+
+    addMealBtn.addEventListener('click', function () {
+        syncStateFromDOM();
+        mealsState.push(defaultMeal());
+        renderMeals();
+    });
+
+    form.addEventListener('submit', function (event) {
+        syncStateFromDOM();
+        const errorMessage = validateMeals();
+        if (errorMessage) {
+            event.preventDefault();
+            window.alert(errorMessage);
+            return;
+        }
+        payloadInput.value = JSON.stringify(mealsState);
+    });
+
+    renderMeals();
+})();
+</script>
+{% endblock %}

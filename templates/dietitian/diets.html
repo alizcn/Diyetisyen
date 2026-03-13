@@ -112,7 +112,10 @@
     <section class="surface-card p-4">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
             <h2 class="display-font h5 mb-0">Diyet Planı Listesi</h2>
-            <span class="small muted">Toplam plan: {{ diet_plans|length }}</span>
+            <div class="d-flex align-items-center gap-2">
+                <span class="small muted">Toplam plan: {{ diet_plans|length }}</span>
+                <a href="{% url 'dietitian_diet_create' %}" class="btn btn-primary btn-sm">Yeni Plan Oluştur</a>
+            </div>
         </div>
 
         <form method="get" action="{% url 'dietitian_diets' %}" class="surface-muted p-3 mb-3">
@@ -143,6 +146,7 @@
                         <th>Başlangıç</th>
                         <th>Bitiş</th>
                         <th>Kalori</th>
+                        <th>Öğün</th>
                         <th>Durum</th>
                         <th>İşlem</th>
                     </tr>
@@ -158,6 +162,7 @@
                         <td>{{ plan.start_date|date:"d.m.Y" }}</td>
                         <td>{% if plan.end_date %}{{ plan.end_date|date:"d.m.Y" }}{% else %}-{% endif %}</td>
                         <td>{% if plan.daily_calories_target %}{{ plan.daily_calories_target }} kcal{% else %}-{% endif %}</td>
+                        <td>{{ plan.meals.all|length }}</td>
                         <td>
                             {% if plan.is_active %}
                             <span class="status-pill status-confirmed">Aktif</span>

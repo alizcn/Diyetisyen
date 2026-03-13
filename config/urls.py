@@ -27,6 +27,7 @@ urlpatterns = [
     path('panel/diyetisyen/hastalar/<int:patient_id>/duzenle/', accounts_views.dietitian_patient_edit, name='dietitian_patient_edit'),
     path('panel/diyetisyen/hastalar/<int:patient_id>/sil/', accounts_views.dietitian_patient_delete, name='dietitian_patient_delete'),
     path('panel/diyetisyen/diyet-planlari/', accounts_views.dietitian_diets, name='dietitian_diets'),
+    path('panel/diyetisyen/diyet-planlari/yeni/', accounts_views.dietitian_diet_create, name='dietitian_diet_create'),
     path('panel/diyetisyen/diyet-planlari/<int:plan_id>/duzenle/', accounts_views.dietitian_diet_edit, name='dietitian_diet_edit'),
     path('panel/diyetisyen/diyet-planlari/<int:plan_id>/sil/', accounts_views.dietitian_diet_delete, name='dietitian_diet_delete'),
     path('panel/diyetisyen/besinler/ekle/', accounts_views.dietitian_food_create, name='dietitian_food_create'),
